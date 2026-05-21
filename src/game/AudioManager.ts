@@ -9,8 +9,8 @@ export class AudioManager {
   boostSound: THREE.Audio;
 
   // Queued SFX pool to prevent overlapping blowouts and allow polyphony
-  sfxPool: THREE.Audio[] = [];
-  sfxQueue: { type: 'pickup' | 'crash' | 'hit', pan: number, priority: number }[] = [];
+  sfxPool: (THREE.Audio | THREE.PositionalAudio)[] = [];
+  sfxQueue: { type: 'pickup' | 'crash' | 'hit', pan: number, priority: number, position?: THREE.Vector3 }[] = [];
   queueTimer = 0;
   
   context: AudioContext;
@@ -31,8 +31,12 @@ export class AudioManager {
     this.boostSound = new THREE.Audio(this.listener);
 
     // Create 4 distinct pooled SFX channels
-    for (let i = 0; i < 4; i++) {
-        const sfx = new THREE.Audio(this.listener);
+    for (let i = 0; i < 8; i++) {
+        // Upgrade to PositionalAudio for 3D spatialization
+        const sfx = new THREE.PositionalAudio(this.listener);
+        sfx.setRefDistance(10);
+        sfx.setRolloffFactor(2);
+        sfx.setMaxDistance(100);
         this.sfxPool.push(sfx);
     }
 
@@ -80,9 +84,9 @@ export class AudioManager {
   }
 
   // Enqueue sounds to prevent playing 5 exact sounds on frame 1
-  public queueSound(type: 'pickup' | 'crash' | 'hit', pan: number = 0, priority: number = 1) {
-      if (this.sfxQueue.length > 8) return; // Drop if queue is backed up
-      this.sfxQueue.push({ type, pan, priority });
+  public queueSound(type: 'pickup' | 'crash' | 'hit', pan: number = 0, priority: number = 1, position?: THREE.Vector3) {
+      if (this.sfxQueue.length > 12) return; // Drop if queue is backed up
+      this.sfxQueue.push({ type, pan, priority, position });
       this.sfxQueue.sort((a,b) => b.priority - a.priority);
   }
 
@@ -122,6 +126,18 @@ export class AudioManager {
           voice.setVolume(0.7 * settingsVol);
       }
       
+      if (nextSfx.position && (voice instanceof THREE.PositionalAudio)) {
+          // If we have a position, update the internal panner's position (via its transform)
+          // Since it's not strictly attached to a mesh in the scene graph during pool playback,
+          // we manually set the position:
+          voice.position.copy(nextSfx.position);
+          voice.updateMatrixWorld();
+      } else if (voice instanceof THREE.PositionalAudio) {
+          // Reset to origin/camera if no position (e.g. player hit)
+          voice.position.set(0,0,0);
+          voice.updateMatrixWorld();
+      }
+
       voice.play();
       this.queueTimer = 0.05; // 50ms stagger
   }

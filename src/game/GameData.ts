@@ -34,6 +34,8 @@ export interface TrackRecords {
 }
 
 export interface PlayerData {
+  isTestDrive?: boolean;
+  testDriveVehicleId?: string;
   coins: number;
   gems: number;
   xp: number;
@@ -56,6 +58,8 @@ export interface PlayerData {
 }
 
 const DEFAULT_DATA: PlayerData = {
+  isTestDrive: false,
+  testDriveVehicleId: undefined,
   coins: 500,
   gems: 0,
   xp: 0,
@@ -280,6 +284,19 @@ export class GameDataManager {
     this.saveData();
   }
 
+  setTestDrive(active: boolean, vehicleId?: string) {
+    this.data.isTestDrive = active;
+    if (vehicleId) {
+        this.data.testDriveVehicleId = vehicleId;
+    } else {
+        this.data.testDriveVehicleId = undefined;
+    }
+    // Don't save test drive state to cloud or local storage persistently if we don't want to,
+    // but for immediate UI reactivity we can just call notify without saveData, or
+    // just call notify. We will call notify directly so it doesn't persist across reloads.
+    this.notify();
+  }
+
   addStars(amount: number) {
     this.data.stars = (this.data.stars || 0) + amount;
     this.saveData();
@@ -331,6 +348,10 @@ export class GameDataManager {
   // ─── Original Race Records ───
 
   async saveRaceRecord(trackId: string, totalTimeMs: number, bestLapMs?: number) {
+    if (this.data.isTestDrive) {
+        console.log("Test drive completed, discarding race record and rewards.");
+        return;
+    }
     if (!this.data.records) this.data.records = {};
     if (!this.data.records[trackId]) {
        this.data.records[trackId] = { bestLap: null, topTimes: [] };

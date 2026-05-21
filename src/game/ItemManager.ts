@@ -171,6 +171,7 @@ export class ItemManager {
                         // Trigger AI spinout
                         ai.spinoutCooldown = 1.5;
                         this.juice.addImpact(ai.mesh.position, 0xffff00);
+                        this.audio.queueSound('hit', 0, 2, ai.mesh.position);
                         break;
                     }
                 }

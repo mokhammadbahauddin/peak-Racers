@@ -27,7 +27,7 @@ export const CHARACTERS: Character[] = [
     tagline: 'Light as a cloud, fast as a dream.',
     description: 'Pure speed, no weight. Win races by being the fastest thing on the track.',
     archetype: 'Speedster',
-    stats: { speed: 85, acceleration: 95, handling: 70, weight: 30 },
+    stats: { speed: 88, acceleration: 98, handling: 65, weight: 25 },
     specialTrait: { name: 'Lightfoot', description: 'Faster start boost off the line' },
     recommendedVehicles: ['speed_demon', 'lemon_buggy'],
     color: 0xffadbc
@@ -39,7 +39,7 @@ export const CHARACTERS: Character[] = [
     tagline: 'Smooth is fast. Fast is smooth.',
     description: 'Consistent and reliable. A car that doesn\'t punish small mistakes.',
     archetype: 'All-Rounder',
-    stats: { speed: 78, acceleration: 75, handling: 85, weight: 55 },
+    stats: { speed: 80, acceleration: 80, handling: 85, weight: 55 },
     specialTrait: { name: 'Nine Lives', description: 'Faster recovery from collisions' },
     recommendedVehicles: ['bubblegum_cruiser', 'nimbus_cruiser'],
     color: 0xbaeafa
@@ -51,7 +51,7 @@ export const CHARACTERS: Character[] = [
     tagline: 'Corners are where I shine.',
     description: 'Feel the satisfaction of a perfect drift line. The boost is just the reward.',
     archetype: 'Drift Master',
-    stats: { speed: 72, acceleration: 100, handling: 92, weight: 22 },
+    stats: { speed: 70, acceleration: 100, handling: 95, weight: 20 },
     specialTrait: { name: 'Drift King', description: 'Drift boost charges 10% faster' },
     recommendedVehicles: ['azure_breeze', 'peach_drifter'],
     color: 0xd1e9cd
@@ -63,7 +63,7 @@ export const CHARACTERS: Character[] = [
     tagline: 'I don\'t avoid collisions. I cause them.',
     description: 'Bulldoze through traffic. Your size is your weapon.',
     archetype: 'Tank',
-    stats: { speed: 75, acceleration: 55, handling: 60, weight: 92 },
+    stats: { speed: 78, acceleration: 50, handling: 55, weight: 95 },
     specialTrait: { name: 'Heavyweight', description: 'Immune to collision pushback from lighter racers' },
     recommendedVehicles: ['golden_champ', 'mint_cruiser'],
     color: 0xe7bbc6
