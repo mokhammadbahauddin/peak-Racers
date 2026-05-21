@@ -69,7 +69,7 @@ export class ArcadeVehicle {
         this.body.wakeUp();
 
         // Steering modify yaw
-        const steerSpeed = 2.0 * this.handlingMult * (isDrifting ? 1.5 : 1.0);
+        const steerSpeed = 2.0 * this.handlingMult * (isDrifting ? 1.8 : 1.0);
         this.yaw += steer * steerSpeed * dt;
 
         // Transmission / Gear Logic (AMT)
@@ -137,18 +137,10 @@ export class ArcadeVehicle {
                 const dist = this.raycast.distance;
                 const err = hoverDist - dist;
                 
-                if (err > 0) {
-                    const f = err * springK - this.body.velocity.y * springD;
-                    this._downforce.set(0, f, 0);
-                    this._t1.set(this._rayFrom.x - this.body.position.x, this._rayFrom.y - this.body.position.y, this._rayFrom.z - this.body.position.z);
-                    this.body.applyForce(this._downforce, this._t1 as any);
-                }
-                
-                if (this.body.velocity.y < 2) {
-                    this._downforce.set(0, -(speedSq / 4) * 2, 0);
-                    this._t1.set(this._rayFrom.x - this.body.position.x, this._rayFrom.y - this.body.position.y, this._rayFrom.z - this.body.position.z);
-                    this.body.applyForce(this._downforce, this._t1 as any);
-                }
+                const f = err * springK - this.body.velocity.y * springD;
+                this._downforce.set(0, f, 0);
+                this._t1.set(this._rayFrom.x - this.body.position.x, this._rayFrom.y - this.body.position.y, this._rayFrom.z - this.body.position.z);
+                this.body.applyForce(this._downforce, this._t1 as any);
             }
         }
 
