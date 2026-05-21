@@ -158,7 +158,7 @@ const AnalogJoystick = ({ onSteer }: { onSteer: (val: number | null) => void }) 
         (e.target as HTMLElement).releasePointerCapture(e.pointerId);
         onSteer(null);
         if (knobRef.current) {
-            knobRef.current.style.transform = `translate(0px, 0px)`;
+            knobRef.current.style.transform = `translate(-50%, -50%) translate(0px, 0px)`;
         }
     };
 
@@ -167,11 +167,11 @@ const AnalogJoystick = ({ onSteer }: { onSteer: (val: number | null) => void }) 
         const rect = parentRef.current.getBoundingClientRect();
         const centerX = rect.left + rect.width / 2;
         let diffX = clientX - centerX;
-        const maxDist = (rect.width / 2) - 16; // 16px padding
+        const maxDist = (rect.width / 2) - 48; // keep knob fully inside
         
         diffX = Math.max(-maxDist, Math.min(maxDist, diffX));
         
-        knobRef.current.style.transform = `translate(${diffX}px, 0px)`;
+        knobRef.current.style.transform = `translate(-50%, -50%) translate(${diffX}px, 0px)`;
         
         // normalize to -1.0 to 1.0
         onSteer(diffX / maxDist);
@@ -180,18 +180,18 @@ const AnalogJoystick = ({ onSteer }: { onSteer: (val: number | null) => void }) 
     return (
         <div 
             ref={parentRef}
-            className="w-56 h-20 rounded-full glass-panel border-2 border-white/50 flex items-center justify-center relative touch-none pointer-events-auto shadow-xl"
+            className="w-full h-full relative touch-none pointer-events-auto rounded-r-3xl overflow-hidden glass-panel border-r-2 border-white/20 bg-white/5 active:bg-white/10 transition-colors"
             onPointerDown={handlePointerDown}
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}
             onPointerCancel={handlePointerUp}
         >
-            <div className="absolute inset-x-6 h-2 bg-white/20 rounded-full overflow-hidden">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-2 bg-white/20 rounded-full pointer-events-none overflow-hidden">
                 <div className="w-1/2 h-full bg-gradient-to-l from-transparent to-pink-400/50"></div>
             </div>
             <div 
                 ref={knobRef}
-                className={`w-24 h-24 rounded-full bg-white flex items-center justify-center border-4 border-slate-200/50 absolute transition-shadow ${active ? 'shadow-[0_0_30px_rgba(255,255,255,0.8)] scale-110' : 'shadow-lg'}`}
+                className={`w-24 h-24 rounded-full bg-white flex items-center justify-center border-4 border-slate-200/50 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none transition-shadow ${active ? 'shadow-[0_0_30px_rgba(255,255,255,0.8)] scale-110' : 'shadow-lg'}`}
                 style={{ transition: active ? 'none' : 'transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)' }}
             >
                 <div className="flex gap-[3px] opacity-30">
@@ -200,6 +200,11 @@ const AnalogJoystick = ({ onSteer }: { onSteer: (val: number | null) => void }) 
                     <div className="w-1.5 h-6 bg-slate-400 rounded-full" />
                 </div>
             </div>
+            {!active && (
+                <div className="absolute top-[30%] left-1/2 -translate-x-1/2 pointer-events-none opacity-30">
+                    <p className="font-display font-black text-white tracking-widest text-sm drop-shadow-md whitespace-nowrap">STEER ZONE</p>
+                </div>
+            )}
         </div>
     );
 };
@@ -386,25 +391,28 @@ export const Gameplay = ({ onNavigate }: { onNavigate: (path: string) => void })
         </div>
       </div>
 
-      <div className="absolute bottom-0 left-0 w-full h-1/2 flex justify-between items-end p-6 z-40 pointer-events-none sm:hidden">
-        <div className="flex pointer-events-auto transform translate-y-[-3rem] ml-4">
+      <div className="absolute inset-0 z-40 flex pointer-events-none sm:hidden mt-[30vh]">
+        {/* Left Zone: Steering */}
+        <div className="w-1/2 h-full flex items-end justify-center pb-6">
            <AnalogJoystick onSteer={(val) => {
                if (engineRef.current) engineRef.current.input.setAnalogSteer(val);
            }} />
         </div>
-        <div className="flex flex-col gap-4 items-end pointer-events-auto transform translate-y-[-2rem]">
+
+        {/* Right Zone: Actions */}
+        <div className="w-1/2 h-full flex flex-col items-end justify-end p-6 gap-6 pointer-events-auto">
            <div className="flex gap-4">
               <button 
                 onPointerDown={(e) => { e.preventDefault(); engineRef.current?.simulateInput('e', true); }}
                 onPointerUp={(e) => { e.preventDefault(); engineRef.current?.simulateInput('e', false); }}
-                className="w-20 h-20 min-h-[80px] min-w-[80px] bg-purple-500 rounded-full border-4 border-white text-white font-black text-lg active:scale-95 shadow-xl"
+                className="w-20 h-20 min-h-[80px] min-w-[80px] bg-purple-500 rounded-full border-4 border-white text-white font-black text-lg active:scale-95 shadow-xl touch-none"
               >
                  ITEM
               </button>
               <button 
                 onPointerDown={(e) => { e.preventDefault(); engineRef.current?.simulateInput(' ', true); }}
                 onPointerUp={(e) => { e.preventDefault(); engineRef.current?.simulateInput(' ', false); }}
-                className="w-20 h-20 min-h-[80px] min-w-[80px] bg-amber-500 rounded-full border-4 border-white text-white font-black text-lg active:scale-95 shadow-xl"
+                className="w-20 h-20 min-h-[80px] min-w-[80px] bg-amber-500 rounded-full border-4 border-white text-white font-black text-lg active:scale-95 shadow-xl touch-none"
               >
                  DRIFT
               </button>
@@ -412,7 +420,7 @@ export const Gameplay = ({ onNavigate }: { onNavigate: (path: string) => void })
            <button 
              onPointerDown={(e) => { e.preventDefault(); engineRef.current?.simulateInput('Shift', true); }}
              onPointerUp={(e) => { e.preventDefault(); engineRef.current?.simulateInput('Shift', false); }}
-             className="w-24 h-24 min-h-[96px] min-w-[96px] bg-cyan-500 rounded-full border-4 border-white text-white font-black text-xl active:scale-95 shadow-xl"
+             className="w-24 h-24 min-h-[96px] min-w-[96px] bg-cyan-500 rounded-full border-4 border-white text-white font-black text-xl active:scale-95 shadow-xl touch-none"
            >
               BOOST
            </button>
