@@ -276,6 +276,9 @@ export class Engine {
     }
   }
 
+  public setAnalogSteer(val: number | null) { this.input.setAnalogSteer(val); }
+  public setAnalogGas(val: number | null) { this.input.setAnalogGas(val); }
+
   public togglePause(paused: boolean) {
     this.isPaused = paused;
     this.lastTime = performance.now();
