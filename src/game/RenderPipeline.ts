@@ -36,8 +36,8 @@ export class RenderPipeline {
     const renderScene = new RenderPass(this.scene, this.camera);
     
     const ssaoPass = new SSAOPass(this.scene, this.camera, window.innerWidth, window.innerHeight);
-    ssaoPass.kernelRadius = 1.2;
-    ssaoPass.minDistance = 0.001;
+    ssaoPass.kernelRadius = 16;
+    ssaoPass.minDistance = 0.005;
     ssaoPass.maxDistance = 0.1;
 
     // Bloom Pass configuration
@@ -51,9 +51,7 @@ export class RenderPipeline {
 
     this.composer = new EffectComposer(this.renderer);
     this.composer.addPass(renderScene);
-    if (window.innerWidth > 768) {
-        this.composer.addPass(ssaoPass); // Only enable SSAO on desktop for performance
-    }
+    this.composer.addPass(ssaoPass);
     this.composer.addPass(this.bloomPass);
     this.composer.addPass(outputPass);
 
@@ -63,8 +61,8 @@ export class RenderPipeline {
     this.dirLight = new THREE.DirectionalLight(0xffaa88, 1.2);
     this.dirLight.position.set(100, 200, 100);
     this.dirLight.castShadow = true;
-    this.dirLight.shadow.mapSize.width = 1024;
-    this.dirLight.shadow.mapSize.height = 1024;
+    this.dirLight.shadow.mapSize.width = 2048;
+    this.dirLight.shadow.mapSize.height = 2048;
     this.dirLight.shadow.camera.near = 0.5;
     this.dirLight.shadow.camera.far = 600;
     this.dirLight.shadow.camera.left = -150;

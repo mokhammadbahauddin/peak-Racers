@@ -74,9 +74,17 @@ function createCruiserModel(colorHex: number): THREE.Group {
   cabinRim.position.set(0, 1.45, -0.2);
   group.add(cabinRim);
 
+  // --- ENGINE BLOCK ---
+  const engineGeo = new THREE.BoxGeometry(0.8, 0.5, 1.0);
+  const engineBlock = new THREE.Mesh(engineGeo, trimMat);
+  engineBlock.position.set(0, 1.6, 1.8);
+  engineBlock.castShadow = true;
+  group.add(engineBlock);
+
   // --- SPOILER ---
   const spoilerWingGeo = new THREE.CapsuleGeometry(0.2, 2.4, 16, 16);
   const spoilerWing = new THREE.Mesh(spoilerWingGeo, trimMat);
+  spoilerWing.scale.set(1.5, 1.5, 1.5);
   spoilerWing.rotation.z = Math.PI / 2;
   spoilerWing.position.set(0, 2.2, 2.8);
   spoilerWing.castShadow = true;
@@ -206,7 +214,7 @@ function getMaterials(colorHex: number) {
     trimMat: new THREE.MeshStandardMaterial({ 
         color: 0xffffff, 
         roughness: 0.2, 
-        metalness: 0.3 
+        metalness: 0.8
     }),
     darkTrimMat: new THREE.MeshStandardMaterial({ 
         color: 0x222222, 

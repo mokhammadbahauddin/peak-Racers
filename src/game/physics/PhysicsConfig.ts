@@ -9,7 +9,7 @@ export const PhysicsConfig = {
     offTrackPenalty: 0.4, // -40%
 
     // Drifting
-    driftSpeedMult: 0.85,
+    driftSpeedMult: 0.95,
     boostChargeRate: 3.0, // +3% / s (assume capacity 100 = 3 units/s? Wait, if 3% per second, and capacity is 100, then it's 3 units/sec. BUT GDD says 'Mini-turbo threshold 1.5s'. If 3/sec * 1.5s = 4.5. Wait, mini-turbo is separate from the boost bar!)
     miniTurboThreshold: 1.5,
     miniTurboSpeedBonus: 20,
@@ -26,7 +26,7 @@ export const PhysicsConfig = {
     // Handling
     turnRadiusLow: 6,
     turnRadiusHigh: 18,
-    tractionRecovery: 0.3,
+    tractionRecovery: 0.1,
     wallBounceSpeed: 0.7, // -30%
     wallBounceStun: 0.4
 };

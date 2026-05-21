@@ -540,6 +540,7 @@ export class Engine {
         this.boostAmount = Math.min(PhysicsConfig.boostCapacity, this.boostAmount + amount);
     }, () => {
         // Spinout logic for player
+        if (this.playerVehicle.invincible) return;
         this.stunTimer = PhysicsConfig.wallBounceStun;
         this.camera.addShake(1.0);
         this.audio.playCrash();
@@ -547,7 +548,12 @@ export class Engine {
         this.playerVehicle.body.velocity.scale(0.5, this.playerVehicle.body.velocity);
         // Force angular velocity
         this.playerVehicle.body.angularVelocity.set(0, 10, 0); 
-    }, this.aiManager.aiCars);
+    }, this.aiManager.aiCars, () => {
+        this.playerVehicle.invincible = true;
+        setTimeout(() => {
+            this.playerVehicle.invincible = false;
+        }, 5000);
+    });
 
     // Out of bounds detection & Manual Reset
     if (minDist > 120 || this.chassisBody.position.y < -5 || this.input.isReset()) {

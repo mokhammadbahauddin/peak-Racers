@@ -18,6 +18,7 @@ export class ArcadeVehicle {
     rpm: number = 0;
     maxSpeed: number = 120;
     speed: number = 0;
+    invincible: boolean = false;
 
     private _rayFrom = new CANNON.Vec3();
     private _rayTo = new CANNON.Vec3();
@@ -68,7 +69,7 @@ export class ArcadeVehicle {
         this.body.wakeUp();
 
         // Steering modify yaw
-        const steerSpeed = 2.0 * this.handlingMult; 
+        const steerSpeed = 2.0 * this.handlingMult * (isDrifting ? 1.5 : 1.0);
         this.yaw += steer * steerSpeed * dt;
 
         // Transmission / Gear Logic (AMT)
@@ -103,8 +104,8 @@ export class ArcadeVehicle {
         let hitCount = 0;
         let hoverDist = 1.6;
 
-        const springK = 25000;
-        const springD = 1500;
+        const springK = 20000;
+        const springD = 1000;
 
         // Front-left, Front-right, Back-left, Back-right
         const offsets = [

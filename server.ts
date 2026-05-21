@@ -65,7 +65,7 @@ async function startServer() {
 
   // In-memory "database" for the game (for v2 local API representation)
   const db = {
-    players: {} as Record<string, any>,
+    players: new Map<string, any>(),
     leaderboard: [] as any[],
   };
 
@@ -87,7 +87,7 @@ async function startServer() {
   app.post('/v2/auth/register', (req, res) => {
       const { email, password } = req.body;
       const player_id = 'user_' + Date.now();
-      db.players[player_id] = {
+      db.players.set(player_id, {
           player_id,
           email,
           display_name: email.split('@')[0],
@@ -96,15 +96,15 @@ async function startServer() {
           active_vehicle_id: 'bubblegum_cruiser',
           owned_vehicles: ['bubblegum_cruiser', 'lemon_buggy'],
           vehicle_upgrades: {}
-      };
+      });
       res.status(201).json({ player_id, access_token: 'mock-token-' + player_id, refresh_token: 'mock-refresh-' + player_id });
   });
 
   app.post('/v2/auth/login', (req, res) => {
       // Mock login, just return a token for an existing user or create a generic one
-      const player_id = Object.keys(db.players)[0] || 'user_123';
-      if (!db.players[player_id]) {
-          db.players[player_id] = {
+      const player_id = db.players.keys().next().value || 'user_123';
+      if (!db.players.has(player_id)) {
+          db.players.set(player_id, {
               player_id,
               display_name: 'Guest',
               coins: 500,
@@ -112,7 +112,7 @@ async function startServer() {
               active_vehicle_id: 'bubblegum_cruiser',
               owned_vehicles: ['bubblegum_cruiser', 'lemon_buggy'],
               vehicle_upgrades: {}
-          };
+          });
       }
       res.json({ access_token: 'mock-token-' + player_id, refresh_token: 'mock-refresh-' + player_id, expires_in: 900 });
   });
@@ -124,22 +124,35 @@ async function startServer() {
   // Players
   app.get('/v2/players/me', authenticateJWT, (req, res) => {
       const userId = (req as any).user.id;
-      const player = db.players[userId];
+      const player = db.players.get(userId);
       if (player) res.json(player);
       else res.status(404).json({ error: 'Player not found' });
   });
 
   app.patch('/v2/players/me', authenticateJWT, (req, res) => {
       const userId = (req as any).user.id;
-      if (db.players[userId]) {
-          Object.assign(db.players[userId], req.body);
-          res.json(db.players[userId]);
-      } else res.status(404).json({ error: 'Player not found' });
+      const isSafeUserId = typeof userId === 'string'
+          && /^[a-zA-Z0-9_-]+$/.test(userId)
+          && !['__proto__', 'constructor', 'prototype'].includes(userId);
+      if (!isSafeUserId || !db.players.has(userId)) {
+          return res.status(404).json({ error: 'Player not found' });
+      }
+
+      const player = db.players.get(userId);
+      const updates = (req.body && typeof req.body === 'object') ? req.body : {};
+      if (Object.prototype.hasOwnProperty.call(updates, 'display_name')) player.display_name = updates.display_name;
+      if (Object.prototype.hasOwnProperty.call(updates, 'avatar_url')) player.avatar_url = updates.avatar_url;
+      if (Object.prototype.hasOwnProperty.call(updates, 'active_vehicle_id')) player.active_vehicle_id = updates.active_vehicle_id;
+      if (Object.prototype.hasOwnProperty.call(updates, 'owned_vehicles')) player.owned_vehicles = updates.owned_vehicles;
+      if (Object.prototype.hasOwnProperty.call(updates, 'vehicle_upgrades')) player.vehicle_upgrades = updates.vehicle_upgrades;
+      if (Object.prototype.hasOwnProperty.call(updates, 'coins')) player.coins = updates.coins;
+      if (Object.prototype.hasOwnProperty.call(updates, 'gems')) player.gems = updates.gems;
+      res.json(player);
   });
 
   app.delete('/v2/players/me', authenticateJWT, (req, res) => {
       const userId = (req as any).user.id;
-      delete db.players[userId];
+      db.players.delete(userId);
       res.status(202).json({ job_id: 'del_' + Date.now() });
   });
 
@@ -152,7 +165,7 @@ async function startServer() {
   app.post('/v2/vehicles/:id/unlock', authenticateJWT, (req, res) => {
       const userId = (req as any).user.id;
       const vehicleId = req.params.id;
-      const player = db.players[userId];
+      const player = db.players.get(userId);
       if (!player) return res.status(404).json({ error: 'Player not found' });
 
       if (!player.owned_vehicles.includes(vehicleId)) {
@@ -164,7 +177,7 @@ async function startServer() {
 
   app.post('/v2/vehicles/:id/upgrade', authenticateJWT, (req, res) => {
       const userId = (req as any).user.id;
-      const player = db.players[userId];
+      const player = db.players.get(userId);
       if (!player) return res.status(404).json({ error: 'Player not found' });
 
       player.coins -= 50; // Mock cost
@@ -178,7 +191,7 @@ async function startServer() {
 
   app.post('/v2/races', authenticateJWT, (req, res) => {
       const userId = (req as any).user.id;
-      const player = db.players[userId];
+      const player = db.players.get(userId);
       const { track_id, lap_time_ms, finish_position } = req.body;
 
       const coinsEarned = finish_position === 1 ? 500 : 100;
@@ -207,7 +220,7 @@ async function startServer() {
 
   app.post('/v2/shop/purchase', authenticateJWT, (req, res) => {
       const userId = (req as any).user.id;
-      const player = db.players[userId];
+      const player = db.players.get(userId);
       const { item_id } = req.body;
 
       if (player && player.coins >= 500) {

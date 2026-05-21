@@ -662,7 +662,7 @@ h4.mini-title{font-family:var(--font-head);font-size:14px;font-weight:700;color:
         <div class="powerup-spec-row"><span class="powerup-spec-label">Speed bonus</span><span class="powerup-spec-val">+25%</span></div>
         <div class="powerup-spec-row"><span class="powerup-spec-label">Duration</span><span class="powerup-spec-val">5.0 s</span></div>
         <div class="powerup-spec-row"><span class="powerup-spec-label">Collision effect</span><span class="powerup-spec-val">Knock (0.8s stun)</span></div>
-        <div class="powerup-spec-row"><span class="powerup-spec-label">Invincibility to</span><span class="powerup-spec-val">Rockets, wall damage</span></div>
+        <div class="powerup-spec-row"><span class="powerup-spec-label">Invincibility to</span><span class="powerup-spec-val">All Hazards, Collisions, Items</span></div>
         <div class="powerup-spec-row"><span class="powerup-spec-label">Drop rate (1st place)</span><span class="powerup-spec-val">5%</span></div>
         <div class="powerup-spec-row"><span class="powerup-spec-label">Visual cue</span><span class="powerup-spec-val">Rainbow sparkle aura</span></div>
       </div>
@@ -693,7 +693,7 @@ h4.mini-title{font-family:var(--font-head);font-size:14px;font-weight:700;color:
             <div class="powerup-rarity rarity-epic">Epic · 15% drop rate</div>
           </div>
         </div>
-        <div class="powerup-desc">Fires forward at the nearest opponent. Homing with soft curve — not pixel-perfect. Miss chance increases with target's Handling stat. The most offensive item. Tone: pastel pinkish missile, not violent.</div>
+        <div class="powerup-desc">Fires forward at the nearest opponent and tracks them through the track with actual homing logic adjusting its velocity towards the target over time. The most offensive item. Tone: pastel pinkish missile, not violent.</div>
         <div class="powerup-divider"></div>
         <div class="powerup-spec-row"><span class="powerup-spec-label">Speed (projectile)</span><span class="powerup-spec-val">2× current car speed</span></div>
         <div class="powerup-spec-row"><span class="powerup-spec-label">Homing range</span><span class="powerup-spec-val">80 m</span></div>
@@ -761,7 +761,7 @@ h4.mini-title{font-family:var(--font-head);font-size:14px;font-weight:700;color:
       </div>
       <div class="card">
         <div class="card-title">Post-Processing Stack</div>
-        <p class="text-sm text-muted">Passes in order: SSAO (ambient occlusion, desktop only) → Bloom (threshold 0.8, mild glow on power-ups) → FXAA (anti-aliasing) → Color grading (per-world LUT). Motion blur pass: OFF by default, toggle in Settings.</p>
+        <p class="text-sm text-muted">Passes in order: SSAO Pass (strong ambient occlusion, radius 16) → Bloom (threshold 0.95, mild glow on power-ups) → FXAA (anti-aliasing) → Color grading (per-world LUT). Motion blur pass: OFF by default, toggle in Settings.</p>
       </div>
       <div class="card">
         <div class="card-title">LOD (Level of Detail)</div>
