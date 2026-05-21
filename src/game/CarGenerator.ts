@@ -17,19 +17,11 @@ function createCruiserModel(colorHex: number): THREE.Group {
   // Materials that look like polished clay/plastic
   const bodyMat = new THREE.MeshPhysicalMaterial({ 
       color: colorHex, 
-      roughness: 0.1, 
-      metalness: 0.1,
-      clearcoat: 1.0,
-      clearcoatRoughness: 0.2
+      roughness: 0.3, metalness: 0.0, clearcoat: 0.5, clearcoatRoughness: 0.3
   });
   
   const glassMat = new THREE.MeshPhysicalMaterial({ 
-      color: 0x111111, 
-      roughness: 0.05, 
-      metalness: 0.9,
-      transparent: true,
-      opacity: 0.8,
-      clearcoat: 1.0
+      color: 0x223344, roughness: 0.1, metalness: 0.8, transparent: true, opacity: 0.85, clearcoat: 0.8
   });
 
   const tireMat = new THREE.MeshStandardMaterial({ color: 0x222222, roughness: 0.9, metalness: 0.1 });
@@ -39,7 +31,7 @@ function createCruiserModel(colorHex: number): THREE.Group {
   // --- CHASSIS (Main Body) - Sleek elongated teardrop/pill ---
   const bodyGeo = new THREE.SphereGeometry(1.5, 32, 32);
   const body = new THREE.Mesh(bodyGeo, bodyMat);
-  body.scale.set(1.1, 0.5, 2.2); // stretch it out
+  body.scale.set(1.2, 0.6, 2.0); // rounder, cute proportion
   body.position.set(0, 1.0, 0.2);
   body.castShadow = true;
   body.receiveShadow = true;
@@ -61,7 +53,7 @@ function createCruiserModel(colorHex: number): THREE.Group {
   // --- CABIN (Glass Dome) ---
   const cabinGeo = new THREE.SphereGeometry(1.0, 32, 32, 0, Math.PI * 2, 0, Math.PI / 2);
   const cabin = new THREE.Mesh(cabinGeo, glassMat);
-  cabin.scale.set(0.9, 0.8, 1.2);
+  cabin.scale.set(1.0, 0.9, 1.1); // rounder cabin
   cabin.position.set(0, 1.45, -0.2);
   cabin.castShadow = true;
   group.add(cabin);
@@ -103,7 +95,7 @@ function createCruiserModel(colorHex: number): THREE.Group {
   group.add(strutL, strutR);
 
   // --- WHEELS ---
-  const wGeo = new THREE.TorusGeometry(0.5, 0.25, 16, 32); // chunky tires
+  const wGeo = new THREE.TorusGeometry(0.45, 0.3, 16, 32); // fatter, softer tires
   const hubGeo = new THREE.CylinderGeometry(0.4, 0.4, 0.3, 32);
 
   [
@@ -130,7 +122,7 @@ function createCruiserModel(colorHex: number): THREE.Group {
       
       // scale rear wheels up slightly
       if (idx >= 2) {
-         wGrp.scale.set(1.2, 1.2, 1.2);
+         wGrp.scale.set(1.1, 1.1, 1.1);
          wGrp.position.y += 0.15; // adjust for scale
       }
       group.add(wGrp);
@@ -138,9 +130,9 @@ function createCruiserModel(colorHex: number): THREE.Group {
   
   // --- HEADLIGHTS ---
   const headGrp = new THREE.Group();
-  const hlGeo = new THREE.SphereGeometry(0.25, 16, 16);
+  const hlGeo = new THREE.SphereGeometry(0.35, 16, 16); // big cute headlights
   const headMat = new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: 0xffffff, emissiveIntensity: 2.0 });
-  const hlRingGeo = new THREE.TorusGeometry(0.25, 0.05, 16, 32);
+  const hlRingGeo = new THREE.TorusGeometry(0.35, 0.05, 16, 32);
   
   [-0.6, 0.6].forEach(x => {
       const hl = new THREE.Mesh(hlGeo, headMat);
@@ -156,7 +148,7 @@ function createCruiserModel(colorHex: number): THREE.Group {
 
   // --- TAIL LIGHTS ---
   const tailGrp = new THREE.Group();
-  const tlGeo = new THREE.CapsuleGeometry(0.15, 0.6, 16, 16);
+  const tlGeo = new THREE.CapsuleGeometry(0.2, 0.4, 16, 16); // rounder tail lights
   const tailMat = new THREE.MeshStandardMaterial({ color: 0xff0000, emissive: 0xff0000, emissiveIntensity: 1.0 });
   
   [-0.7, 0.7].forEach(x => {
