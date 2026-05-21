@@ -1,0 +1,1610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PRD — Pastel Peak Racers v2.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Quicksand:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --primary: #78555e;
+  --primary-c: #ffd1dc;
+  --secondary: #356572;
+  --secondary-c: #b7e7f7;
+  --tertiary: #4f644e;
+  --tertiary-c: #cbe3c7;
+  --surface: #fff8f8;
+  --surface-2: #f4ecec;
+  --surface-3: #efe6e7;
+  --on-surface: #1e1b1b;
+  --on-surface-v: #4f4446;
+  --outline: #d3c3c5;
+  --error: #ba1a1a;
+  --error-c: #ffdad6;
+  --amber: #b87f1a;
+  --amber-c: #fff0cc;
+  --font-head: 'Plus Jakarta Sans', sans-serif;
+  --font-body: 'Quicksand', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --radius-lg: 20px;
+  --radius-full: 9999px;
+  --shadow: 0 4px 24px rgba(120,85,94,0.08);
+  --shadow-md: 0 8px 40px rgba(120,85,94,0.12);
+  --glass: rgba(255,255,255,0.55);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--surface);
+  color: var(--on-surface);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+/* ── HEADER ── */
+.doc-header {
+  background: linear-gradient(135deg, #ffd1dc 0%, #b7e7f7 60%, #cbe3c7 100%);
+  padding: 64px 48px 56px;
+  position: relative;
+  overflow: hidden;
+}
+.doc-header::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at 80% 20%, rgba(255,255,255,0.5) 0%, transparent 60%),
+              radial-gradient(circle at 10% 80%, rgba(120,85,94,0.08) 0%, transparent 50%);
+}
+.header-inner { position: relative; z-index: 1; max-width: 900px; }
+.doc-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.9);
+  border-radius: var(--radius-full); padding: 6px 16px;
+  font-size: 12px; font-weight: 700; color: var(--primary); letter-spacing: 0.08em; text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.doc-badge::before { content: '●'; font-size: 8px; color: #4caf50; }
+h1.doc-title {
+  font-family: var(--font-head); font-size: 52px; font-weight: 800; color: var(--primary);
+  line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 12px;
+}
+h1.doc-title span { color: var(--secondary); }
+.doc-subtitle { font-size: 17px; color: var(--primary); opacity: 0.75; max-width: 560px; margin-bottom: 32px; }
+.doc-meta { display: flex; gap: 20px; flex-wrap: wrap; }
+.meta-pill {
+  background: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.8);
+  border-radius: var(--radius-full); padding: 6px 14px;
+  font-size: 12px; font-weight: 700; color: var(--on-surface-v);
+}
+.meta-pill strong { color: var(--primary); }
+
+/* ── LAYOUT ── */
+.doc-body { max-width: 960px; margin: 0 auto; padding: 48px 32px 80px; }
+
+/* ── TOC ── */
+.toc {
+  background: var(--surface-2); border: 1px solid var(--outline);
+  border-radius: var(--radius); padding: 28px 32px; margin-bottom: 48px;
+}
+.toc h2 { font-family: var(--font-head); font-size: 13px; font-weight: 700; color: var(--on-surface-v); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 16px; }
+.toc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 24px; }
+.toc a { font-size: 14px; color: var(--secondary); text-decoration: none; display: flex; align-items: center; gap: 8px; padding: 4px 0; }
+.toc a:hover { color: var(--primary); }
+.toc-num { font-family: var(--font-mono); font-size: 12px; color: var(--on-surface-v); min-width: 24px; }
+
+/* ── SECTION ── */
+.section { margin-bottom: 56px; }
+.section-label {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+  color: var(--on-surface-v); letter-spacing: 0.1em; text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.section-label::before {
+  content: ''; width: 20px; height: 1px; background: var(--on-surface-v); opacity: 0.4;
+}
+h2.section-title {
+  font-family: var(--font-head); font-size: 28px; font-weight: 800; color: var(--primary);
+  margin-bottom: 8px; line-height: 1.2;
+}
+.section-desc { color: var(--on-surface-v); font-size: 14px; max-width: 680px; margin-bottom: 28px; }
+
+h3.sub-title {
+  font-family: var(--font-head); font-size: 16px; font-weight: 700; color: var(--on-surface);
+  margin: 28px 0 12px; display: flex; align-items: center; gap: 8px;
+}
+h3.sub-title::after { content: ''; flex: 1; height: 1px; background: var(--outline); }
+
+/* ── CARDS ── */
+.card {
+  background: white; border: 1px solid var(--outline);
+  border-radius: var(--radius); padding: 20px 24px; box-shadow: var(--shadow);
+}
+.card-grid { display: grid; gap: 16px; }
+.card-grid-2 { grid-template-columns: 1fr 1fr; }
+.card-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+.card-grid-auto { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+
+.card-head { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
+.card-icon {
+  width: 36px; height: 36px; border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+.card-title { font-family: var(--font-head); font-size: 14px; font-weight: 700; color: var(--on-surface); }
+.card-sub { font-size: 12px; color: var(--on-surface-v); }
+
+/* ── PHASE TIMELINE ── */
+.phases { display: flex; flex-direction: column; gap: 0; }
+.phase-item {
+  display: grid; grid-template-columns: 80px 32px 1fr;
+  align-items: start; gap: 0 16px;
+}
+.phase-item:not(:last-child) .phase-line { flex: 1; width: 2px; background: var(--outline); margin: 0 auto; }
+.phase-num {
+  font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+  color: var(--on-surface-v); text-align: right; padding-top: 10px;
+}
+.phase-dot-wrap { display: flex; flex-direction: column; align-items: center; }
+.phase-dot {
+  width: 32px; height: 32px; border-radius: 50%;
+  border: 2px solid var(--outline); background: white;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; flex-shrink: 0;
+  font-family: var(--font-head);
+}
+.phase-dot.done { background: var(--tertiary-c); border-color: var(--tertiary); color: var(--tertiary); }
+.phase-dot.current { background: var(--primary-c); border-color: var(--primary); color: var(--primary); box-shadow: 0 0 0 4px rgba(120,85,94,0.12); }
+.phase-dot.pending { background: var(--surface-3); color: var(--on-surface-v); }
+.phase-line-v { width: 2px; flex: 1; min-height: 24px; background: var(--outline); }
+.phase-content { padding: 6px 0 28px; }
+.phase-name { font-family: var(--font-head); font-size: 15px; font-weight: 700; color: var(--on-surface); margin-bottom: 4px; }
+.phase-body { font-size: 13px; color: var(--on-surface-v); line-height: 1.6; }
+.phase-tag {
+  display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.07em;
+  text-transform: uppercase; padding: 2px 8px; border-radius: var(--radius-full);
+  margin-bottom: 6px;
+}
+.tag-done { background: var(--tertiary-c); color: var(--tertiary); }
+.tag-current { background: var(--primary-c); color: var(--primary); }
+.tag-pending { background: var(--surface-3); color: var(--on-surface-v); }
+
+/* ── DISCOVERY OUTPUTS ── */
+.discovery-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.disc-card {
+  background: white; border: 1px solid var(--outline);
+  border-radius: var(--radius); padding: 20px;
+  position: relative; overflow: hidden;
+}
+.disc-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+}
+.disc-card.research::before { background: linear-gradient(90deg, var(--secondary), var(--secondary-c)); }
+.disc-card.strategic::before { background: linear-gradient(90deg, var(--primary), var(--primary-c)); }
+.disc-card.gate::before { background: linear-gradient(90deg, var(--tertiary), var(--tertiary-c)); }
+.disc-type { font-size: 10px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--on-surface-v); margin-bottom: 8px; }
+.disc-name { font-family: var(--font-head); font-size: 15px; font-weight: 700; color: var(--on-surface); margin-bottom: 6px; }
+.disc-body { font-size: 13px; color: var(--on-surface-v); line-height: 1.6; }
+
+/* ── DESIGN DECISIONS ── */
+.design-stack { display: flex; flex-direction: column; gap: 12px; }
+.design-row { display: grid; grid-template-columns: 28px 1fr 1fr; gap: 12px; align-items: stretch; }
+.design-level { display: flex; align-items: center; justify-content: center; }
+.design-level-badge {
+  width: 24px; height: 24px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono); font-size: 10px; font-weight: 700;
+}
+.dl-1 { background: #e8e0f7; color: #5d47b7; }
+.dl-2 { background: var(--secondary-c); color: var(--secondary); }
+.dl-3 { background: var(--surface-3); color: var(--on-surface-v); }
+.design-card {
+  background: white; border: 1px solid var(--outline);
+  border-radius: var(--radius-sm); padding: 14px 16px;
+}
+.design-card-title { font-size: 13px; font-weight: 700; color: var(--on-surface); margin-bottom: 4px; }
+.design-card-body { font-size: 12px; color: var(--on-surface-v); line-height: 1.5; }
+.decision-badge {
+  display: inline-block; font-size: 10px; font-weight: 700;
+  background: var(--amber-c); color: var(--amber);
+  border-radius: var(--radius-full); padding: 2px 8px; margin-bottom: 4px;
+}
+
+/* ── PRD SECTIONS TABLE ── */
+.prd-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.prd-table th {
+  text-align: left; padding: 10px 14px;
+  background: var(--surface-2); border-bottom: 1px solid var(--outline);
+  font-family: var(--font-head); font-size: 12px; font-weight: 700;
+  color: var(--on-surface-v); letter-spacing: 0.05em; text-transform: uppercase;
+}
+.prd-table td { padding: 12px 14px; border-bottom: 1px solid var(--outline); vertical-align: top; }
+.prd-table tr:last-child td { border-bottom: none; }
+.prd-table tr:hover td { background: var(--surface-2); }
+.req-tag {
+  display: inline-block; font-size: 10px; font-weight: 700;
+  border-radius: var(--radius-full); padding: 2px 8px; margin-bottom: 4px; white-space: nowrap;
+}
+.req-must { background: var(--error-c); color: var(--error); }
+.req-should { background: var(--primary-c); color: var(--primary); }
+.req-nice { background: var(--tertiary-c); color: var(--tertiary); }
+
+/* ── SCOPE TABLE ── */
+.scope-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.scope-col { background: white; border: 1px solid var(--outline); border-radius: var(--radius); overflow: hidden; }
+.scope-header { padding: 14px 18px; font-family: var(--font-head); font-size: 13px; font-weight: 700; }
+.scope-in .scope-header { background: var(--tertiary-c); color: var(--tertiary); }
+.scope-out .scope-header { background: var(--surface-3); color: var(--on-surface-v); }
+.scope-body { padding: 8px 0; }
+.scope-item { padding: 8px 18px; font-size: 13px; border-bottom: 1px solid var(--outline); display: flex; align-items: flex-start; gap: 10px; }
+.scope-item:last-child { border-bottom: none; }
+.scope-item::before { content: ''; font-size: 12px; margin-top: 2px; flex-shrink: 0; }
+.scope-in .scope-item::before { content: '✓'; color: var(--tertiary); }
+.scope-out .scope-item::before { content: '✕'; color: var(--on-surface-v); }
+.scope-item-label { font-weight: 700; color: var(--on-surface); display: block; font-size: 13px; }
+.scope-item-desc { color: var(--on-surface-v); font-size: 12px; }
+
+/* ── NFR CARDS ── */
+.nfr-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.nfr-card { background: white; border: 1px solid var(--outline); border-radius: var(--radius); padding: 16px 18px; }
+.nfr-icon { font-size: 22px; margin-bottom: 8px; }
+.nfr-title { font-family: var(--font-head); font-size: 13px; font-weight: 700; color: var(--on-surface); margin-bottom: 6px; }
+.nfr-metric { font-family: var(--font-mono); font-size: 15px; font-weight: 600; color: var(--primary); margin-bottom: 4px; }
+.nfr-desc { font-size: 12px; color: var(--on-surface-v); }
+
+/* ── RISKS ── */
+.risk-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.risk-table th {
+  padding: 10px 14px; background: var(--surface-2); border-bottom: 1px solid var(--outline);
+  font-family: var(--font-head); font-size: 11px; font-weight: 700;
+  color: var(--on-surface-v); letter-spacing: 0.05em; text-transform: uppercase; text-align: left;
+}
+.risk-table td { padding: 12px 14px; border-bottom: 1px solid var(--outline); vertical-align: top; }
+.risk-table tr:last-child td { border-bottom: none; }
+.risk-sev {
+  display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px;
+  border-radius: var(--radius-full);
+}
+.risk-high { background: var(--error-c); color: var(--error); }
+.risk-med { background: var(--amber-c); color: var(--amber); }
+.risk-low { background: var(--tertiary-c); color: var(--tertiary); }
+
+/* ── METRICS ── */
+.metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; }
+.metric-card { background: white; border: 1px solid var(--outline); border-radius: var(--radius); padding: 20px; text-align: center; }
+.metric-value { font-family: var(--font-head); font-size: 32px; font-weight: 800; color: var(--primary); line-height: 1; margin-bottom: 4px; }
+.metric-label { font-size: 12px; color: var(--on-surface-v); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
+.metric-desc { font-size: 12px; color: var(--on-surface-v); margin-top: 6px; }
+
+/* ── UX STATES ── */
+.states-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+.state-card {
+  background: white; border: 1px solid var(--outline);
+  border-radius: var(--radius); padding: 16px;
+  text-align: center;
+}
+.state-icon { font-size: 28px; margin-bottom: 8px; }
+.state-name { font-family: var(--font-head); font-size: 13px; font-weight: 700; color: var(--on-surface); margin-bottom: 4px; }
+.state-desc { font-size: 11px; color: var(--on-surface-v); }
+
+/* ── MILESTONES ── */
+.milestone-list { display: flex; flex-direction: column; gap: 0; }
+.ms-item { display: grid; grid-template-columns: 120px 1fr; gap: 20px; position: relative; padding-bottom: 24px; }
+.ms-item:not(:last-child)::before {
+  content: ''; position: absolute; left: 143px; top: 22px; bottom: 0;
+  width: 1px; background: var(--outline);
+}
+.ms-date { font-family: var(--font-mono); font-size: 12px; color: var(--on-surface-v); text-align: right; padding-top: 6px; }
+.ms-content { display: flex; gap: 14px; }
+.ms-dot {
+  width: 14px; height: 14px; border-radius: 50%; border: 2px solid;
+  flex-shrink: 0; margin-top: 6px;
+}
+.ms-dot.done { background: var(--tertiary); border-color: var(--tertiary); }
+.ms-dot.current { background: var(--primary); border-color: var(--primary); }
+.ms-dot.pending { background: white; border-color: var(--outline); }
+.ms-name { font-family: var(--font-head); font-size: 14px; font-weight: 700; color: var(--on-surface); margin-bottom: 4px; }
+.ms-items { font-size: 12px; color: var(--on-surface-v); }
+
+/* ── MAINTENANCE ── */
+.maint-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.maint-card { background: var(--surface-2); border: 1px solid var(--outline); border-radius: var(--radius); padding: 18px 20px; }
+.maint-title { font-family: var(--font-head); font-size: 14px; font-weight: 700; color: var(--on-surface); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+.maint-items { list-style: none; }
+.maint-items li { font-size: 13px; color: var(--on-surface-v); padding: 4px 0; border-bottom: 1px solid var(--outline); display: flex; align-items: flex-start; gap: 8px; }
+.maint-items li:last-child { border-bottom: none; }
+.maint-items li::before { content: '→'; color: var(--primary); flex-shrink: 0; }
+
+/* ── ADR ── */
+.adr-card { background: white; border: 1.5px solid var(--primary-c); border-radius: var(--radius); padding: 20px 24px; }
+.adr-row { display: grid; grid-template-columns: 100px 1fr; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--outline); align-items: start; }
+.adr-row:last-child { border-bottom: none; }
+.adr-label { font-family: var(--font-mono); font-size: 11px; font-weight: 600; color: var(--on-surface-v); text-transform: uppercase; letter-spacing: 0.05em; padding-top: 2px; }
+.adr-value { font-size: 13px; color: var(--on-surface); }
+
+/* ── OPEN QUESTIONS ── */
+.oq-list { display: flex; flex-direction: column; gap: 10px; }
+.oq-item { background: var(--amber-c); border: 1px solid #f5d78e; border-radius: var(--radius-sm); padding: 14px 16px; display: flex; gap: 12px; }
+.oq-num { font-family: var(--font-mono); font-size: 12px; font-weight: 700; color: var(--amber); flex-shrink: 0; padding-top: 1px; }
+.oq-body { font-size: 13px; color: #4a3000; }
+.oq-resolved { background: var(--tertiary-c); border-color: #a5d094; }
+.oq-resolved .oq-body { color: #1a3d18; }
+.oq-resolved .oq-num { color: var(--tertiary); }
+
+/* ── TECH STACK ── */
+.stack-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
+.stack-card { background: white; border: 1px solid var(--outline); border-radius: var(--radius-sm); padding: 14px 16px; }
+.stack-layer { font-size: 10px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--on-surface-v); margin-bottom: 4px; }
+.stack-name { font-family: var(--font-head); font-size: 14px; font-weight: 700; color: var(--on-surface); margin-bottom: 2px; }
+.stack-why { font-size: 12px; color: var(--on-surface-v); }
+
+/* ── PERSONAS ── */
+.personas-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.persona-card { background: white; border: 1px solid var(--outline); border-radius: var(--radius); overflow: hidden; }
+.persona-head { padding: 20px 20px 14px; }
+.persona-avatar {
+  width: 48px; height: 48px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; margin-bottom: 12px;
+}
+.persona-name { font-family: var(--font-head); font-size: 15px; font-weight: 700; color: var(--on-surface); }
+.persona-tagline { font-size: 12px; color: var(--on-surface-v); }
+.persona-divider { height: 1px; background: var(--outline); margin: 0 20px; }
+.persona-body { padding: 14px 20px; }
+.persona-row { margin-bottom: 10px; }
+.persona-row-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--on-surface-v); margin-bottom: 3px; }
+.persona-row-val { font-size: 13px; color: var(--on-surface); line-height: 1.5; }
+
+/* ── API CONTRACTS ── */
+.api-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.api-table th { text-align: left; padding: 8px 12px; background: var(--surface-2); border-bottom: 1px solid var(--outline); font-family: var(--font-head); font-size: 11px; font-weight: 700; color: var(--on-surface-v); text-transform: uppercase; letter-spacing: 0.05em; }
+.api-table td { padding: 10px 12px; border-bottom: 1px solid var(--outline); vertical-align: top; }
+.api-table tr:last-child td { border-bottom: none; }
+.method { font-family: var(--font-mono); font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 4px; }
+.get { background: #e3f2fd; color: #1565c0; }
+.post { background: #e8f5e9; color: #2e7d32; }
+.patch { background: #fff3e0; color: #e65100; }
+.delete { background: #fce4ec; color: #880e4f; }
+.path { font-family: var(--font-mono); font-size: 12px; color: var(--on-surface); }
+
+/* ── CALLOUT ── */
+.callout { border-radius: var(--radius-sm); padding: 14px 18px; font-size: 13px; display: flex; gap: 12px; margin: 16px 0; }
+.callout-icon { flex-shrink: 0; font-size: 16px; }
+.callout-info { background: #e8f0fe; border: 1px solid #b8cef9; color: #1a3a8c; }
+.callout-warn { background: var(--amber-c); border: 1px solid #f5d78e; color: #4a3000; }
+.callout-danger { background: var(--error-c); border: 1px solid #f7b9b9; color: #7a0000; }
+.callout-success { background: var(--tertiary-c); border: 1px solid #a5d094; color: #1a3d18; }
+
+/* ── DATA SCHEMA ── */
+.schema-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.schema-entity {
+  background: white; border: 1px solid var(--outline); border-radius: var(--radius);
+  overflow: hidden; font-family: var(--font-mono); font-size: 12px;
+}
+.schema-head { background: var(--surface-2); padding: 10px 14px; display: flex; align-items: center; gap: 8px; }
+.schema-entity-name { font-family: var(--font-head); font-size: 13px; font-weight: 700; color: var(--primary); }
+.schema-pk { font-size: 10px; background: var(--primary-c); color: var(--primary); border-radius: 4px; padding: 1px 6px; font-weight: 700; }
+.schema-field { padding: 7px 14px; border-bottom: 1px solid var(--outline); display: grid; grid-template-columns: 1fr 80px 50px; gap: 8px; align-items: center; }
+.schema-field:last-child { border-bottom: none; }
+.schema-fname { color: var(--on-surface); }
+.schema-ftype { color: var(--secondary); font-size: 11px; }
+.schema-fnull { font-size: 10px; color: var(--on-surface-v); text-align: right; }
+.schema-rel { display: flex; align-items: center; gap: 6px; padding: 6px 14px; font-size: 11px; color: var(--on-surface-v); background: var(--surface-2); }
+.schema-rel-badge { background: var(--secondary-c); color: var(--secondary); padding: 1px 6px; border-radius: 4px; font-weight: 700; white-space: nowrap; }
+
+/* ── FOOTER ── */
+.doc-footer { border-top: 1px solid var(--outline); padding: 28px 32px; margin-top: 40px; display: flex; justify-content: space-between; align-items: center; max-width: 960px; margin-left: auto; margin-right: auto; }
+.footer-brand { font-family: var(--font-head); font-size: 14px; font-weight: 700; color: var(--primary); }
+.footer-meta { font-size: 12px; color: var(--on-surface-v); }
+
+/* ── DIVIDER ── */
+.divider { height: 1px; background: var(--outline); margin: 8px 0 28px; }
+
+/* utils */
+.text-mono { font-family: var(--font-mono); }
+.text-muted { color: var(--on-surface-v); }
+.text-sm { font-size: 13px; }
+
+@media (max-width: 700px) {
+  h1.doc-title { font-size: 36px; }
+  .doc-header { padding: 40px 24px; }
+  .doc-body { padding: 32px 20px 60px; }
+  .card-grid-2, .card-grid-3, .discovery-grid, .personas-grid,
+  .scope-grid, .maint-grid, .schema-grid, .toc-grid { grid-template-columns: 1fr; }
+  .design-row { grid-template-columns: 1fr; }
+  .ms-item { grid-template-columns: 1fr; }
+  .design-row .design-level { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════════════
+     HEADER
+     ════════════════════════════════════════════════════════════ -->
+<div class="doc-header">
+  <div class="header-inner">
+    <div class="doc-badge">PRD · Living Document · v2.0</div>
+    <h1 class="doc-title">Pastel Peak<br/><span>Racers</span></h1>
+    <p class="doc-subtitle">The definitive product requirements document for a cozy-arcade kart racing experience — from discovery through maintenance.</p>
+    <div class="doc-meta">
+      <div class="meta-pill"><strong>Status:</strong> Active Development</div>
+      <div class="meta-pill"><strong>Phase:</strong> 4 — Development</div>
+      <div class="meta-pill"><strong>Version:</strong> 2.0.0</div>
+      <div class="meta-pill"><strong>Platform:</strong> Web / Mobile</div>
+      <div class="meta-pill"><strong>Stack:</strong> Three.js + Tailwind</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     BODY
+     ════════════════════════════════════════════════════════════ -->
+<div class="doc-body">
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc">
+    <h2>Table of Contents</h2>
+    <div class="toc-grid">
+      <a href="#overview"><span class="toc-num">01</span> Project Overview & Vision</a>
+      <a href="#personas"><span class="toc-num">08</span> User Personas & JTBD</a>
+      <a href="#discovery"><span class="toc-num">02</span> Discovery Phase Outputs</a>
+      <a href="#functional"><span class="toc-num">09</span> Functional Requirements</a>
+      <a href="#lifecycle"><span class="toc-num">03</span> Dev Lifecycle (7 Phases)</a>
+      <a href="#nfr"><span class="toc-num">10</span> Non-Functional Requirements</a>
+      <a href="#design"><span class="toc-num">04</span> Design Decisions Pre-Coding</a>
+      <a href="#api"><span class="toc-num">11</span> API Contracts</a>
+      <a href="#schema"><span class="toc-num">05</span> Data Model & Schema</a>
+      <a href="#risks"><span class="toc-num">12</span> Risks & Mitigations</a>
+      <a href="#ux-states"><span class="toc-num">06</span> UX States & Error Handling</a>
+      <a href="#metrics"><span class="toc-num">13</span> Success Metrics</a>
+      <a href="#scope"><span class="toc-num">07</span> Scope: In & Out</a>
+      <a href="#milestones"><span class="toc-num">14</span> Timeline & Milestones</a>
+      <a href="#maintenance"><span class="toc-num">15</span> Maintenance Plan</a>
+      <a href="#open"><span class="toc-num">16</span> Open Questions</a>
+    </div>
+  </div>
+
+  <!-- ── 01 OVERVIEW ── -->
+  <section class="section" id="overview">
+    <div class="section-label">Section 01</div>
+    <h2 class="section-title">Project Overview & Vision</h2>
+    <p class="section-desc">What this product is, why it exists, and what it must accomplish.</p>
+
+    <div class="card-grid card-grid-2" style="margin-bottom:16px;">
+      <div class="card">
+        <div class="card-head">
+          <div class="card-icon" style="background:var(--primary-c);">🏎️</div>
+          <div>
+            <div class="card-title">Problem Statement</div>
+            <div class="card-sub">The core pain we're solving</div>
+          </div>
+        </div>
+        <p class="text-sm text-muted">Most arcade racers prioritize intensity over aesthetics, creating a gap for players seeking <strong>"Cozy-Arcade" gameplay</strong> — high-energy kart mechanics wrapped in a soothing, premium pastel visual shell. Pastel Peak Racers fills this niche with a digitally tactile experience where every drift, boost, and victory feels physically satisfying.</p>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <div class="card-icon" style="background:var(--secondary-c);">🎯</div>
+          <div>
+            <div class="card-title">North Star Vision</div>
+            <div class="card-sub">What "done" looks like</div>
+          </div>
+        </div>
+        <p class="text-sm text-muted">Deliver the definitive digitally-tactile racing experience. A player picking up the game for the first time should feel the premium weight of the cars, the satisfying "juice" of power-ups, and the dreamlike peace of the pastel world — all within 90 seconds of loading.</p>
+      </div>
+    </div>
+
+    <div class="card-grid card-grid-3">
+      <div class="card">
+        <div class="card-head"><div class="card-icon" style="background:var(--tertiary-c);">🎮</div><div><div class="card-title">Target Platform</div></div></div>
+        <p class="text-sm text-muted">Web browsers (desktop primary, mobile responsive). Progressive enhancement for touch controls. No native app in v2.0.</p>
+      </div>
+      <div class="card">
+        <div class="card-head"><div class="card-icon" style="background:var(--primary-c);">💰</div><div><div class="card-title">Business Model</div></div></div>
+        <p class="text-sm text-muted">Free-to-play core loop. Monetization via cosmetic skin packs (Rare / Epic / Legendary tiers) and Battle Pass. No pay-to-win mechanics.</p>
+      </div>
+      <div class="card">
+        <div class="card-head"><div class="card-icon" style="background:var(--secondary-c);">🏆</div><div><div class="card-title">Competitive Positioning</div></div></div>
+        <p class="text-sm text-muted">Occupies the whitespace between <em>Mario Kart</em> (competitive/Nintendo) and <em>Monument Valley</em> (serene/puzzle). Neither exists in browser-native form.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 02 DISCOVERY ── -->
+  <section class="section" id="discovery">
+    <div class="section-label">Section 02</div>
+    <h2 class="section-title">Discovery Phase Outputs</h2>
+    <p class="section-desc">All six artifacts produced before a single line of code was written. These feed the go/no-go gate decision.</p>
+
+    <div class="callout callout-success" style="margin-bottom:20px;">
+      <span class="callout-icon">✓</span>
+      <span><strong>Go decision made.</strong> All six discovery artifacts completed. Discovery phase closed. Team aligned on building v2.0.</span>
+    </div>
+
+    <h3 class="sub-title">Research Artifacts</h3>
+    <div class="discovery-grid" style="margin-bottom:20px;">
+      <div class="disc-card research">
+        <div class="disc-type">Research Output 1</div>
+        <div class="disc-name">User Personas</div>
+        <div class="disc-body">Three validated personas derived from 40+ player interviews: <em>The Cozy Gamer</em> (22–35F, plays to unwind), <em>The Completionist</em> (18–28M, drives leaderboard), and <em>The Casual Dripper</em> (35–50, 5-min sessions). Full profiles in Section 08.</div>
+      </div>
+      <div class="disc-card research">
+        <div class="disc-type">Research Output 2</div>
+        <div class="disc-name">Pain Points & JTBD</div>
+        <div class="disc-body">Root JTBD: "I want a competitive game that doesn't raise my cortisol." Surface ask is "pretty racing game." Actual job: stress-free competition. This framing prevents building an aesthetics wrapper over a stressful experience.</div>
+      </div>
+      <div class="disc-card research">
+        <div class="disc-type">Research Output 3</div>
+        <div class="disc-name">Competitive Analysis</div>
+        <div class="disc-body">Analyzed 12 competitors across pricing, polish baseline, and UX patterns. Key gap: no browser-native cozy racer exists at AAA visual quality. Players already expect glassmorphism UI from mobile games.</div>
+      </div>
+    </div>
+
+    <h3 class="sub-title">Strategic Artifacts</h3>
+    <div class="discovery-grid" style="margin-bottom:16px;">
+      <div class="disc-card strategic">
+        <div class="disc-type">Strategic Output 1</div>
+        <div class="disc-name">Problem Statement</div>
+        <div class="disc-body">Casual gamers aged 18–45 lack a browser-native arcade racer that delivers competitive depth without anxiety-inducing intensity, in a visually premium package they're not embarrassed to play in public or stream.</div>
+      </div>
+      <div class="disc-card strategic">
+        <div class="disc-type">Strategic Output 2</div>
+        <div class="disc-name">Opportunity Sizing</div>
+        <div class="disc-body">TAM: 280M casual browser gamers. SAM: 40M "cozy game" demographic (growing 22% YoY). SOM: 400K MAU target by month 18. At 5% conversion on $4.99 skin packs: $1M ARR baseline.</div>
+      </div>
+      <div class="disc-card gate">
+        <div class="disc-type">Strategic Output 3</div>
+        <div class="disc-name">Stakeholder Alignment</div>
+        <div class="disc-body">Decision authority: Product Lead. Budget constraint: 6-person team × 8 months. Compliance: GDPR (data residency EU), COPPA (no under-13 data). Final call on scope: Product Lead. No late-stage pivots on art style.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 03 LIFECYCLE ── -->
+  <section class="section" id="lifecycle">
+    <div class="section-label">Section 03</div>
+    <h2 class="section-title">Development Lifecycle (7 Phases)</h2>
+    <p class="section-desc">Every phase has a gate. Skipping a gate has a cost. Discovery is the cheapest time to kill a bad idea; production is the most expensive.</p>
+
+    <div class="card" style="padding:28px 32px;">
+      <div class="phases">
+
+        <div class="phase-item">
+          <div class="phase-num">01</div>
+          <div class="phase-dot-wrap">
+            <div class="phase-dot done">✓</div>
+            <div class="phase-line-v"></div>
+          </div>
+          <div class="phase-content">
+            <span class="phase-tag tag-done">Completed</span>
+            <div class="phase-name">Discovery</div>
+            <div class="phase-body">Validated "Cozy-Arcade" niche via 40+ user interviews, competitor teardowns, and JTBD mapping. Produced all 6 discovery artifacts. Go/No-Go gate passed.</div>
+          </div>
+        </div>
+
+        <div class="phase-item">
+          <div class="phase-num">02</div>
+          <div class="phase-dot-wrap">
+            <div class="phase-dot done">✓</div>
+            <div class="phase-line-v"></div>
+          </div>
+          <div class="phase-content">
+            <span class="phase-tag tag-done">Completed</span>
+            <div class="phase-name">PRD & Planning</div>
+            <div class="phase-body">This document. Defined all functional/non-functional requirements, API contracts, data schema, scope, milestones, and risk register. Signed off by Product Lead.</div>
+          </div>
+        </div>
+
+        <div class="phase-item">
+          <div class="phase-num">03</div>
+          <div class="phase-dot-wrap">
+            <div class="phase-dot done">✓</div>
+            <div class="phase-line-v"></div>
+          </div>
+          <div class="phase-content">
+            <span class="phase-tag tag-done">Completed</span>
+            <div class="phase-name">Design</div>
+            <div class="phase-body">Full UX/UI system designed: glassmorphism design language, "No Top-Bar" immersive canvas logic, all 12 screen states mocked. Data model finalized before UX to prevent redesign loops. ADRs written for all major decisions.</div>
+          </div>
+        </div>
+
+        <div class="phase-item">
+          <div class="phase-num">04</div>
+          <div class="phase-dot-wrap">
+            <div class="phase-dot current">→</div>
+            <div class="phase-line-v"></div>
+          </div>
+          <div class="phase-content">
+            <span class="phase-tag tag-current">In Progress</span>
+            <div class="phase-name">Development</div>
+            <div class="phase-body">Sprint-based execution (2-week sprints). Three.js for 3D rendering, Tailwind CSS for UI layer. CI/CD pipeline live from Sprint 1. Feature flags on all unreleased tracks. Code review required for all PRs touching game physics or leaderboard logic.</div>
+          </div>
+        </div>
+
+        <div class="phase-item">
+          <div class="phase-num">05</div>
+          <div class="phase-dot-wrap">
+            <div class="phase-dot pending">5</div>
+            <div class="phase-line-v"></div>
+          </div>
+          <div class="phase-content">
+            <span class="phase-tag tag-pending">Upcoming</span>
+            <div class="phase-name">QA & Staging</div>
+            <div class="phase-body">Staging mirrors production exactly. Test suite: unit (game physics), integration (API + leaderboard), E2E (Playwright, all 12 screens), load (5,000 concurrent sessions), and UAT with 20 recruited players from target personas.</div>
+          </div>
+        </div>
+
+        <div class="phase-item">
+          <div class="phase-num">06</div>
+          <div class="phase-dot-wrap">
+            <div class="phase-dot pending">6</div>
+            <div class="phase-line-v"></div>
+          </div>
+          <div class="phase-content">
+            <span class="phase-tag tag-pending">Upcoming</span>
+            <div class="phase-name">Deployment</div>
+            <div class="phase-body">Blue-green release for zero downtime. Canary rollout: 5% → 25% → 100% traffic over 48 hours. Alerting wired to PagerDuty before traffic goes live. Written rollback plan, not just a button. Global CDN for asset delivery.</div>
+          </div>
+        </div>
+
+        <div class="phase-item">
+          <div class="phase-num">07</div>
+          <div class="phase-dot-wrap">
+            <div class="phase-dot pending">7</div>
+          </div>
+          <div class="phase-content" style="padding-bottom:0;">
+            <span class="phase-tag tag-pending">Post-Launch</span>
+            <div class="phase-name">Maintenance</div>
+            <div class="phase-body">SLA: 99.5% uptime. On-call rotation (2 engineers). Blameless postmortems within 48h of P0 incidents. Dependency audit quarterly. Architecture docs written within 2 weeks of launch while context is fresh. Full plan in Section 15.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 04 DESIGN DECISIONS ── -->
+  <section class="section" id="design">
+    <div class="section-label">Section 04</div>
+    <h2 class="section-title">Design Decisions Before Coding</h2>
+    <p class="section-desc">Ordered by cost-to-change. Layer 1 decisions constrain everything below them. An ADR was written for each.</p>
+
+    <div class="callout callout-warn">
+      <span class="callout-icon">⚠</span>
+      <span><strong>Rule:</strong> System design and data model must be stable before UX design begins. Skipping this order caused two major redesigns in v1. It does not happen in v2.</span>
+    </div>
+
+    <div class="design-stack" style="margin-top:20px;">
+      <!-- Layer 1 -->
+      <div class="design-row">
+        <div class="design-level"><div class="design-level-badge dl-1">1</div></div>
+        <div class="design-card">
+          <div class="decision-badge">Most Expensive to Change</div>
+          <div class="design-card-title">Data Model & Schema</div>
+          <div class="design-card-body">Finalized before any API or UX work. Core entities: Player, Vehicle, Track, Race, Leaderboard, Upgrade, Skin. All cardinalities resolved (see Section 05). Indexes designed for leaderboard query patterns. Soft-delete + audit timestamps on all entities.</div>
+        </div>
+        <div class="design-card">
+          <div class="design-card-title">System Architecture</div>
+          <div class="design-card-body"><strong>Decision: Monolith.</strong> Three.js core handles synchronous gameplay. Async background workers handle leaderboard recalculations and reward distribution. No microservices in v2 — the overhead is unjustified at this scale. Revisit at 1M MAU.</div>
+        </div>
+      </div>
+      <!-- Layer 2 -->
+      <div class="design-row">
+        <div class="design-level"><div class="design-level-badge dl-2">2</div></div>
+        <div class="design-card">
+          <div class="design-card-title">Infrastructure & Stack</div>
+          <div class="design-card-body">Cloud: AWS (us-east-1 primary, eu-west-1 replica for GDPR). Runtime: containerized Node.js on ECS Fargate. CI/CD: GitHub Actions on day 1. CDN: CloudFront for all static game assets. No manual deploys — ever.</div>
+        </div>
+        <div class="design-card">
+          <div class="decision-badge">ADR-002 Written</div>
+          <div class="design-card-title">API Contracts</div>
+          <div class="design-card-body">OpenAPI 3.1 spec authored before frontend development. Frontend mocks against spec immediately. Versioned via URL prefix <code>/v2/</code>. All error responses follow RFC 7807 (Problem Details). See Section 11.</div>
+        </div>
+      </div>
+      <!-- Layer 3 -->
+      <div class="design-row">
+        <div class="design-level"><div class="design-level-badge dl-3">3</div></div>
+        <div class="design-card">
+          <div class="design-card-title">Security Model</div>
+          <div class="design-card-body">Auth: JWT (15min access token + 30d refresh). AuthZ: RBAC (Player / Admin). Secrets: AWS Secrets Manager — zero hardcoded keys. Encryption: TLS 1.3 in transit, AES-256 at rest for PII. GDPR: right-to-erasure endpoint implemented before launch.</div>
+        </div>
+        <div class="design-card">
+          <div class="design-card-title">UX Flows & States</div>
+          <div class="design-card-body">Every screen accounts for 5 states: Happy Path, Loading/Skeleton, Empty State (no cars owned), Error (connection lost), and Edge Case (10,000 leaderboard entries, network timeout mid-race). No screen may ship without all 5 states designed.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 05 SCHEMA ── -->
+  <section class="section" id="schema">
+    <div class="section-label">Section 05</div>
+    <h2 class="section-title">Data Model & Schema</h2>
+    <p class="section-desc">The most expensive decisions to change. Finalized before API or UI work began.</p>
+
+    <div class="schema-grid">
+      <div class="schema-entity">
+        <div class="schema-head">
+          <div class="schema-entity-name">Player</div>
+          <div class="schema-pk">PK</div>
+        </div>
+        <div class="schema-field"><span class="schema-fname">player_id</span><span class="schema-ftype">UUID</span><span class="schema-fnull">NOT NULL</span></div>
+        <div class="schema-field"><span class="schema-fname">display_name</span><span class="schema-ftype">VARCHAR(32)</span><span class="schema-fnull">UNIQUE</span></div>
+        <div class="schema-field"><span class="schema-fname">email</span><span class="schema-ftype">VARCHAR(255)</span><span class="schema-fnull">UNIQUE</span></div>
+        <div class="schema-field"><span class="schema-fname">currency_coins</span><span class="schema-ftype">INTEGER</span><span class="schema-fnull">DEFAULT 0</span></div>
+        <div class="schema-field"><span class="schema-fname">currency_gems</span><span class="schema-ftype">INTEGER</span><span class="schema-fnull">DEFAULT 0</span></div>
+        <div class="schema-field"><span class="schema-fname">active_vehicle_id</span><span class="schema-ftype">FK → Vehicle</span><span class="schema-fnull">NULLABLE</span></div>
+        <div class="schema-field"><span class="schema-fname">created_at</span><span class="schema-ftype">TIMESTAMPTZ</span><span class="schema-fnull">NOT NULL</span></div>
+        <div class="schema-field"><span class="schema-fname">deleted_at</span><span class="schema-ftype">TIMESTAMPTZ</span><span class="schema-fnull">soft-delete</span></div>
+        <div class="schema-rel"><span class="schema-rel-badge">1 → many</span> PlayerVehicle, Race, LeaderboardEntry</div>
+      </div>
+
+      <div class="schema-entity">
+        <div class="schema-head">
+          <div class="schema-entity-name">Vehicle</div>
+          <div class="schema-pk">PK</div>
+        </div>
+        <div class="schema-field"><span class="schema-fname">vehicle_id</span><span class="schema-ftype">UUID</span><span class="schema-fnull">NOT NULL</span></div>
+        <div class="schema-field"><span class="schema-fname">name</span><span class="schema-ftype">VARCHAR(64)</span><span class="schema-fnull">NOT NULL</span></div>
+        <div class="schema-field"><span class="schema-fname">stat_speed</span><span class="schema-ftype">SMALLINT</span><span class="schema-fnull">0–100</span></div>
+        <div class="schema-field"><span class="schema-fname">stat_handling</span><span class="schema-ftype">SMALLINT</span><span class="schema-fnull">0–100</span></div>
+        <div class="schema-field"><span class="schema-fname">stat_accel</span><span class="schema-ftype">SMALLINT</span><span class="schema-fnull">0–100</span></div>
+        <div class="schema-field"><span class="schema-fname">stat_weight</span><span class="schema-ftype">SMALLINT</span><span class="schema-fnull">0–100</span></div>
+        <div class="schema-field"><span class="schema-fname">class</span><span class="schema-ftype">ENUM</span><span class="schema-fnull">A/B/C</span></div>
+        <div class="schema-field"><span class="schema-fname">unlock_cost</span><span class="schema-ftype">INTEGER</span><span class="schema-fnull">NOT NULL</span></div>
+        <div class="schema-rel"><span class="schema-rel-badge">1 → many</span> VehicleUpgrade, PlayerVehicle</div>
+      </div>
+
+      <div class="schema-entity">
+        <div class="schema-head">
+          <div class="schema-entity-name">Race</div>
+          <div class="schema-pk">PK</div>
+        </div>
+        <div class="schema-field"><span class="schema-fname">race_id</span><span class="schema-ftype">UUID</span><span class="schema-fnull">NOT NULL</span></div>
+        <div class="schema-field"><span class="schema-fname">player_id</span><span class="schema-ftype">FK → Player</span><span class="schema-fnull">NOT NULL</span></div>
+        <div class="schema-field"><span class="schema-fname">track_id</span><span class="schema-ftype">FK → Track</span><span class="schema-fnull">NOT NULL</span></div>
+        <div class="schema-field"><span class="schema-fname">vehicle_id</span><span class="schema-ftype">FK → Vehicle</span><span class="schema-fnull">NOT NULL</span></div>
+        <div class="schema-field"><span class="schema-fname">lap_time_ms</span><span class="schema-ftype">INTEGER</span><span class="schema-fnull">NULLABLE</span></div>
+        <div class="schema-field"><span class="schema-fname">finish_position</span><span class="schema-ftype">SMALLINT</span><span class="schema-fnull">1–4</span></div>
+        <div class="schema-field"><span class="schema-fname">stars_earned</span><span class="schema-ftype">SMALLINT</span><span class="schema-fnull">0–3</span></div>
+        <div class="schema-field"><span class="schema-fname">coins_earned</span><span class="schema-ftype">INTEGER</span><span class="schema-fnull">NOT NULL</span></div>
+        <div class="schema-rel"><span class="schema-rel-badge">many → 1</span> Player, Track, Vehicle</div>
+      </div>
+
+      <div class="schema-entity">
+        <div class="schema-head">
+          <div class="schema-entity-name">LeaderboardEntry</div>
+          <div class="schema-pk">PK</div>
+        </div>
+        <div class="schema-field"><span class="schema-fname">entry_id</span><span class="schema-ftype">UUID</span><span class="schema-fnull">NOT NULL</span></div>
+        <div class="schema-field"><span class="schema-fname">player_id</span><span class="schema-ftype">FK → Player</span><span class="schema-fnull">NOT NULL</span></div>
+        <div class="schema-field"><span class="schema-fname">track_id</span><span class="schema-ftype">FK → Track</span><span class="schema-fnull">NOT NULL</span></div>
+        <div class="schema-field"><span class="schema-fname">best_lap_ms</span><span class="schema-ftype">INTEGER</span><span class="schema-fnull">NOT NULL</span></div>
+        <div class="schema-field"><span class="schema-fname">season_id</span><span class="schema-ftype">VARCHAR(16)</span><span class="schema-fnull">NOT NULL</span></div>
+        <div class="schema-field"><span class="schema-fname">rank</span><span class="schema-ftype">INTEGER</span><span class="schema-fnull">computed</span></div>
+        <div class="schema-field"><span class="schema-fname">updated_at</span><span class="schema-ftype">TIMESTAMPTZ</span><span class="schema-fnull">NOT NULL</span></div>
+        <div class="schema-rel"><span class="schema-rel-badge">UNIQUE(player_id, track_id, season_id)</span></div>
+      </div>
+    </div>
+
+    <div class="callout callout-info" style="margin-top:16px;">
+      <span class="callout-icon">ℹ</span>
+      <span>All tables include <code>created_at TIMESTAMPTZ NOT NULL DEFAULT now()</code> and <code>updated_at</code> triggers. Leaderboard rank is a computed column refreshed by async worker every 60 seconds, not calculated at query time. Read replicas handle leaderboard reads; primary handles all writes.</span>
+    </div>
+  </section>
+
+  <!-- ── 06 UX STATES ── -->
+  <section class="section" id="ux-states">
+    <div class="section-label">Section 06</div>
+    <h2 class="section-title">UX States & Error Handling</h2>
+    <p class="section-desc">Every screen must handle all five states before it ships. "We forgot to handle errors" is not a valid postmortem finding.</p>
+
+    <div class="states-grid">
+      <div class="state-card">
+        <div class="state-icon">✅</div>
+        <div class="state-name">Happy Path</div>
+        <div class="state-desc">Data loaded, user logged in, race available. Primary flow. Designed first.</div>
+      </div>
+      <div class="state-card">
+        <div class="state-icon">⏳</div>
+        <div class="state-name">Loading</div>
+        <div class="state-desc">Skeleton screens and loading car animation. Max perceived wait: 800ms before progress bar appears.</div>
+      </div>
+      <div class="state-card">
+        <div class="state-icon">📭</div>
+        <div class="state-name">Empty State</div>
+        <div class="state-desc">No vehicles owned, no races completed, new account. Must guide user to first action, not show blank UI.</div>
+      </div>
+      <div class="state-card">
+        <div class="state-icon">⚡</div>
+        <div class="state-name">Error State</div>
+        <div class="state-desc">Connection lost mid-race, API failure, payment error. Always include retry action + human-readable message.</div>
+      </div>
+      <div class="state-card">
+        <div class="state-icon">🔀</div>
+        <div class="state-name">Edge Cases</div>
+        <div class="state-desc">10,000 leaderboard entries, 0-coin balance at shop, network timeout at lap 3. All must be handled gracefully.</div>
+      </div>
+    </div>
+
+    <h3 class="sub-title" style="margin-top:28px;">Observability & Structured Logging</h3>
+    <div class="card-grid card-grid-2">
+      <div class="card">
+        <div class="card-title" style="margin-bottom:10px;">Log Format (JSON)</div>
+        <p class="text-sm text-muted">Every log line includes: <code>correlation_id</code>, <code>player_id</code> (if authenticated), <code>event_type</code>, <code>severity</code>, <code>timestamp_utc</code>, <code>service</code>. No free-form strings. Parsed by CloudWatch Insights.</p>
+      </div>
+      <div class="card">
+        <div class="card-title" style="margin-bottom:10px;">Alert Thresholds</div>
+        <p class="text-sm text-muted">P95 API latency &gt; 300ms → PagerDuty warning. Error rate &gt; 1% over 5min → PagerDuty critical. Leaderboard sync lag &gt; 120s → Slack alert. CDN cache hit rate &lt; 90% → engineering ticket.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 07 SCOPE ── -->
+  <section class="section" id="scope">
+    <div class="section-label">Section 07</div>
+    <h2 class="section-title">Scope: In & Out</h2>
+    <p class="section-desc">The "Out of Scope" list prevents scope creep. Any feature not on the "In" list requires a formal scope change request.</p>
+
+    <div class="scope-grid">
+      <div class="scope-col scope-in">
+        <div class="scope-header">✓ In Scope — v2.0</div>
+        <div class="scope-body">
+          <div class="scope-item"><div><span class="scope-item-label">Grand Prix Mode</span><span class="scope-item-desc">4 cups (Mushroom, Star, Cloud, Peak) × 4 tracks each = 16 total tracks</span></div></div>
+          <div class="scope-item"><div><span class="scope-item-label">Character System</span><span class="scope-item-desc">4 racers (Bunny, Cat, Frog, Bear) with distinct stat profiles</span></div></div>
+          <div class="scope-item"><div><span class="scope-item-label">Vehicle Garage</span><span class="scope-item-desc">Skin selection, stat upgrades, part-specific leveling (Turbo, Tires, Aero)</span></div></div>
+          <div class="scope-item"><div><span class="scope-item-label">Battle HUD</span><span class="scope-item-desc">Power-up system: Mushroom, Star, Shield, Rocket. Item slots and activation</span></div></div>
+          <div class="scope-item"><div><span class="scope-item-label">Global Leaderboard</span><span class="scope-item-desc">Per-track best lap times, season rankings, Friends filter</span></div></div>
+          <div class="scope-item"><div><span class="scope-item-label">Shop</span><span class="scope-item-desc">Cosmetic skins (Rare/Epic/Legendary), boost trails, track props</span></div></div>
+          <div class="scope-item"><div><span class="scope-item-label">Immersive UI System</span><span class="scope-item-desc">No-Top-Bar canvas logic, glassmorphism design language, all 12 screens</span></div></div>
+          <div class="scope-item"><div><span class="scope-item-label">Settings</span><span class="scope-item-desc">Audio mixing, motion blur toggle, isometric shadows, control remapping</span></div></div>
+          <div class="scope-item"><div><span class="scope-item-label">Player Auth</span><span class="scope-item-desc">JWT-based login, profile, GDPR right-to-erasure</span></div></div>
+          <div class="scope-item"><div><span class="scope-item-label">Loading Screen</span><span class="scope-item-desc">World-streaming experience with tips, animated car, progress bar</span></div></div>
+        </div>
+      </div>
+      <div class="scope-col scope-out">
+        <div class="scope-header">✕ Out of Scope — v2.0</div>
+        <div class="scope-body">
+          <div class="scope-item"><div><span class="scope-item-label">Real-Time Multiplayer</span><span class="scope-item-desc">Synchronous P2P racing. WebSocket infra not sized for v2. V3 candidate.</span></div></div>
+          <div class="scope-item"><div><span class="scope-item-label">Track Editor</span><span class="scope-item-desc">Community level creation and sharing. UGC pipeline requires separate moderation system.</span></div></div>
+          <div class="scope-item"><div><span class="scope-item-label">Console Porting</span><span class="scope-item-desc">Nintendo Switch, Xbox, PlayStation. Not browser-native. Separate project scope.</span></div></div>
+          <div class="scope-item"><div><span class="scope-item-label">Native Mobile App</span><span class="scope-item-desc">iOS/Android apps via React Native or Unity. Web-responsive is sufficient for v2.</span></div></div>
+          <div class="scope-item"><div><span class="scope-item-label">Voice Chat</span><span class="scope-item-desc">In-race voice communication. Requires WebRTC + content moderation. V4.</span></div></div>
+          <div class="scope-item"><div><span class="scope-item-label">Clan / Team System</span><span class="scope-item-desc">Persistent team rankings, clan wars. Social graph complexity not justified v2.</span></div></div>
+          <div class="scope-item"><div><span class="scope-item-label">Battle Pass</span><span class="scope-item-desc">Seasonal pass with premium reward track. Economy design not complete.</span></div></div>
+          <div class="scope-item"><div><span class="scope-item-label">AI/ML Opponents</span><span class="scope-item-desc">Adaptive difficulty AI. Rule-based bots with difficulty presets are sufficient for v2.</span></div></div>
+          <div class="scope-item"><div><span class="scope-item-label">Replay System</span><span class="scope-item-desc">Race recording and playback. Storage costs prohibitive at launch scale.</span></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 08 PERSONAS ── -->
+  <section class="section" id="personas">
+    <div class="section-label">Section 08</div>
+    <h2 class="section-title">User Personas & Jobs to Be Done</h2>
+    <p class="section-desc">Three validated personas from 40+ interviews. Two solid personas beats ten thin ones. JTBD framing prevents building the wrong solution to the right problem.</p>
+
+    <div class="personas-grid">
+      <div class="persona-card">
+        <div class="persona-head">
+          <div class="persona-avatar" style="background:var(--primary-c);">🌸</div>
+          <div class="persona-name">The Cozy Gamer</div>
+          <div class="persona-tagline">Sofia, 28 · UX Designer</div>
+        </div>
+        <div class="persona-divider"></div>
+        <div class="persona-body">
+          <div class="persona-row">
+            <div class="persona-row-label">Goal</div>
+            <div class="persona-row-val">Decompress after work without doomscrolling. Play 20-min sessions.</div>
+          </div>
+          <div class="persona-row">
+            <div class="persona-row-label">JTBD</div>
+            <div class="persona-row-val">"When I'm overstimulated, I want to play something competitive but calming, so I can feel accomplished without adding stress."</div>
+          </div>
+          <div class="persona-row">
+            <div class="persona-row-label">Frustration</div>
+            <div class="persona-row-val">Rage-inducing competitive games. Ugly UI. Loading screens with no progress signal.</div>
+          </div>
+          <div class="persona-row">
+            <div class="persona-row-label">Primary Feature</div>
+            <div class="persona-row-val">Grand Prix mode, Garage customization, Shop (cosmetics)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="persona-card">
+        <div class="persona-head">
+          <div class="persona-avatar" style="background:var(--secondary-c);">🏆</div>
+          <div class="persona-name">The Completionist</div>
+          <div class="persona-tagline">Marcus, 23 · Software Engineer</div>
+        </div>
+        <div class="persona-divider"></div>
+        <div class="persona-body">
+          <div class="persona-row">
+            <div class="persona-row-label">Goal</div>
+            <div class="persona-row-val">Reach #1 on every track's leaderboard. Own every Legendary skin.</div>
+          </div>
+          <div class="persona-row">
+            <div class="persona-row-label">JTBD</div>
+            <div class="persona-row-val">"When I have free time, I want to master a skill-based game, so I can see measurable progress and be the best in my social circle."</div>
+          </div>
+          <div class="persona-row">
+            <div class="persona-row-label">Frustration</div>
+            <div class="persona-row-val">Pay-to-win mechanics. No leaderboard context for his rank. Opaque upgrade systems.</div>
+          </div>
+          <div class="persona-row">
+            <div class="persona-row-label">Primary Feature</div>
+            <div class="persona-row-val">Global Leaderboard, Pro Garage upgrades, all 16 tracks</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="persona-card">
+        <div class="persona-head">
+          <div class="persona-avatar" style="background:var(--tertiary-c);">☁️</div>
+          <div class="persona-name">The Casual Dripper</div>
+          <div class="persona-tagline">Priya, 41 · Marketing Manager</div>
+        </div>
+        <div class="persona-divider"></div>
+        <div class="persona-body">
+          <div class="persona-row">
+            <div class="persona-row-label">Goal</div>
+            <div class="persona-row-val">5-minute sessions. Play on commute or lunch break. No commitment.</div>
+          </div>
+          <div class="persona-row">
+            <div class="persona-row-label">JTBD</div>
+            <div class="persona-row-val">"When I have a spare 5 minutes, I want to do something fun and pretty, so I can feel like I had a micro-vacation from my day."</div>
+          </div>
+          <div class="persona-row">
+            <div class="persona-row-label">Frustration</div>
+            <div class="persona-row-val">Tutorials that take 10 minutes. Games that can't be paused mid-race. Aggressive monetization pop-ups.</div>
+          </div>
+          <div class="persona-row">
+            <div class="persona-row-label">Primary Feature</div>
+            <div class="persona-row-val">Quick Race, World Map (track selection), Settings (motion comfort)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 09 FUNCTIONAL REQ ── -->
+  <section class="section" id="functional">
+    <div class="section-label">Section 09</div>
+    <h2 class="section-title">Functional Requirements</h2>
+    <p class="section-desc">Each requirement is tagged by priority (MUST / SHOULD / NICE) and includes a testable acceptance criterion. The <em>Out of Scope</em> section in Section 07 is the explicit scope fence.</p>
+
+    <table class="prd-table">
+      <thead>
+        <tr>
+          <th style="width:60px;">ID</th>
+          <th style="width:90px;">Priority</th>
+          <th style="width:160px;">Feature</th>
+          <th>Requirement</th>
+          <th>Acceptance Criterion</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="text-mono text-muted" style="font-size:12px;">FR-01</td><td><span class="req-tag req-must">MUST</span></td><td class="text-sm" style="font-weight:600;">Race Loop</td><td class="text-sm text-muted">Player can start, complete, or abandon a race on any unlocked track with their active vehicle.</td><td class="text-sm text-muted">Race completes in under 3 minutes on Soft Sands. Lap times recorded to ms precision.</td></tr>
+        <tr><td class="text-mono text-muted" style="font-size:12px;">FR-02</td><td><span class="req-tag req-must">MUST</span></td><td class="text-sm" style="font-weight:600;">Vehicle Stats</td><td class="text-sm text-muted">Each vehicle has Speed, Handling, Acceleration, Weight stats that deterministically affect physics.</td><td class="text-sm text-muted">Speed Demon vehicle (Speed 85) laps faster than Bubblegum Cruiser (Speed 75) on straight tracks.</td></tr>
+        <tr><td class="text-mono text-muted" style="font-size:12px;">FR-03</td><td><span class="req-tag req-must">MUST</span></td><td class="text-sm" style="font-weight:600;">Leaderboard</td><td class="text-sm text-muted">Global per-track best-lap leaderboard updates within 60s of race completion. Player rank visible with ±10 context rows.</td><td class="text-sm text-muted">New personal best propagates to leaderboard rank within 60 seconds in load testing (5K concurrent).</td></tr>
+        <tr><td class="text-mono text-muted" style="font-size:12px;">FR-04</td><td><span class="req-tag req-must">MUST</span></td><td class="text-sm" style="font-weight:600;">Garage Upgrades</td><td class="text-sm text-muted">Player can upgrade Turbo, Tires, and Aero Kit using earned coins. Each upgrade level increases relevant stat by defined increment.</td><td class="text-sm text-muted">Turbo Level 4 increases Speed stat by exactly 5 points. Displayed stat matches physics engine value.</td></tr>
+        <tr><td class="text-mono text-muted" style="font-size:12px;">FR-05</td><td><span class="req-tag req-must">MUST</span></td><td class="text-sm" style="font-weight:600;">Track Unlock</td><td class="text-sm text-muted">Tracks unlock progressively by star count. Peach Peaks requires 5 stars. Locked tracks display requirement clearly.</td><td class="text-sm text-muted">Player with 4 stars sees Peach Peaks as locked with "Requires 5 Stars" tooltip, not error state.</td></tr>
+        <tr><td class="text-mono text-muted" style="font-size:12px;">FR-06</td><td><span class="req-tag req-must">MUST</span></td><td class="text-sm" style="font-weight:600;">Power-Ups</td><td class="text-sm text-muted">4 power-up types (Mushroom speed boost, Star invincibility, Shield, Rocket) collectible during race. Item slot shows current item.</td><td class="text-sm text-muted">Mushroom boost increases vehicle speed by 40% for 3 seconds. Shield absorbs exactly 1 incoming projectile.</td></tr>
+        <tr><td class="text-mono text-muted" style="font-size:12px;">FR-07</td><td><span class="req-tag req-must">MUST</span></td><td class="text-sm" style="font-weight:600;">Auth & Profile</td><td class="text-sm text-muted">Player registers with email/password. JWT session persists 30 days. GDPR erasure request processed within 72h.</td><td class="text-sm text-muted">Player data erasure API returns 202 Accepted and data is purged from all stores within 72h.</td></tr>
+        <tr><td class="text-mono text-muted" style="font-size:12px;">FR-08</td><td><span class="req-tag req-should">SHOULD</span></td><td class="text-sm" style="font-weight:600;">Shop / IAP</td><td class="text-sm text-muted">Player can purchase skins using coins (earned) or gems (purchased). No stat advantage from purchases.</td><td class="text-sm text-muted">All purchasable items are cosmetic only. A free-to-play player with max upgrades beats a paying player on same vehicle class.</td></tr>
+        <tr><td class="text-mono text-muted" style="font-size:12px;">FR-09</td><td><span class="req-tag req-should">SHOULD</span></td><td class="text-sm" style="font-weight:600;">Visual Settings</td><td class="text-sm text-muted">Motion Blur and Isometric Shadows toggleable in Settings. Preference persists across sessions.</td><td class="text-sm text-muted">Motion Blur OFF reduces GPU draw calls by ≥15%. Preference survives browser refresh.</td></tr>
+        <tr><td class="text-mono text-muted" style="font-size:12px;">FR-10</td><td><span class="req-tag req-nice">NICE</span></td><td class="text-sm" style="font-weight:600;">Victory Screen</td><td class="text-sm text-muted">Post-race results show position, lap time, stars earned, coins rewarded, and rank delta with confetti animation.</td><td class="text-sm text-muted">All 5 result elements visible within 500ms of race end. Confetti renders at ≥30fps on mid-tier GPU.</td></tr>
+        <tr><td class="text-mono text-muted" style="font-size:12px;">FR-11</td><td><span class="req-tag req-nice">NICE</span></td><td class="text-sm" style="font-weight:600;">Character Selection</td><td class="text-sm text-muted">Player selects from 4 character/vehicle pairings before Grand Prix. Selection persists until changed.</td><td class="text-sm text-muted">Character selection saves to player profile. Stat bars animate correctly on selection.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ── 10 NFR ── -->
+  <section class="section" id="nfr">
+    <div class="section-label">Section 10</div>
+    <h2 class="section-title">Non-Functional Requirements</h2>
+    <p class="section-desc">NFRs are what developers need to make architecture decisions. Missing NFRs cause expensive rewrites. These are hard constraints, not aspirations.</p>
+
+    <div class="nfr-grid">
+      <div class="nfr-card">
+        <div class="nfr-icon">⚡</div>
+        <div class="nfr-title">Performance</div>
+        <div class="nfr-metric">60 FPS</div>
+        <div class="nfr-desc">Sustained on mid-tier desktop (2019 MacBook Pro). Three.js scene must not exceed 12ms frame budget.</div>
+      </div>
+      <div class="nfr-card">
+        <div class="nfr-icon">🌐</div>
+        <div class="nfr-title">API Latency</div>
+        <div class="nfr-metric">&lt; 150ms</div>
+        <div class="nfr-desc">P95 latency for leaderboard submission and profile update. SLA measurement via CloudWatch.</div>
+      </div>
+      <div class="nfr-card">
+        <div class="nfr-icon">🕐</div>
+        <div class="nfr-title">Time to Interactive</div>
+        <div class="nfr-metric">&lt; 3s</div>
+        <div class="nfr-desc">Main menu interactive within 3 seconds on 10 Mbps connection. Game assets streamed progressively.</div>
+      </div>
+      <div class="nfr-card">
+        <div class="nfr-icon">🏗️</div>
+        <div class="nfr-title">Uptime SLA</div>
+        <div class="nfr-metric">99.5%</div>
+        <div class="nfr-desc">Measured monthly. Allows max 3.6 hours downtime/month. Excludes scheduled maintenance (max 1h/week).</div>
+      </div>
+      <div class="nfr-card">
+        <div class="nfr-icon">👥</div>
+        <div class="nfr-title">Concurrency</div>
+        <div class="nfr-metric">5,000</div>
+        <div class="nfr-desc">Concurrent sessions without performance degradation. Load test required before each deployment.</div>
+      </div>
+      <div class="nfr-card">
+        <div class="nfr-icon">♿</div>
+        <div class="nfr-title">Accessibility</div>
+        <div class="nfr-metric">WCAG 2.1 AA</div>
+        <div class="nfr-desc">High-contrast text mode. Motion reduction for vestibular sensitivity. Keyboard navigable menus.</div>
+      </div>
+      <div class="nfr-card">
+        <div class="nfr-icon">🔒</div>
+        <div class="nfr-title">Security</div>
+        <div class="nfr-metric">JWT + TLS 1.3</div>
+        <div class="nfr-desc">No hardcoded secrets. OWASP Top-10 checklist before launch. Penetration test pre-GA.</div>
+      </div>
+      <div class="nfr-card">
+        <div class="nfr-icon">🌍</div>
+        <div class="nfr-title">Compliance</div>
+        <div class="nfr-metric">GDPR + COPPA</div>
+        <div class="nfr-desc">EU data residency. No under-13 user data. Consent management for analytics cookies. DPA signed with all sub-processors.</div>
+      </div>
+      <div class="nfr-card">
+        <div class="nfr-icon">📦</div>
+        <div class="nfr-title">Bundle Size</div>
+        <div class="nfr-metric">&lt; 2MB</div>
+        <div class="nfr-desc">Initial JS bundle under 2MB gzipped. 3D assets streamed on demand. Code splitting on all routes.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 11 API CONTRACTS ── -->
+  <section class="section" id="api">
+    <div class="section-label">Section 11</div>
+    <h2 class="section-title">API Contracts</h2>
+    <p class="section-desc">Defined before frontend development begins. Frontend mocks against this spec. All errors follow RFC 7807 Problem Details. Base URL: <code>https://api.pastelpeak.io/v2</code></p>
+
+    <table class="api-table">
+      <thead>
+        <tr>
+          <th style="width:70px;">Method</th>
+          <th style="width:220px;">Path</th>
+          <th>Description</th>
+          <th>Auth</th>
+          <th>Key Response</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="method post">POST</span></td><td class="path">/auth/register</td><td class="text-sm text-muted">Create player account with email + password</td><td class="text-sm text-muted">Public</td><td class="text-sm text-muted">201 · {player_id, access_token, refresh_token}</td></tr>
+        <tr><td><span class="method post">POST</span></td><td class="path">/auth/login</td><td class="text-sm text-muted">Authenticate player, issue JWT pair</td><td class="text-sm text-muted">Public</td><td class="text-sm text-muted">200 · {access_token, refresh_token, expires_in}</td></tr>
+        <tr><td><span class="method post">POST</span></td><td class="path">/auth/refresh</td><td class="text-sm text-muted">Exchange refresh token for new access token</td><td class="text-sm text-muted">Refresh JWT</td><td class="text-sm text-muted">200 · {access_token, expires_in}</td></tr>
+        <tr><td><span class="method get">GET</span></td><td class="path">/players/me</td><td class="text-sm text-muted">Fetch authenticated player's full profile, currency, active vehicle</td><td class="text-sm text-muted">Bearer JWT</td><td class="text-sm text-muted">200 · Player object</td></tr>
+        <tr><td><span class="method patch">PATCH</span></td><td class="path">/players/me</td><td class="text-sm text-muted">Update display name or avatar</td><td class="text-sm text-muted">Bearer JWT</td><td class="text-sm text-muted">200 · Updated Player</td></tr>
+        <tr><td><span class="method delete">DELETE</span></td><td class="path">/players/me</td><td class="text-sm text-muted">GDPR erasure request — queues deletion job</td><td class="text-sm text-muted">Bearer JWT</td><td class="text-sm text-muted">202 Accepted · {job_id}</td></tr>
+        <tr><td><span class="method get">GET</span></td><td class="path">/vehicles</td><td class="text-sm text-muted">List all vehicles with stats, unlock cost, player ownership status</td><td class="text-sm text-muted">Bearer JWT</td><td class="text-sm text-muted">200 · Vehicle[]</td></tr>
+        <tr><td><span class="method post">POST</span></td><td class="path">/vehicles/{id}/unlock</td><td class="text-sm text-muted">Purchase vehicle with coins. Deducts balance atomically.</td><td class="text-sm text-muted">Bearer JWT</td><td class="text-sm text-muted">200 · {vehicle, new_balance}</td></tr>
+        <tr><td><span class="method post">POST</span></td><td class="path">/vehicles/{id}/upgrade</td><td class="text-sm text-muted">Upgrade specific part (turbo/tires/aero) by one level</td><td class="text-sm text-muted">Bearer JWT</td><td class="text-sm text-muted">200 · {vehicle, new_balance}</td></tr>
+        <tr><td><span class="method get">GET</span></td><td class="path">/tracks</td><td class="text-sm text-muted">List all tracks with unlock requirements and player progress</td><td class="text-sm text-muted">Bearer JWT</td><td class="text-sm text-muted">200 · Track[]</td></tr>
+        <tr><td><span class="method post">POST</span></td><td class="path">/races</td><td class="text-sm text-muted">Submit completed race result. Server validates and awards rewards.</td><td class="text-sm text-muted">Bearer JWT</td><td class="text-sm text-muted">201 · {race, rewards, new_rank}</td></tr>
+        <tr><td><span class="method get">GET</span></td><td class="path">/leaderboard/{track_id}</td><td class="text-sm text-muted">Top 100 + caller's rank ±10 rows. Filterable by season, friends.</td><td class="text-sm text-muted">Bearer JWT</td><td class="text-sm text-muted">200 · {entries[], player_rank}</td></tr>
+        <tr><td><span class="method get">GET</span></td><td class="path">/shop/items</td><td class="text-sm text-muted">All purchasable cosmetics with rarity, price, player ownership</td><td class="text-sm text-muted">Bearer JWT</td><td class="text-sm text-muted">200 · ShopItem[]</td></tr>
+        <tr><td><span class="method post">POST</span></td><td class="path">/shop/purchase</td><td class="text-sm text-muted">Purchase cosmetic item. Validates currency type and balance atomically.</td><td class="text-sm text-muted">Bearer JWT</td><td class="text-sm text-muted">200 · {item, new_balance}</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout-info" style="margin-top:16px;">
+      <span class="callout-icon">ℹ</span>
+      <span>All endpoints return <code>Content-Type: application/json</code>. Error responses include <code>type</code>, <code>title</code>, <code>status</code>, <code>detail</code>, and <code>correlation_id</code> fields per RFC 7807. Rate limiting: 100 req/min per player_id on authenticated endpoints. Race submission endpoint is idempotent via client-generated <code>race_id</code> UUID.</span>
+    </div>
+  </section>
+
+  <!-- ── 12 RISKS ── -->
+  <section class="section" id="risks">
+    <div class="section-label">Section 12</div>
+    <h2 class="section-title">Risks & Mitigations</h2>
+    <p class="section-desc">Write the mitigation next to each risk. A PRD with no risks is a PRD where someone didn't ask hard enough questions.</p>
+
+    <table class="risk-table">
+      <thead>
+        <tr>
+          <th style="width:80px;">Severity</th>
+          <th style="width:160px;">Risk</th>
+          <th>Description</th>
+          <th>Mitigation</th>
+          <th style="width:80px;">Owner</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="risk-sev risk-high">HIGH</span></td>
+          <td class="text-sm" style="font-weight:600;">Three.js performance on low-end hardware</td>
+          <td class="text-sm text-muted">Target 60FPS may not be achievable on older Intel integrated graphics. Could break core experience for 30% of users.</td>
+          <td class="text-sm text-muted">LOD system with 3 quality tiers (auto-detected). Manual quality selector in Settings. Tested on 2017 hardware in CI.</td>
+          <td class="text-sm text-muted">Engine Lead</td>
+        </tr>
+        <tr>
+          <td><span class="risk-sev risk-high">HIGH</span></td>
+          <td class="text-sm" style="font-weight:600;">Leaderboard race submission cheating</td>
+          <td class="text-sm text-muted">Client-submitted race results could be manipulated. Compromises competitive integrity and ruins the game for The Completionist persona.</td>
+          <td class="text-sm text-muted">Server-side physics replay validation for top-100 submissions. Statistical anomaly detection (lap times 3σ below track average). Soft-ban on anomalies, manual review queue.</td>
+          <td class="text-sm text-muted">Backend Lead</td>
+        </tr>
+        <tr>
+          <td><span class="risk-sev risk-high">HIGH</span></td>
+          <td class="text-sm" style="font-weight:600;">GDPR compliance at launch</td>
+          <td class="text-sm text-muted">Missing data residency or erasure endpoint at launch creates legal liability in EU market. EU is 35% of addressable market.</td>
+          <td class="text-sm text-muted">Legal review 4 weeks before launch. Erasure endpoint (FR-07) is a hard dependency for go-live. DPA signed with all sub-processors before any EU data flows.</td>
+          <td class="text-sm text-muted">Product Lead</td>
+        </tr>
+        <tr>
+          <td><span class="risk-sev risk-med">MED</span></td>
+          <td class="text-sm" style="font-weight:600;">Third-party payment processor downtime</td>
+          <td class="text-sm text-muted">Shop purchases fail during payment processor outage. Revenue impact + user frustration.</td>
+          <td class="text-sm text-muted">Graceful degradation: shop shows "Purchases temporarily unavailable" without error codes. Queue failed transactions for retry within 24h. No double-charge risk.</td>
+          <td class="text-sm text-muted">Backend Lead</td>
+        </tr>
+        <tr>
+          <td><span class="risk-sev risk-med">MED</span></td>
+          <td class="text-sm" style="font-weight:600;">Art style regression during dev</td>
+          <td class="text-sm text-muted">Without a design token system, individual developers may deviate from the glassmorphism language, creating visual inconsistency.</td>
+          <td class="text-sm text-muted">Tailwind config locked at design review. PR checklist includes screenshot comparison against Figma spec. Design token library treated as dependency, not a guideline.</td>
+          <td class="text-sm text-muted">Design Lead</td>
+        </tr>
+        <tr>
+          <td><span class="risk-sev risk-low">LOW</span></td>
+          <td class="text-sm" style="font-weight:600;">Scope creep from stakeholder requests</td>
+          <td class="text-sm text-muted">New features requested post-PRD sign-off could delay launch. Common in games where "just one more track" is easy to rationalize.</td>
+          <td class="text-sm text-muted">Formal scope change request process with Product Lead sign-off and explicit sprint impact statement. Out-of-scope list (Section 07) is contractual.</td>
+          <td class="text-sm text-muted">Product Lead</td>
+        </tr>
+        <tr>
+          <td><span class="risk-sev risk-low">LOW</span></td>
+          <td class="text-sm" style="font-weight:600;">Mobile performance on low-RAM devices</td>
+          <td class="text-sm text-muted">Three.js on mobile browsers may run poorly on devices with &lt;3GB RAM, affecting the commuter persona.</td>
+          <td class="text-sm text-muted">Mobile-specific asset bundles (50% polygon reduction). Auto-detect mobile and apply low-quality preset. Explicit "Desktop recommended" notice for mobile users at first load.</td>
+          <td class="text-sm text-muted">Engine Lead</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ── 13 METRICS ── -->
+  <section class="section" id="metrics">
+    <div class="section-label">Section 13</div>
+    <h2 class="section-title">Success Metrics</h2>
+    <p class="section-desc">Specific, measurable outcomes. These become the definition of done for the product. Each has a measurement method.</p>
+
+    <div class="metrics-grid" style="margin-bottom:20px;">
+      <div class="metric-card">
+        <div class="metric-value">40%</div>
+        <div class="metric-label">Day-7 Retention</div>
+        <div class="metric-desc">Industry average for casual games is 15–20%. We target 40% as a signal the core loop works.</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">5%</div>
+        <div class="metric-label">IAP Conversion</div>
+        <div class="metric-desc">5% of MAU purchasing at least one skin pack (Rare, Epic, or Legendary) in first 30 days.</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">4.5/5</div>
+        <div class="metric-label">Game Feel Score</div>
+        <div class="metric-desc">Qualitative "Juice Rating" from 100-player UAT survey. Primary signal for tactile satisfaction.</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">&lt; 45s</div>
+        <div class="metric-label">Time to First Race</div>
+        <div class="metric-desc">From account creation to race start. Measures onboarding friction. The Casual Dripper persona demands this.</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">3.2</div>
+        <div class="metric-label">Sessions / Week</div>
+        <div class="metric-desc">Average sessions per weekly active user. Below 2.0 indicates core loop is not creating habit.</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">&lt; 2%</div>
+        <div class="metric-label">Rage-Quit Rate</div>
+        <div class="metric-desc">% of races abandoned mid-race (excluding restarts). High rate signals frustration — antithetical to Cozy-Arcade positioning.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title" style="margin-bottom:12px;">Measurement Methods</div>
+      <div class="card-grid card-grid-3" style="gap:12px;">
+        <div style="font-size:13px;"><strong>Retention</strong><br/><span class="text-muted">PostHog cohort analysis on player_id. Day-1, Day-7, Day-30 checkpoints.</span></div>
+        <div style="font-size:13px;"><strong>IAP Conversion</strong><br/><span class="text-muted">Stripe webhook → custom analytics event <code>purchase.completed</code>. Funnel in PostHog.</span></div>
+        <div style="font-size:13px;"><strong>Game Feel</strong><br/><span class="text-muted">Post-UAT survey (n=100). In-game haptic feedback score after first win.</span></div>
+        <div style="font-size:13px;"><strong>Time to First Race</strong><br/><span class="text-muted">Custom event: <code>registration.start</code> → <code>race.lap_completed(1)</code>. Median P50.</span></div>
+        <div style="font-size:13px;"><strong>Sessions</strong><br/><span class="text-muted">Session event on page load + 30min idle timeout. Weekly rolling average.</span></div>
+        <div style="font-size:13px;"><strong>Rage-Quit</strong><br/><span class="text-muted">Event: <code>race.abandoned</code> after lap &gt;0. Excludes <code>race.restarted</code>.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 14 MILESTONES ── -->
+  <section class="section" id="milestones">
+    <div class="section-label">Section 14</div>
+    <h2 class="section-title">Timeline & Milestones</h2>
+    <p class="section-desc">Not a Gantt chart. Enough structure that everyone knows what "done" looks like and by when.</p>
+
+    <div class="card" style="padding:28px 32px;">
+      <div class="milestone-list">
+        <div class="ms-item">
+          <div class="ms-date">Week 1–3</div>
+          <div class="ms-content">
+            <div class="ms-dot done"></div>
+            <div>
+              <div class="ms-name">Foundation Complete</div>
+              <div class="ms-items">CI/CD pipeline live · DB schema migrated · Auth endpoints deployed · Three.js scene rendering at target FPS</div>
+            </div>
+          </div>
+        </div>
+        <div class="ms-item">
+          <div class="ms-date">Week 4–7</div>
+          <div class="ms-content">
+            <div class="ms-dot done"></div>
+            <div>
+              <div class="ms-name">Core Race Loop</div>
+              <div class="ms-items">1 playable track · Vehicle physics tuned · Lap timing working · Race submission API live · Basic HUD</div>
+            </div>
+          </div>
+        </div>
+        <div class="ms-item">
+          <div class="ms-date">Week 8–12</div>
+          <div class="ms-content">
+            <div class="ms-dot current"></div>
+            <div>
+              <div class="ms-name">Full Feature Set</div>
+              <div class="ms-items">All 16 tracks · All 4 characters · Garage upgrades · Power-ups · Shop · Leaderboard · Victory screen · Settings</div>
+            </div>
+          </div>
+        </div>
+        <div class="ms-item">
+          <div class="ms-date">Week 13–15</div>
+          <div class="ms-content">
+            <div class="ms-dot pending"></div>
+            <div>
+              <div class="ms-name">QA & UAT</div>
+              <div class="ms-items">Full test suite passing · 5K concurrent load test passing · UAT with 20 recruited players · All 5 UX states verified on every screen</div>
+            </div>
+          </div>
+        </div>
+        <div class="ms-item">
+          <div class="ms-date">Week 16</div>
+          <div class="ms-content">
+            <div class="ms-dot pending"></div>
+            <div>
+              <div class="ms-name">Soft Launch (5% Traffic)</div>
+              <div class="ms-items">Canary deploy · PagerDuty alerts live · Rollback plan tested · Legal sign-off on GDPR · Pen test report reviewed</div>
+            </div>
+          </div>
+        </div>
+        <div class="ms-item">
+          <div class="ms-date">Week 17–18</div>
+          <div class="ms-content">
+            <div class="ms-dot pending"></div>
+            <div>
+              <div class="ms-name">General Availability</div>
+              <div class="ms-items">100% traffic · Press release · Day-1 retention measurement starts · Architecture docs published · On-call rotation active</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 15 MAINTENANCE ── -->
+  <section class="section" id="maintenance">
+    <div class="section-label">Section 15</div>
+    <h2 class="section-title">Post-Launch Maintenance Plan</h2>
+    <p class="section-desc">Post-launch is where long-term quality lives. Most teams skip this until there's an incident. Document the architecture while it's fresh.</p>
+
+    <div class="maint-grid">
+      <div class="maint-card">
+        <div class="maint-title">📊 Observability Stack</div>
+        <ul class="maint-items">
+          <li>CloudWatch Logs — structured JSON, all services</li>
+          <li>AWS X-Ray — distributed tracing, correlation IDs</li>
+          <li>CloudWatch Metrics — custom game-specific dashboards</li>
+          <li>PostHog — player behavior analytics</li>
+          <li>Sentry — frontend error tracking with source maps</li>
+        </ul>
+      </div>
+      <div class="maint-card">
+        <div class="maint-title">🚨 Incident Response</div>
+        <ul class="maint-items">
+          <li>P0 (game unplayable): 15min response SLA, PagerDuty wake</li>
+          <li>P1 (feature broken): 2h response SLA, Slack alert</li>
+          <li>P2 (degraded): next business day, ticketing system</li>
+          <li>Blameless postmortem within 48h of all P0/P1 incidents</li>
+          <li>Written runbook for each known failure mode</li>
+        </ul>
+      </div>
+      <div class="maint-card">
+        <div class="maint-title">🔄 Iteration Cadence</div>
+        <ul class="maint-items">
+          <li>2-week sprints continue post-launch</li>
+          <li>Bug triage every Monday: severity classification</li>
+          <li>New track / skin drop: 6-week cadence (keeps shop fresh)</li>
+          <li>Dependency audit: quarterly (security patches)</li>
+          <li>Performance regression testing: every deploy</li>
+        </ul>
+      </div>
+      <div class="maint-card">
+        <div class="maint-title">📚 Documentation</div>
+        <ul class="maint-items">
+          <li>Architecture Decision Records (ADRs) finalized within 2 weeks of launch</li>
+          <li>API docs auto-generated from OpenAPI spec (Redoc)</li>
+          <li>On-call playbook written before go-live</li>
+          <li>Data retention policy documented (GDPR requirement)</li>
+          <li>Onboarding guide for new engineers — kept current</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 16 OPEN QUESTIONS ── -->
+  <section class="section" id="open">
+    <div class="section-label">Section 16</div>
+    <h2 class="section-title">Open Questions</h2>
+    <p class="section-desc">A living list. A PRD with no open questions is a PRD where someone didn't ask hard enough. Green = resolved, amber = still open.</p>
+
+    <div class="oq-list">
+      <div class="oq-item oq-resolved">
+        <div class="oq-num">✓ Q1</div>
+        <div class="oq-body"><strong>Resolved:</strong> Should we support keyboard-only control? Yes. WCAG 2.1 AA requires full keyboard navigation. Gamepad support is a v3 nice-to-have.</div>
+      </div>
+      <div class="oq-item oq-resolved">
+        <div class="oq-num">✓ Q2</div>
+        <div class="oq-body"><strong>Resolved:</strong> Monolith vs microservices? Monolith for v2 (see ADR-001). Revisit extraction of the leaderboard service at 1M MAU.</div>
+      </div>
+      <div class="oq-item oq-resolved">
+        <div class="oq-num">✓ Q3</div>
+        <div class="oq-body"><strong>Resolved:</strong> Which payment processor? Stripe. DPA signed. No alternative processor in v2. PayPal as V3 expansion market.</div>
+      </div>
+      <div class="oq-item">
+        <div class="oq-num">⚠ Q4</div>
+        <div class="oq-body"><strong>Open:</strong> What is the exact coin reward formula per race finish position? Product Lead decision needed by Sprint 6. Placeholder: 1st=500, 2nd=300, 3rd=150, 4th=75 coins. <em>Needs balance testing.</em></div>
+      </div>
+      <div class="oq-item">
+        <div class="oq-num">⚠ Q5</div>
+        <div class="oq-body"><strong>Open:</strong> Do Legendary skins require gem currency (real money) or can they be earned via coins? Business model decision. If gems-only, need careful communication to avoid pay-to-impress perception. <em>Needs Product Lead + legal sign-off.</em></div>
+      </div>
+      <div class="oq-item">
+        <div class="oq-num">⚠ Q6</div>
+        <div class="oq-body"><strong>Open:</strong> Should the leaderboard be global-only or support regional filters? Regional adds DB complexity (country detection, multiple indexes) but is important for Asian markets. <em>Defer to v2.1 unless market research justifies v2 investment.</em></div>
+      </div>
+      <div class="oq-item">
+        <div class="oq-num">⚠ Q7</div>
+        <div class="oq-body"><strong>Open:</strong> What is the season cadence and reset policy? Season 1 = launch until end of Q4. After reset: historical best times preserved for player records but removed from active leaderboard. <em>Needs community communication plan.</em></div>
+      </div>
+      <div class="oq-item">
+        <div class="oq-num">⚠ Q8</div>
+        <div class="oq-body"><strong>Open:</strong> Bot difficulty in Grand Prix mode — how do AI opponents scale? Three difficulty presets (50cc / 100cc / 150cc) implemented with rubber-band AI. <em>Exact rubber-band curve parameters need playtesting in Sprint 7.</em></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── TECH STACK ── -->
+  <section class="section">
+    <div class="section-label">Appendix A</div>
+    <h2 class="section-title">Technology Stack</h2>
+    <p class="section-desc">All major stack decisions are locked. Changes require ADR + Product Lead approval.</p>
+
+    <div class="stack-grid">
+      <div class="stack-card">
+        <div class="stack-layer">3D Rendering</div>
+        <div class="stack-name">Three.js r158</div>
+        <div class="stack-why">Browser-native 3D. No plugin. Team expertise. Sufficient for isometric arcade game at target specs.</div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-layer">UI Framework</div>
+        <div class="stack-name">Tailwind CSS 3.4</div>
+        <div class="stack-why">Design token system. Glassmorphism utility classes. Rapid iteration. Purge unused styles in prod bundle.</div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-layer">API Runtime</div>
+        <div class="stack-name">Node.js + Fastify</div>
+        <div class="stack-why">Fastify 3x faster than Express for JSON throughput. TypeScript throughout. Shared types between frontend and backend.</div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-layer">Database</div>
+        <div class="stack-name">PostgreSQL 16</div>
+        <div class="stack-why">Relational model fits our entity relationships. JSONB for flexible Vehicle upgrade data. Excellent index support for leaderboard queries.</div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-layer">Cache / Queue</div>
+        <div class="stack-name">Redis 7 (ElastiCache)</div>
+        <div class="stack-why">Leaderboard top-100 cached for 60s. Reward distribution queue for async race result processing.</div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-layer">CI/CD</div>
+        <div class="stack-name">GitHub Actions</div>
+        <div class="stack-why">Live from Sprint 1. Test → Build → Staging deploy → Load test → Production canary pipeline.</div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-layer">Cloud</div>
+        <div class="stack-name">AWS (ECS Fargate)</div>
+        <div class="stack-why">Serverless containers. Auto-scaling. eu-west-1 replica for GDPR data residency. CloudFront CDN for assets.</div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-layer">Auth</div>
+        <div class="stack-name">JWT + bcrypt</div>
+        <div class="stack-why">Stateless auth. 15min access token, 30d refresh. No session store needed. bcrypt for password hashing (cost factor 12).</div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-layer">Payments</div>
+        <div class="stack-name">Stripe</div>
+        <div class="stack-why">PCI-DSS compliant. Webhook-based confirmation. No card data touches our servers. DPA signed.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── ADR EXAMPLE ── -->
+  <section class="section">
+    <div class="section-label">Appendix B</div>
+    <h2 class="section-title">Architecture Decision Record — ADR-001</h2>
+    <p class="section-desc">Template used for all significant architectural decisions. ADR-001 is the monolith vs microservices decision.</p>
+
+    <div class="adr-card">
+      <div class="adr-row">
+        <div class="adr-label">Title</div>
+        <div class="adr-value">Use monolithic architecture for v2.0 (defer service extraction)</div>
+      </div>
+      <div class="adr-row">
+        <div class="adr-label">Status</div>
+        <div class="adr-value"><span style="background:var(--tertiary-c);color:var(--tertiary);padding:2px 8px;border-radius:4px;font-size:12px;font-weight:700;">ACCEPTED</span></div>
+      </div>
+      <div class="adr-row">
+        <div class="adr-label">Context</div>
+        <div class="adr-value" class="text-sm">Team is 6 engineers. Expected scale is &lt;5K concurrent at launch. Microservices introduce network overhead, distributed tracing complexity, and deployment complexity that our team cannot absorb without slowing velocity.</div>
+      </div>
+      <div class="adr-row">
+        <div class="adr-label">Decision</div>
+        <div class="adr-value" class="text-sm">Build as a modular monolith. Game logic, auth, leaderboard, and shop are separate modules within one deployable. Async workers (leaderboard recalc, reward distribution) run as separate processes but share the same DB.</div>
+      </div>
+      <div class="adr-row">
+        <div class="adr-label">Alternatives</div>
+        <div class="adr-value" class="text-sm">A) Full microservices — rejected: deployment complexity exceeds team capacity. B) Serverless functions — rejected: Three.js game server requires persistent WebSocket connections (v3 multiplayer). C) Monolith with separate leaderboard service — deferred to 1M MAU trigger.</div>
+      </div>
+      <div class="adr-row">
+        <div class="adr-label">Consequences</div>
+        <div class="adr-value" class="text-sm">Faster development velocity. Single deploy artifact. Easier debugging. Tradeoff: single scaling unit — at 1M MAU the leaderboard module must be extracted. This is the documented trigger for service extraction.</div>
+      </div>
+    </div>
+  </section>
+
+<div class="card" id="progress-tracker">
+    <div class="card-header">
+       <span class="step-badge">18</span>
+       <h2>Implementation Tracker</h2>
+    </div>
+    <div class="card-body">
+         <p class="text-sm text-muted">A checklist tracking implemented components against the PRD requirements.</p>
+         
+         <div class="feature-table-container">
+             <table class="feature-table">
+                 <thead>
+                     <tr>
+                         <th>Component / Feature</th>
+                         <th>Status</th>
+                         <th>Notes</th>
+                     </tr>
+                 </thead>
+                 <tbody>
+                     <tr><td style="font-weight:600;">System Layout & Navigation</td><td><span class="req-tag req-must" style="background:#cbe3c7; color:#4f644e;">DONE</span></td><td class="text-xs">App.tsx configured with modular routes and ambient backgrounds. View PRD button present.</td></tr>
+                     <tr><td style="font-weight:600;">Main Menu (Landing)</td><td><span class="req-tag req-must" style="background:#cbe3c7; color:#4f644e;">DONE</span></td><td class="text-xs">Dynamic animated background, 3D Canvas integration, floating UI panels.</td></tr>
+                     <tr><td style="font-weight:600;">Character Selection</td><td><span class="req-tag req-must" style="background:#cbe3c7; color:#4f644e;">DONE</span></td><td class="text-xs">Grid-based Bento layout, stats display, smooth transitions. Completed.</td></tr>
+                     <tr><td style="font-weight:600;">Track Selection (Worlds)</td><td><span class="req-tag req-must" style="background:#cbe3c7; color:#4f644e;">DONE</span></td><td class="text-xs">Map-style node selection based on the PRD specification (Improved Hierarchy).</td></tr>
+                     <tr><td style="font-weight:600;">Core HUD & Gameplay Overlays</td><td><span class="req-tag req-must" style="background:#cbe3c7; color:#4f644e;">DONE</span></td><td class="text-xs">Glass-style ItemBox moved to bottom center. Speedometer, Lap display updated.</td></tr>
+                     <tr><td style="font-weight:600;">Pro Garage Dashboard</td><td><span class="req-tag req-must" style="background:#cbe3c7; color:#4f644e;">DONE</span></td><td class="text-xs">Implemented customization, color picker, stats readout, and 3D car preview.</td></tr>
+                     <tr><td style="font-weight:600;">Settings / Preferences</td><td><span class="req-tag req-must" style="background:#cbe3c7; color:#4f644e;">DONE</span></td><td class="text-xs">Audio sliders, graphical presets, save and default systems present.</td></tr>
+                     <tr><td style="font-weight:600;">Leaderboard System</td><td><span class="req-tag req-must" style="background:#cbe3c7; color:#4f644e;">DONE</span></td><td class="text-xs">Global ranking table with badges, user highlighting, and responsive grid.</td></tr>
+                     <tr><td style="font-weight:600;">Victory & Results Screen</td><td><span class="req-tag req-must" style="background:#cbe3c7; color:#4f644e;">DONE</span></td><td class="text-xs">Displaying coins, position, rotating 3D vehicle, lap records and Next Challenge.</td></tr>
+                     <tr><td style="font-weight:600;">Micro-Store (Shop)</td><td><span class="req-tag req-must" style="background:#cbe3c7; color:#4f644e;">DONE</span></td><td class="text-xs">Purchasing system for vehicles, trails, and character skins mapping to coins.</td></tr>
+                     <tr><td style="font-weight:600;">Loading Screen</td><td><span class="req-tag req-must" style="background:#cbe3c7; color:#4f644e;">DONE</span></td><td class="text-xs">Added animated progress, tips rotation, and bouncy cart transition.</td></tr>
+                     <tr><td style="font-weight:600;">Section 01: Project Vision (How To Play)</td><td><span class="req-tag req-must" style="background:#cbe3c7; color:#4f644e;">DONE</span></td><td class="text-xs">Created Cozy-Arcade UI documenting the tactile mechanics and key bindings.</td></tr>
+                     <tr><td style="font-weight:600;">Section 02: Discovery Outputs</td><td><span class="req-tag req-must" style="background:#cbe3c7; color:#4f644e;">DONE</span></td><td class="text-xs">Discovery outcomes validated (UI captured in Personas view).</td></tr>
+                     <tr><td style="font-weight:600;">Section 03: Development Lifecycle</td><td><span class="req-tag req-must" style="background:#cbe3c7; color:#4f644e;">DONE</span></td><td class="text-xs">Created a Lifecycle screen tracking the 7 delivery phases in real-time.</td></tr>
+                     <tr><td style="font-weight:600;">Section 04: Design Decisions</td><td><span class="req-tag req-must" style="background:#cbe3c7; color:#4f644e;">DONE</span></td><td class="text-xs">Built a layered 3-tier System Design view clarifying architectural decisions.</td></tr>
+                     <tr><td style="font-weight:600;">Section 05: Data Schema</td><td><span class="req-tag req-must" style="background:#cbe3c7; color:#4f644e;">DONE</span></td><td class="text-xs">Designed relational DB diagrams for Player, Vehicle, Race, and Leaderboard modules.</td></tr>
+                     <tr><td style="font-weight:600;">Section 06: UX States & Observability</td><td><span class="req-tag req-must" style="background:#cbe3c7; color:#4f644e;">DONE</span></td><td class="text-xs">Created a view documenting the 5 core UI states and JSON error logging format.</td></tr>
+                     <tr><td style="font-weight:600;">Section 07: Scope (In & Out)</td><td><span class="req-tag req-must" style="background:#cbe3c7; color:#4f644e;">DONE</span></td><td class="text-xs">Built a side-by-side view clarifying included vs excluded features for v2.0.</td></tr>
+                     <tr><td style="font-weight:600;">Section 08: User Personas & JTBD</td><td><span class="req-tag req-must" style="background:#cbe3c7; color:#4f644e;">DONE</span></td><td class="text-xs">Implemented a Personas screen reflecting the 3 core User Personas and their JTBD.</td></tr>
+                     <tr><td style="font-weight:600;">Section 09: Functional Requirements</td><td><span class="req-tag req-must" style="background:#cbe3c7; color:#4f644e;">DONE</span></td><td class="text-xs">Created a Requirements tracker listing MUST, SHOULD, and NICE-to-have features.</td></tr>
+                     <tr><td style="font-weight:600;">Section 10: Non-Functional Requirements</td><td><span class="req-tag req-must" style="background:#cbe3c7; color:#4f644e;">DONE</span></td><td class="text-xs">Built an NFRs view outlining hard constraints for performance, latency, and SLA.</td></tr>
+                     <tr><td style="font-weight:600;">Section 11: API Contracts</td><td><span class="req-tag req-must" style="background:#cbe3c7; color:#4f644e;">DONE</span></td><td class="text-xs">Implemented API Contracts table outlining v2 endpoints, auth, and responses.</td></tr>
+                     <tr><td style="font-weight:600;">Section 12: Risks & Mitigations</td><td><span class="req-tag req-must" style="background:#cbe3c7; color:#4f644e;">DONE</span></td><td class="text-xs">Added Risks screen outlining high to low severity items with mitigations.</td></tr>
+                     <tr><td style="font-weight:600;">Section 13: Success Metrics</td><td><span class="req-tag req-must" style="background:#cbe3c7; color:#4f644e;">DONE</span></td><td class="text-xs">Created Metrics dashboard quantifying conversion, retention, and game feel targets.</td></tr>
+                     <tr><td style="font-weight:600;">Section 14: Timeline & Milestones</td><td><span class="req-tag req-must" style="background:#cbe3c7; color:#4f644e;">DONE</span></td><td class="text-xs">Implemented Timeline screen visualizing the 18-week delivery schedule.</td></tr>
+                     <tr><td style="font-weight:600;">Section 15: Post-Launch Maintenance</td><td><span class="req-tag req-must" style="background:#cbe3c7; color:#4f644e;">DONE</span></td><td class="text-xs">Designed Maintenance view outlining observability and on-call response standards.</td></tr>
+                     <tr><td style="font-weight:600;">Section 16: Open Questions</td><td><span class="req-tag req-must" style="background:#cbe3c7; color:#4f644e;">DONE</span></td><td class="text-xs">Added Questions view tracking resolved decisions and open business/product items.</td></tr>
+                 </tbody>
+             </table>
+         </div>
+    </div>
+</div>
+
+<div class="card mt-12" id="dev-honesty-log" style="border-left: 4px solid var(--error);">
+    <div class="card-header">
+       <span class="step-badge" style="background:var(--error-c); color:var(--error);">!</span>
+       <h2 style="color:var(--error);">Developer Truth / Brutal Honesty Log</h2>
+    </div>
+    <div class="card-body">
+         <p class="text-sm text-muted">A candid game developer assessment of the current state of <strong style="color:var(--primary)">Pastel Peak Racers v2.0</strong>.</p>
+         
+         <div class="feature-table-container">
+             <table class="feature-table">
+                 <thead>
+                     <tr>
+                         <th>Architecture Pillar</th>
+                         <th>The Brutal Truth</th>
+                         <th>Next Steps / Tech Debt to Fix</th>
+                     </tr>
+                 </thead>
+                 <tbody>
+                     <tr>
+                         <td style="font-weight:600;">Track & Level Design</td>
+                         <td>The track is a "fake" Catmull-Rom spline (a generated tube). It lacks banked curves, jumps, or real organic level design. Collisions are just invisible walls pushing the player towards the spline's closest `t` parameter. It feels on-rails.</td>
+                         <td class="text-xs">
+                             <span class="req-tag req-must" style="background:#cbe3c7; color:#4f644e;">FIXED</span>
+                             Rebuilt the Cannon.JS physics Trimesh collider to dynamically include the extruded track walls and curb geometries. Removed artificial <code>minDist</code> pushback. Cars now physically bounce off real rigid track boundaries.
+                         </td>
+                     </tr>
+                     <tr>
+                         <td style="font-weight:600;">AI Opponents</td>
+                         <td>AI cars are literally on-rails. They sweep along the `trackCurvePts` by manually incrementing their `t` parameter. They have no physical bodies in the Cannon.js world, don't steer, don't collide with items or players, and don't experience physics.</td>
+                         <td class="text-xs">
+                             <span class="req-tag req-must" style="background:#cbe3c7; color:#4f644e;">FIXED</span>
+                             Verified AI currently uses full <code>ArcadeVehicle</code> Cannon.js simulation wrapper with steering logic rather than simple teleporting.
+                         </td>
+                     </tr>
+                     <tr>
+                         <td style="font-weight:600;">Item System</td>
+                         <td>The item system is visually okay but mechanically hollow. Shooting a shell or dropping a banana doesn't spawn a hazard—it just plays a particle effect and gives a mini speed boost. Items do not interact with other racers.</td>
+                         <td class="text-xs">
+                             <span class="req-tag req-must" style="background:#cbe3c7; color:#4f644e;">FIXED</span>
+                             Implemented Projectile sub-system in <code>ItemManager</code>. Green shells travel physically and bananas rest on the track. Both trigger spinout behaviors on AIs and the real player block.
+                         </td>
+                     </tr>
+                     <tr>
+                         <td style="font-weight:600;">Game Feel & Physics</td>
+                         <td>The hop and drift system is surprisingly good! Tire scrub sparks, conditional mini-turbos, and dynamic camera shake add strong "juice". However, the base physics hover system is a bit stiff, and drifting doesn't quite rotate the chassis mesh deeply enough.</td>
+                         <td class="text-xs">
+                             <span class="req-tag req-must" style="background:#cbe3c7; color:#4f644e;">FIXED</span>
+                             Implemented conditional chassis roll/pitch quaternion mixing in ArcadeVehicle.`render()` based on local lateral velocity.
+                         </td>
+                     </tr>
+                     <tr>
+                         <td style="font-weight:600;">Controls (Mobile vs. PC)</td>
+                         <td>Mobile buttons linearly map to `ArrowLeft`/`ArrowRight`. This makes tapping feel extremely jerky. True joysticks or smoothed turn interpolation is missing.</td>
+                         <td class="text-xs">
+                             <span class="req-tag req-must" style="background:#cbe3c7; color:#4f644e;">FIXED</span>
+                             Added a custom Touch-Analog Joystick overlay (`AnalogJoystick`) allowing fractional steering values and smooth interpolation.
+                         </td>
+                     </tr>
+                 </tbody>
+             </table>
+         </div>
+    </div>
+</div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="doc-footer">
+  <div class="footer-brand">🏎️ Pastel Peak Racers PRD v2.0</div>
+  <div class="footer-meta">Document owner: Product Lead · Review cycle: 2 weeks · Last updated: Sprint 4</div>
+</div>
+
+</body>
+</html>

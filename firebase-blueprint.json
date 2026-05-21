@@ -1,0 +1,60 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "A user of the game",
+      "type": "object",
+      "properties": {
+        "coins": { "type": "number", "description": "Number of coins" },
+        "activeColor": { "type": "number" },
+        "activeCarType": { "type": "string", "enum": ["cruiser", "sprinter", "tank"] },
+        "activeWorld": { "type": "string" },
+        "activeTrack": { "type": "string" },
+        "stats": {
+          "type": "object",
+          "properties": {
+            "speedLevel": { "type": "number" },
+            "handlingLevel": { "type": "number" },
+            "armorLevel": { "type": "number" }
+          }
+        },
+        "settings": {
+          "type": "object",
+          "properties": {
+            "masterVolume": { "type": "number" },
+            "musicVolume": { "type": "number" },
+            "sfxVolume": { "type": "number" },
+            "graphicsQuality": { "type": "string", "enum": ["low", "medium", "high"] }
+          }
+        },
+        "createdAt": { "type": "timestamp" },
+        "updatedAt": { "type": "timestamp" }
+      },
+      "required": ["coins", "activeColor", "activeCarType", "settings"]
+    },
+    "RaceRecord": {
+      "title": "Race Record",
+      "description": "Record for a lap or a race by a user",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "The user who ran the race" },
+        "trackId": { "type": "string" },
+        "timeMs": { "type": "number" },
+        "carType": { "type": "string", "enum": ["cruiser", "sprinter", "tank"] },
+        "recordType": { "type": "string", "enum": ["best_lap", "total_race"] },
+        "createdAt": { "type": "timestamp" }
+      },
+      "required": ["userId", "trackId", "timeMs", "carType", "recordType", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "Player data, statistics, and settings"
+    },
+    "/raceRecords/{recordId}": {
+      "schema": { "$ref": "#/entities/RaceRecord" },
+      "description": "Global leaderboard records per track and user"
+    }
+  }
+}

@@ -1,0 +1,107 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&family=Quicksand:wght@500;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #78555e;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #ffd1dc;
+  --color-on-primary-container: #7a5761;
+  --color-secondary: #356572;
+  --color-secondary-container: #b7e7f7;
+  --color-tertiary: #4f644e;
+  --color-tertiary-container: #cbe3c7;
+  
+  --font-sans: "Quicksand", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Plus Jakarta Sans", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --font-body-md: Quicksand, sans-serif;
+  --font-label-sm: Quicksand, sans-serif;
+  --font-body-lg: Quicksand, sans-serif;
+  --font-title-md: Quicksand, sans-serif;
+  --font-headline-lg-mobile: "Plus Jakarta Sans", sans-serif;
+  --font-headline-lg: "Plus Jakarta Sans", sans-serif;
+
+  --spacing-container-max: 1200px;
+  --spacing-gutter: 24px;
+  
+  --radius-4xl: 2rem;
+  --radius-5xl: 3rem;
+}
+
+@layer base {
+  body {
+    @apply font-sans font-medium text-slate-800 antialiased;
+    background-color: #fff8f8;
+  }
+}
+
+@layer utilities {
+    @keyframes float {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        50% { transform: translateY(-15px) rotate(2deg); }
+    }
+    
+    .glass-panel {
+        background: rgba(255, 255, 255, 0.45);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border: 1.5px solid rgba(255, 255, 255, 0.9);
+        box-shadow: 0 12px 40px rgba(178, 226, 242, 0.15), inset 0 2px 10px rgba(255, 255, 255, 0.4);
+        @apply rounded-[2.5rem];
+    }
+    
+    .glass-button {
+        @apply relative flex flex-col items-center justify-center gap-2 font-bold transition-all duration-300 rounded-2xl;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.3) 100%);
+        border: 1.5px solid rgba(255, 255, 255, 0.9);
+        box-shadow: 0 4px 15px rgba(178, 226, 242, 0.1), inset 0 2px 8px rgba(255, 255, 255, 0.5);
+        @apply text-slate-500;
+    }
+    
+    .glass-button:hover {
+        @apply bg-white/80 -translate-y-1;
+        box-shadow: 0 8px 25px rgba(178, 226, 242, 0.2), inset 0 2px 10px rgba(255, 255, 255, 0.6);
+        @apply text-primary;
+    }
+    
+    .glass-button:active {
+        @apply scale-95;
+    }
+
+    .glass-button-primary {
+        @apply relative flex items-center justify-center p-4 gap-3 font-black uppercase tracking-wider transition-all duration-300 rounded-3xl text-white;
+        background: linear-gradient(135deg, #fb7185 0%, #e11d48 100%);
+        border: 2px solid rgba(255, 255, 255, 0.9);
+        box-shadow: 0 12px 32px rgba(225, 29, 72, 0.3), inset 0 2px 8px rgba(255, 255, 255, 0.4);
+    }
+
+    .glass-button-primary:hover {
+        @apply opacity-90 -translate-y-1;
+        box-shadow: 0 15px 35px rgba(225, 29, 72, 0.45);
+    }
+
+    .dream-gradient {
+        background: radial-gradient(circle at 30% 30%, #ffd1dc 0%, #b7e7f7 50%, #ccebe6 100%);
+    }
+
+    .custom-slider {
+        @apply w-full h-3 rounded-full appearance-none outline-none;
+    }
+    
+    .custom-slider::-webkit-slider-thumb {
+        @apply appearance-none w-7 h-7 rounded-full bg-white border-4 border-current cursor-pointer shadow-[0_4px_10px_rgba(0,0,0,0.1)] transition-transform;
+    }
+    
+    .custom-slider::-moz-range-thumb {
+        @apply w-7 h-7 rounded-full bg-white border-4 border-current cursor-pointer shadow-[0_4px_10px_rgba(0,0,0,0.1)] transition-transform;
+    }
+
+    .hide-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    .hide-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+}

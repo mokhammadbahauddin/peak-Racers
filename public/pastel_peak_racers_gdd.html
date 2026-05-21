@@ -1,0 +1,1577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>GDD — Pastel Peak Racers v2.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Quicksand:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --primary: #78555e;
+  --primary-c: #ffd1dc;
+  --primary-dim: #e7bbc6;
+  --secondary: #356572;
+  --secondary-c: #b7e7f7;
+  --tertiary: #4f644e;
+  --tertiary-c: #cbe3c7;
+  --surface: #fff8f8;
+  --surface-2: #f4ecec;
+  --surface-3: #efe6e7;
+  --on-surface: #1e1b1b;
+  --on-surface-v: #4f4446;
+  --outline: #d3c3c5;
+  --error: #ba1a1a;
+  --error-c: #ffdad6;
+  --amber: #a06010;
+  --amber-c: #fff0cc;
+  --purple: #5b4a8a;
+  --purple-c: #ece8ff;
+  --blue: #1a5fa8;
+  --blue-c: #ddeeff;
+  --font-head: 'Plus Jakarta Sans', sans-serif;
+  --font-body: 'Quicksand', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --radius-lg: 20px;
+  --radius-full: 9999px;
+  --shadow: 0 4px 24px rgba(120,85,94,0.08);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font-body);background:var(--surface);color:var(--on-surface);font-size:15px;line-height:1.7;}
+
+/* ── HEADER ── */
+.doc-header{background:linear-gradient(135deg,#cbe3c7 0%,#b7e7f7 40%,#ffd1dc 100%);padding:64px 48px 56px;position:relative;overflow:hidden;}
+.doc-header::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 30%,rgba(255,255,255,0.6) 0%,transparent 55%),radial-gradient(circle at 80% 80%,rgba(120,85,94,0.07) 0%,transparent 50%);}
+.header-inner{position:relative;z-index:1;max-width:900px;}
+.doc-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.9);border-radius:var(--radius-full);padding:6px 16px;font-size:12px;font-weight:700;color:var(--primary);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:20px;}
+.doc-badge::before{content:'◆';font-size:8px;color:var(--tertiary);}
+h1.doc-title{font-family:var(--font-head);font-size:52px;font-weight:800;color:var(--tertiary);line-height:1.1;letter-spacing:-0.02em;margin-bottom:12px;}
+h1.doc-title span{color:var(--primary);}
+.doc-subtitle{font-size:17px;color:var(--tertiary);opacity:0.8;max-width:600px;margin-bottom:32px;}
+.doc-meta{display:flex;gap:12px;flex-wrap:wrap;}
+.meta-pill{background:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.8);border-radius:var(--radius-full);padding:6px 14px;font-size:12px;font-weight:700;color:var(--on-surface-v);}
+.meta-pill strong{color:var(--tertiary);}
+
+/* ── LAYOUT ── */
+.doc-body{max-width:980px;margin:0 auto;padding:48px 32px 80px;}
+
+/* ── TOC ── */
+.toc{background:var(--surface-2);border:1px solid var(--outline);border-radius:var(--radius);padding:28px 32px;margin-bottom:48px;}
+.toc-section-head{font-family:var(--font-head);font-size:11px;font-weight:700;color:var(--on-surface-v);letter-spacing:0.1em;text-transform:uppercase;margin:16px 0 8px;padding-bottom:4px;border-bottom:1px solid var(--outline);}
+.toc-section-head:first-child{margin-top:0;}
+.toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px 24px;}
+.toc a{font-size:13px;color:var(--secondary);text-decoration:none;display:flex;align-items:center;gap:8px;padding:3px 0;}
+.toc a:hover{color:var(--primary);}
+.toc-num{font-family:var(--font-mono);font-size:11px;color:var(--on-surface-v);min-width:28px;}
+
+/* ── SECTION ── */
+.section{margin-bottom:60px;}
+.section-label{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:11px;font-weight:500;color:var(--on-surface-v);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px;}
+.section-label::before{content:'';width:20px;height:1px;background:var(--on-surface-v);opacity:0.4;}
+h2.section-title{font-family:var(--font-head);font-size:28px;font-weight:800;color:var(--primary);margin-bottom:8px;line-height:1.2;}
+.section-desc{color:var(--on-surface-v);font-size:14px;max-width:720px;margin-bottom:28px;}
+h3.sub-title{font-family:var(--font-head);font-size:16px;font-weight:700;color:var(--on-surface);margin:28px 0 14px;display:flex;align-items:center;gap:10px;}
+h3.sub-title::after{content:'';flex:1;height:1px;background:var(--outline);}
+h4.mini-title{font-family:var(--font-head);font-size:14px;font-weight:700;color:var(--on-surface);margin:16px 0 8px;}
+
+/* ── CARDS ── */
+.card{background:white;border:1px solid var(--outline);border-radius:var(--radius);padding:20px 24px;box-shadow:var(--shadow);}
+.card-grid{display:grid;gap:16px;}
+.g2{grid-template-columns:1fr 1fr;}
+.g3{grid-template-columns:1fr 1fr 1fr;}
+.g4{grid-template-columns:1fr 1fr 1fr 1fr;}
+.gauto{grid-template-columns:repeat(auto-fit,minmax(200px,1fr));}
+.card-title{font-family:var(--font-head);font-size:14px;font-weight:700;color:var(--on-surface);margin-bottom:8px;}
+.card-sub{font-size:12px;color:var(--on-surface-v);margin-bottom:8px;}
+.card-icon{font-size:24px;margin-bottom:10px;}
+
+/* ── CALLOUT ── */
+.callout{border-radius:var(--radius-sm);padding:14px 18px;font-size:13px;display:flex;gap:12px;margin:16px 0;line-height:1.6;}
+.callout-icon{flex-shrink:0;font-size:15px;margin-top:1px;}
+.callout-info{background:#e8f0fe;border:1px solid #b8cef9;color:#1a3a8c;}
+.callout-warn{background:var(--amber-c);border:1px solid #f5d78e;color:#4a3000;}
+.callout-tip{background:var(--tertiary-c);border:1px solid #a5d094;color:#1a3d18;}
+.callout-design{background:var(--purple-c);border:1px solid #c4b8f5;color:#2d1f5a;}
+
+/* ── STAT BARS ── */
+.stat-row{display:flex;align-items:center;gap:12px;margin-bottom:8px;}
+.stat-label{font-size:12px;font-weight:700;color:var(--on-surface-v);width:90px;flex-shrink:0;}
+.stat-track{flex:1;height:10px;background:var(--surface-3);border-radius:var(--radius-full);overflow:hidden;}
+.stat-fill{height:100%;border-radius:var(--radius-full);}
+.fill-speed{background:linear-gradient(90deg,#ffd1dc,#f09090);}
+.fill-handle{background:linear-gradient(90deg,#b7e7f7,#5abfef);}
+.fill-accel{background:linear-gradient(90deg,#cbe3c7,#5ab55a);}
+.fill-weight{background:linear-gradient(90deg,#ece8ff,#9a7fdf);}
+.stat-val{font-family:var(--font-mono);font-size:12px;font-weight:600;color:var(--on-surface);width:28px;text-align:right;}
+
+/* ── CHARACTER CARDS ── */
+.char-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.char-card{background:white;border:1px solid var(--outline);border-radius:var(--radius);overflow:hidden;}
+.char-head{padding:18px 20px 14px;}
+.char-avatar{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:12px;}
+.char-name{font-family:var(--font-head);font-size:18px;font-weight:800;color:var(--on-surface);}
+.char-class{font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:4px;}
+.char-tagline{font-size:13px;color:var(--on-surface-v);}
+.char-divider{height:1px;background:var(--outline);margin:0 20px;}
+.char-body{padding:14px 20px;}
+.char-jtbd{font-size:13px;color:var(--on-surface-v);font-style:italic;margin-bottom:12px;padding:8px 12px;background:var(--surface-2);border-radius:var(--radius-sm);border-left:3px solid var(--primary-c);}
+.char-trait-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;}
+.char-trait{font-size:11px;font-weight:700;padding:3px 10px;border-radius:var(--radius-full);background:var(--surface-2);color:var(--on-surface-v);}
+.char-strong{background:var(--tertiary-c);color:var(--tertiary);}
+.char-weak{background:var(--error-c);color:var(--error);}
+
+/* ── VEHICLE TABLE ── */
+.v-table{width:100%;border-collapse:collapse;font-size:13px;}
+.v-table th{text-align:left;padding:10px 14px;background:var(--surface-2);border-bottom:1px solid var(--outline);font-family:var(--font-head);font-size:11px;font-weight:700;color:var(--on-surface-v);letter-spacing:0.05em;text-transform:uppercase;}
+.v-table td{padding:11px 14px;border-bottom:1px solid var(--outline);vertical-align:middle;}
+.v-table tr:last-child td{border-bottom:none;}
+.v-table tr:hover td{background:var(--surface-2);}
+.vehicle-class{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:var(--radius-full);}
+.cls-a{background:var(--error-c);color:var(--error);}
+.cls-b{background:var(--amber-c);color:var(--amber);}
+.cls-c{background:var(--tertiary-c);color:var(--tertiary);}
+.mini-stat{display:flex;gap:4px;align-items:center;}
+.mini-pip{width:8px;height:8px;border-radius:2px;background:var(--surface-3);}
+.mini-pip.filled-s{background:var(--error);}
+.mini-pip.filled-h{background:var(--secondary);}
+.mini-pip.filled-a{background:var(--tertiary);}
+.mini-pip.filled-w{background:var(--purple);}
+
+/* ── TRACK CARDS ── */
+.track-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.track-card{background:white;border:1px solid var(--outline);border-radius:var(--radius);overflow:hidden;}
+.track-banner{height:8px;}
+.track-body{padding:16px 20px;}
+.track-world{font-size:10px;font-weight:700;letter-spacing:0.09em;text-transform:uppercase;color:var(--on-surface-v);margin-bottom:4px;}
+.track-name{font-family:var(--font-head);font-size:15px;font-weight:700;color:var(--on-surface);margin-bottom:4px;}
+.track-sub{font-size:12px;color:var(--on-surface-v);margin-bottom:12px;}
+.track-meta{display:flex;gap:12px;flex-wrap:wrap;}
+.track-chip{font-size:11px;font-weight:700;padding:3px 10px;border-radius:var(--radius-full);}
+.diff-easy{background:var(--tertiary-c);color:var(--tertiary);}
+.diff-med{background:var(--amber-c);color:var(--amber);}
+.diff-hard{background:var(--error-c);color:var(--error);}
+.track-features{margin-top:10px;}
+.track-feat-label{font-size:10px;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--on-surface-v);margin-bottom:4px;}
+.track-feat-list{display:flex;gap:6px;flex-wrap:wrap;}
+.feat-tag{font-size:11px;background:var(--surface-2);color:var(--on-surface-v);padding:2px 8px;border-radius:4px;}
+
+/* ── ECONOMY ── */
+.economy-flow{display:flex;align-items:center;gap:0;flex-wrap:wrap;margin-bottom:16px;}
+.econ-node{background:white;border:1px solid var(--outline);border-radius:var(--radius-sm);padding:12px 16px;text-align:center;min-width:110px;}
+.econ-node-label{font-size:10px;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--on-surface-v);margin-bottom:4px;}
+.econ-node-val{font-family:var(--font-head);font-size:14px;font-weight:700;color:var(--on-surface);}
+.econ-arrow{font-size:18px;color:var(--outline);padding:0 8px;}
+.economy-table{width:100%;border-collapse:collapse;font-size:13px;}
+.economy-table th{text-align:left;padding:9px 14px;background:var(--surface-2);border-bottom:1px solid var(--outline);font-family:var(--font-head);font-size:11px;font-weight:700;color:var(--on-surface-v);text-transform:uppercase;letter-spacing:0.05em;}
+.economy-table td{padding:10px 14px;border-bottom:1px solid var(--outline);}
+.economy-table tr:last-child td{border-bottom:none;}
+.economy-table tr:hover td{background:var(--surface-2);}
+.coin-val{font-family:var(--font-mono);font-size:13px;color:var(--amber);font-weight:600;}
+.gem-val{font-family:var(--font-mono);font-size:13px;color:var(--secondary);font-weight:600;}
+
+/* ── UPGRADE TREE ── */
+.upgrade-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
+.upgrade-part{background:white;border:1px solid var(--outline);border-radius:var(--radius);overflow:hidden;}
+.upgrade-head{padding:14px 16px;display:flex;align-items:center;gap:10px;}
+.upgrade-icon{font-size:22px;}
+.upgrade-part-name{font-family:var(--font-head);font-size:14px;font-weight:700;color:var(--on-surface);}
+.upgrade-part-stat{font-size:11px;color:var(--on-surface-v);}
+.upgrade-levels{padding:0 0 8px;}
+.upgrade-level{padding:8px 16px;border-top:1px solid var(--outline);display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.upgrade-lv-num{font-family:var(--font-mono);font-size:11px;font-weight:700;color:var(--on-surface-v);width:36px;}
+.upgrade-lv-effect{font-size:12px;color:var(--on-surface);flex:1;}
+.upgrade-lv-cost{font-family:var(--font-mono);font-size:11px;color:var(--amber);font-weight:600;white-space:nowrap;}
+.upgrade-max{background:var(--tertiary-c);color:var(--tertiary);font-size:10px;font-weight:700;padding:2px 8px;border-radius:var(--radius-full);}
+
+/* ── POWERUP TABLE ── */
+.powerup-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.powerup-card{background:white;border:1px solid var(--outline);border-radius:var(--radius-sm);padding:16px 18px;}
+.powerup-head{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.powerup-icon{width:36px;height:36px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.powerup-name{font-family:var(--font-head);font-size:14px;font-weight:700;color:var(--on-surface);}
+.powerup-rarity{font-size:10px;font-weight:700;padding:2px 8px;border-radius:var(--radius-full);letter-spacing:0.06em;}
+.powerup-divider{height:1px;background:var(--outline);margin:8px 0;}
+.powerup-spec-row{display:flex;justify-content:space-between;font-size:12px;padding:3px 0;}
+.powerup-spec-label{color:var(--on-surface-v);}
+.powerup-spec-val{font-family:var(--font-mono);font-weight:600;color:var(--on-surface);}
+.powerup-desc{font-size:12px;color:var(--on-surface-v);margin-top:8px;line-height:1.5;}
+
+/* ── AI BEHAVIOR ── */
+.ai-difficulty{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+.ai-card{background:white;border:1px solid var(--outline);border-radius:var(--radius);padding:18px;}
+.ai-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.ai-name{font-family:var(--font-head);font-size:15px;font-weight:700;}
+.ai-cc{font-size:11px;font-weight:700;padding:3px 10px;border-radius:var(--radius-full);}
+.cc-50{background:var(--tertiary-c);color:var(--tertiary);}
+.cc-100{background:var(--amber-c);color:var(--amber);}
+.cc-150{background:var(--error-c);color:var(--error);}
+.ai-param-row{display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:1px solid var(--outline);}
+.ai-param-row:last-child{border-bottom:none;}
+.ai-param-label{color:var(--on-surface-v);}
+.ai-param-val{font-family:var(--font-mono);font-weight:600;font-size:12px;color:var(--on-surface);}
+
+/* ── JUICE TABLE ── */
+.juice-table{width:100%;border-collapse:collapse;font-size:13px;}
+.juice-table th{text-align:left;padding:9px 14px;background:var(--surface-2);border-bottom:1px solid var(--outline);font-family:var(--font-head);font-size:11px;font-weight:700;color:var(--on-surface-v);text-transform:uppercase;letter-spacing:0.05em;}
+.juice-table td{padding:11px 14px;border-bottom:1px solid var(--outline);vertical-align:top;}
+.juice-table tr:last-child td{border-bottom:none;}
+.juice-table tr:hover td{background:var(--surface-2);}
+.juice-type{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:var(--radius-full);}
+.jt-visual{background:var(--primary-c);color:var(--primary);}
+.jt-audio{background:var(--secondary-c);color:var(--secondary);}
+.jt-haptic{background:var(--purple-c);color:var(--purple);}
+.jt-camera{background:var(--amber-c);color:var(--amber);}
+.juice-priority{font-size:10px;font-weight:700;padding:2px 8px;border-radius:var(--radius-full);}
+.jp-p0{background:var(--error-c);color:var(--error);}
+.jp-p1{background:var(--amber-c);color:var(--amber);}
+.jp-p2{background:var(--tertiary-c);color:var(--tertiary);}
+
+/* ── AUDIO TABLE ── */
+.audio-table{width:100%;border-collapse:collapse;font-size:13px;}
+.audio-table th{text-align:left;padding:9px 14px;background:var(--surface-2);border-bottom:1px solid var(--outline);font-family:var(--font-head);font-size:11px;font-weight:700;color:var(--on-surface-v);text-transform:uppercase;letter-spacing:0.05em;}
+.audio-table td{padding:10px 14px;border-bottom:1px solid var(--outline);vertical-align:top;}
+.audio-table tr:last-child td{border-bottom:none;}
+.audio-table tr:hover td{background:var(--surface-2);}
+.audio-cat{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:var(--radius-full);}
+.ac-sfx{background:var(--primary-c);color:var(--primary);}
+.ac-music{background:var(--secondary-c);color:var(--secondary);}
+.ac-ambient{background:var(--tertiary-c);color:var(--tertiary);}
+.ac-ui{background:var(--purple-c);color:var(--purple);}
+
+/* ── PROGRESSION TREE ── */
+.prog-tree{display:flex;flex-direction:column;gap:12px;}
+.prog-tier{background:white;border:1px solid var(--outline);border-radius:var(--radius);padding:16px 20px;}
+.prog-tier-head{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.prog-tier-badge{font-family:var(--font-mono);font-size:11px;font-weight:700;padding:4px 12px;border-radius:var(--radius-full);}
+.pt-new{background:var(--tertiary-c);color:var(--tertiary);}
+.pt-regular{background:var(--secondary-c);color:var(--secondary);}
+.pt-veteran{background:var(--amber-c);color:var(--amber);}
+.pt-master{background:var(--error-c);color:var(--error);}
+.prog-tier-name{font-family:var(--font-head);font-size:15px;font-weight:700;color:var(--on-surface);}
+.prog-tier-req{font-size:12px;color:var(--on-surface-v);}
+.prog-unlocks{display:flex;gap:8px;flex-wrap:wrap;}
+.prog-unlock-chip{font-size:12px;padding:4px 12px;border-radius:var(--radius-full);background:var(--surface-2);color:var(--on-surface);}
+
+/* ── PHYSICS TABLE ── */
+.physics-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.physics-card{background:white;border:1px solid var(--outline);border-radius:var(--radius);padding:18px 20px;}
+.physics-title{font-family:var(--font-head);font-size:14px;font-weight:700;color:var(--on-surface);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.physics-param{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--outline);font-size:13px;}
+.physics-param:last-child{border-bottom:none;}
+.physics-param-name{color:var(--on-surface-v);}
+.physics-param-val{font-family:var(--font-mono);font-size:12px;font-weight:600;color:var(--on-surface);}
+.physics-param-note{font-size:11px;color:var(--on-surface-v);font-style:italic;}
+
+/* ── SCREEN MAP ── */
+.screen-map{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;}
+.screen-node{background:white;border:1px solid var(--outline);border-radius:var(--radius-sm);padding:14px 16px;text-align:center;}
+.screen-icon{font-size:22px;margin-bottom:8px;}
+.screen-name{font-family:var(--font-head);font-size:13px;font-weight:700;color:var(--on-surface);margin-bottom:4px;}
+.screen-desc{font-size:11px;color:var(--on-surface-v);line-height:1.5;}
+.screen-tag{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:var(--radius-full);margin-top:6px;}
+.st-core{background:var(--primary-c);color:var(--primary);}
+.st-meta{background:var(--secondary-c);color:var(--secondary);}
+.st-system{background:var(--surface-3);color:var(--on-surface-v);}
+
+/* ── CAMERA ── */
+.camera-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+.camera-card{background:white;border:1px solid var(--outline);border-radius:var(--radius-sm);padding:16px;}
+.camera-name{font-family:var(--font-head);font-size:13px;font-weight:700;color:var(--on-surface);margin-bottom:8px;}
+.camera-spec{font-size:12px;color:var(--on-surface-v);margin-bottom:4px;}
+.camera-spec strong{color:var(--on-surface);}
+
+/* ── MISC UTILS ── */
+.text-mono{font-family:var(--font-mono);}
+.text-muted{color:var(--on-surface-v);}
+.text-sm{font-size:13px;}
+.text-xs{font-size:12px;}
+.divider{height:1px;background:var(--outline);margin:8px 0 24px;}
+.tag{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:var(--radius-full);}
+.tag-primary{background:var(--primary-c);color:var(--primary);}
+.tag-secondary{background:var(--secondary-c);color:var(--secondary);}
+.tag-tertiary{background:var(--tertiary-c);color:var(--tertiary);}
+.tag-warn{background:var(--amber-c);color:var(--amber);}
+.tag-error{background:var(--error-c);color:var(--error);}
+.rarity-common{background:var(--surface-3);color:var(--on-surface-v);}
+.rarity-rare{background:var(--secondary-c);color:var(--secondary);}
+.rarity-epic{background:var(--purple-c);color:var(--purple);}
+.rarity-legendary{background:var(--amber-c);color:var(--amber);}
+
+/* ── FOOTER ── */
+.doc-footer{border-top:1px solid var(--outline);padding:28px 32px;margin-top:40px;display:flex;justify-content:space-between;align-items:center;max-width:980px;margin-left:auto;margin-right:auto;}
+.footer-brand{font-family:var(--font-head);font-size:14px;font-weight:700;color:var(--tertiary);}
+.footer-meta{font-size:12px;color:var(--on-surface-v);}
+
+@media(max-width:700px){
+  h1.doc-title{font-size:36px;}
+  .doc-header{padding:40px 24px;}
+  .doc-body{padding:32px 20px 60px;}
+  .g2,.g3,.g4,.char-grid,.track-grid,.upgrade-grid,.ai-difficulty,.physics-grid,.camera-grid,.toc-grid{grid-template-columns:1fr;}
+  .powerup-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════
+     HEADER
+══════════════════════════════════════════════ -->
+<div class="doc-header">
+  <div class="header-inner">
+    <div class="doc-badge">GDD · Game Design Document · v2.0</div>
+    <h1 class="doc-title">Game Design<br/><span>Document</span></h1>
+    <p class="doc-subtitle">Complete design specification for Pastel Peak Racers — mechanics, characters, tracks, economy, AI, audio, and juice. Companion to the PRD.</p>
+    <div class="doc-meta">
+      <div class="meta-pill"><strong>Game:</strong> Pastel Peak Racers</div>
+      <div class="meta-pill"><strong>Genre:</strong> Cozy Arcade Kart Racer</div>
+      <div class="meta-pill"><strong>Platform:</strong> Web Browser</div>
+      <div class="meta-pill"><strong>Renderer:</strong> Three.js (Isometric 3D)</div>
+      <div class="meta-pill"><strong>Players:</strong> 1 (Async Leaderboard)</div>
+      <div class="meta-pill"><strong>Session Target:</strong> 5–20 min</div>
+    </div>
+  </div>
+</div>
+
+<div class="doc-body">
+
+  <!-- TOC -->
+  <div class="toc">
+    <div class="toc-section-head">Part I — Foundation</div>
+    <div class="toc-grid">
+      <a href="#vision"><span class="toc-num">01</span> Game Vision & Pillars</a>
+      <a href="#screens"><span class="toc-num">02</span> Screen Map & Flow</a>
+    </div>
+    <div class="toc-section-head">Part II — Core Gameplay</div>
+    <div class="toc-grid">
+      <a href="#physics"><span class="toc-num">03</span> Physics & Controls</a>
+      <a href="#powerups"><span class="toc-num">04</span> Power-Up System</a>
+      <a href="#camera"><span class="toc-num">05</span> Camera & Rendering</a>
+    </div>
+    <div class="toc-section-head">Part III — Characters & Vehicles</div>
+    <div class="toc-grid">
+      <a href="#characters"><span class="toc-num">06</span> Playable Characters</a>
+      <a href="#vehicles"><span class="toc-num">07</span> Vehicle Roster & Stats</a>
+      <a href="#upgrades"><span class="toc-num">08</span> Upgrade System</a>
+    </div>
+    <div class="toc-section-head">Part IV — Tracks & Worlds</div>
+    <div class="toc-grid">
+      <a href="#tracks"><span class="toc-num">09</span> Track Design Specs</a>
+      <a href="#grandprix"><span class="toc-num">10</span> Grand Prix Mode</a>
+    </div>
+    <div class="toc-section-head">Part V — Economy & Progression</div>
+    <div class="toc-grid">
+      <a href="#economy"><span class="toc-num">11</span> Economy Design</a>
+      <a href="#progression"><span class="toc-num">12</span> Player Progression</a>
+    </div>
+    <div class="toc-section-head">Part VI — AI & Feel</div>
+    <div class="toc-grid">
+      <a href="#ai"><span class="toc-num">13</span> AI Opponent Behavior</a>
+      <a href="#juice"><span class="toc-num">14</span> Juice & Game Feel</a>
+      <a href="#audio"><span class="toc-num">15</span> Audio Design</a>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       01 — VISION & PILLARS
+  ══════════════════════════════════════════════ -->
+  <section class="section" id="vision">
+    <div class="section-label">Section 01</div>
+    <h2 class="section-title">Game Vision & Design Pillars</h2>
+    <p class="section-desc">Everything in this document traces back to three non-negotiable pillars. If a feature conflicts with a pillar, the feature loses.</p>
+
+    <div class="card-grid g3" style="margin-bottom:20px;">
+      <div class="card" style="border-top:4px solid var(--primary);">
+        <div class="card-icon">🌸</div>
+        <div class="card-title">Pillar 1 — Cozy Competitive</div>
+        <p class="text-sm text-muted">The game must feel competitive without raising cortisol. Losing is gentle. Winning is satisfying but not smug. There are no "you suck" animations. Rubberband AI prevents blowouts. Stars reset frustration.</p>
+      </div>
+      <div class="card" style="border-top:4px solid var(--secondary);">
+        <div class="card-icon">✨</div>
+        <div class="card-title">Pillar 2 — Digitally Tactile</div>
+        <p class="text-sm text-muted">Every interaction must feel physically satisfying. The cars have weight. Drifts leave trails. Coins burst. Buttons depress. If a moment doesn't feel good to touch, it's unfinished. "Juice" is a first-class design concern.</p>
+      </div>
+      <div class="card" style="border-top:4px solid var(--tertiary);">
+        <div class="card-icon">🎨</div>
+        <div class="card-title">Pillar 3 — Premium Aesthetic</div>
+        <p class="text-sm text-muted">The game must look good enough to screenshot and share. Glassmorphism UI. Soft isometric 3D. Clay-mation vehicles. The visual bar is set by the design mock-ups — engineering must match it, not approximate it.</p>
+      </div>
+    </div>
+
+    <h3 class="sub-title">Core Game Loop</h3>
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:0;flex-wrap:wrap;">
+        <div style="text-align:center;padding:12px 16px;">
+          <div style="font-size:22px;margin-bottom:4px;">🗺️</div>
+          <div style="font-family:var(--font-head);font-size:13px;font-weight:700;">Select Track</div>
+          <div style="font-size:11px;color:var(--on-surface-v);">World Map</div>
+        </div>
+        <div style="font-size:20px;color:var(--outline);padding:0 4px;">→</div>
+        <div style="text-align:center;padding:12px 16px;">
+          <div style="font-size:22px;margin-bottom:4px;">🏁</div>
+          <div style="font-family:var(--font-head);font-size:13px;font-weight:700;">Race</div>
+          <div style="font-size:11px;color:var(--on-surface-v);">3 Laps · Power-ups</div>
+        </div>
+        <div style="font-size:20px;color:var(--outline);padding:0 4px;">→</div>
+        <div style="text-align:center;padding:12px 16px;">
+          <div style="font-size:22px;margin-bottom:4px;">🏆</div>
+          <div style="font-family:var(--font-head);font-size:13px;font-weight:700;">Results</div>
+          <div style="font-size:11px;color:var(--on-surface-v);">Stars · Coins · Rank</div>
+        </div>
+        <div style="font-size:20px;color:var(--outline);padding:0 4px;">→</div>
+        <div style="text-align:center;padding:12px 16px;">
+          <div style="font-size:22px;margin-bottom:4px;">🔧</div>
+          <div style="font-family:var(--font-head);font-size:13px;font-weight:700;">Upgrade / Buy</div>
+          <div style="font-size:11px;color:var(--on-surface-v);">Garage · Shop</div>
+        </div>
+        <div style="font-size:20px;color:var(--outline);padding:0 4px;">→</div>
+        <div style="text-align:center;padding:12px 16px;">
+          <div style="font-size:22px;margin-bottom:4px;">🌟</div>
+          <div style="font-family:var(--font-head);font-size:13px;font-weight:700;">Unlock</div>
+          <div style="font-size:11px;color:var(--on-surface-v);">New Tracks · Cars</div>
+        </div>
+        <div style="font-size:20px;color:var(--outline);padding:0 4px;">→</div>
+        <div style="text-align:center;padding:12px 16px;background:var(--surface-2);border-radius:var(--radius-sm);">
+          <div style="font-size:22px;margin-bottom:4px;">🔁</div>
+          <div style="font-family:var(--font-head);font-size:13px;font-weight:700;">Repeat</div>
+          <div style="font-size:11px;color:var(--on-surface-v);">Always a next goal</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout callout-design" style="margin-top:16px;">
+      <span class="callout-icon">◆</span>
+      <span><strong>Design Rule:</strong> There must always be a visible "next thing to do" at every point in the loop. A player who finishes a race with no clear next goal is a player who quits. The world map, upgrade screen, and shop all surface the nearest unlock gate prominently.</span>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+       02 — SCREEN MAP
+  ══════════════════════════════════════════════ -->
+  <section class="section" id="screens">
+    <div class="section-label">Section 02</div>
+    <h2 class="section-title">Screen Map & Navigation Flow</h2>
+    <p class="section-desc">12 distinct screens. Each follows the "Immersive Canvas" rule — no persistent top navigation bar during active gameplay or selection flows.</p>
+
+    <div class="screen-map">
+      <div class="screen-node">
+        <div class="screen-icon">⏳</div>
+        <div class="screen-name">Loading</div>
+        <div class="screen-desc">World streaming, tips, animated car, progress bar</div>
+        <div class="screen-tag st-system">System</div>
+      </div>
+      <div class="screen-node">
+        <div class="screen-icon">🏠</div>
+        <div class="screen-name">Main Menu</div>
+        <div class="screen-desc">Hero car, RACE NOW CTA, nav to all top-level destinations</div>
+        <div class="screen-tag st-core">Core</div>
+      </div>
+      <div class="screen-node">
+        <div class="screen-icon">🌍</div>
+        <div class="screen-name">World Map</div>
+        <div class="screen-desc">Isometric world carousel, cup selection, world completion %</div>
+        <div class="screen-tag st-core">Core</div>
+      </div>
+      <div class="screen-node">
+        <div class="screen-icon">🗺️</div>
+        <div class="screen-name">Track Selection</div>
+        <div class="screen-desc">Interactive map nodes, lock states, star requirements</div>
+        <div class="screen-tag st-core">Core</div>
+      </div>
+      <div class="screen-node">
+        <div class="screen-icon">🦸</div>
+        <div class="screen-name">Character Select</div>
+        <div class="screen-desc">4 racers, stat comparison, selection persists</div>
+        <div class="screen-tag st-core">Core</div>
+      </div>
+      <div class="screen-node">
+        <div class="screen-icon">🏎️</div>
+        <div class="screen-name">Race HUD</div>
+        <div class="screen-desc">Speedometer, position, lap counter, minimap, power-up slot</div>
+        <div class="screen-tag st-core">Core</div>
+      </div>
+      <div class="screen-node">
+        <div class="screen-icon">🏆</div>
+        <div class="screen-name">Victory / Results</div>
+        <div class="screen-desc">Podium, stars earned, coins, rank delta, confetti</div>
+        <div class="screen-tag st-core">Core</div>
+      </div>
+      <div class="screen-node">
+        <div class="screen-icon">🔧</div>
+        <div class="screen-name">Garage</div>
+        <div class="screen-desc">3D car viewer, stat bars, upgrade panel, skin selector</div>
+        <div class="screen-tag st-meta">Meta</div>
+      </div>
+      <div class="screen-node">
+        <div class="screen-icon">🛍️</div>
+        <div class="screen-name">Shop</div>
+        <div class="screen-desc">Car skins, boost trails, props. Rarity tiers, coin/gem prices</div>
+        <div class="screen-tag st-meta">Meta</div>
+      </div>
+      <div class="screen-node">
+        <div class="screen-icon">📊</div>
+        <div class="screen-name">Leaderboard</div>
+        <div class="screen-desc">Global / Friends rankings, player's rank ±10, season filter</div>
+        <div class="screen-tag st-meta">Meta</div>
+      </div>
+      <div class="screen-node">
+        <div class="screen-icon">🏅</div>
+        <div class="screen-name">Grand Prix</div>
+        <div class="screen-desc">Cup selection grid, CC difficulty selector, world flyover</div>
+        <div class="screen-tag st-core">Core</div>
+      </div>
+      <div class="screen-node">
+        <div class="screen-icon">⚙️</div>
+        <div class="screen-name">Settings</div>
+        <div class="screen-desc">Audio sliders, visual comfort toggles, account, controls</div>
+        <div class="screen-tag st-system">System</div>
+      </div>
+    </div>
+
+    <div class="callout callout-tip" style="margin-top:16px;">
+      <span class="callout-icon">✓</span>
+      <span><strong>Immersive Canvas Rule:</strong> Race HUD, Track Selection, World Map, and Character Select screens suppress the global navigation shell entirely. The 3D world is the UI. Bottom nav is suppressed on these screens. All other screens show the standard navigation bar.</span>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+       03 — PHYSICS & CONTROLS
+  ══════════════════════════════════════════════ -->
+  <section class="section" id="physics">
+    <div class="section-label">Section 03</div>
+    <h2 class="section-title">Physics & Controls</h2>
+    <p class="section-desc">Arcade physics — not simulation. Every parameter below is tunable via a game config object. No hardcoded physics values in game logic.</p>
+
+    <h3 class="sub-title">Core Physics Parameters</h3>
+    <div class="physics-grid">
+      <div class="physics-card">
+        <div class="physics-title">🚗 Movement</div>
+        <div class="physics-param"><span class="physics-param-name">Top speed (Class A)</span><span class="physics-param-val">160 km/h</span></div>
+        <div class="physics-param"><span class="physics-param-name">Top speed (Class B)</span><span class="physics-param-val">140 km/h</span></div>
+        <div class="physics-param"><span class="physics-param-name">Top speed (Class C)</span><span class="physics-param-val">120 km/h</span></div>
+        <div class="physics-param"><span class="physics-param-name">Acceleration time 0→100</span><span class="physics-param-val">1.8–3.2s</span></div>
+        <div class="physics-param"><span class="physics-param-name">Braking deceleration</span><span class="physics-param-val">−2.8 m/s²</span></div>
+        <div class="physics-param"><span class="physics-param-name">Off-track speed penalty</span><span class="physics-param-val">−40%</span></div>
+      </div>
+      <div class="physics-card">
+        <div class="physics-title">🌀 Drifting</div>
+        <div class="physics-param"><span class="physics-param-name">Drift activation</span><span class="physics-param-val">Hold brake + steer</span></div>
+        <div class="physics-param"><span class="physics-param-name">Drift speed multiplier</span><span class="physics-param-val">×0.85</span></div>
+        <div class="physics-param"><span class="physics-param-name">Boost charge rate</span><span class="physics-param-val">+3% boost/s</span></div>
+        <div class="physics-param"><span class="physics-param-name">Mini-turbo threshold</span><span class="physics-param-val">1.5s drift</span></div>
+        <div class="physics-param"><span class="physics-param-name">Mini-turbo speed bonus</span><span class="physics-param-val">+20 km/h × 0.8s</span></div>
+        <div class="physics-param"><span class="physics-param-name">Drift trail color</span><span class="physics-param-val">Player skin hue</span></div>
+      </div>
+      <div class="physics-card">
+        <div class="physics-title">💨 Boost System</div>
+        <div class="physics-param"><span class="physics-param-name">Boost bar capacity</span><span class="physics-param-val">100 units</span></div>
+        <div class="physics-param"><span class="physics-param-name">Boost speed multiplier</span><span class="physics-param-val">×1.4 (+40%)</span></div>
+        <div class="physics-param"><span class="physics-param-name">Boost duration</span><span class="physics-param-val">2.0 s</span></div>
+        <div class="physics-param"><span class="physics-param-name">Boost from drift</span><span class="physics-param-val">+3/s while drifting</span></div>
+        <div class="physics-param"><span class="physics-param-name">Boost from star pickup</span><span class="physics-param-val">+30 units</span></div>
+        <div class="physics-param"><span class="physics-param-name">Boost bar decay at rest</span><span class="physics-param-val">−1/s (idle)</span></div>
+      </div>
+      <div class="physics-card">
+        <div class="physics-title">🎮 Handling</div>
+        <div class="physics-param"><span class="physics-param-name">Steering sensitivity</span><span class="physics-param-val">Speed-dependent</span></div>
+        <div class="physics-param"><span class="physics-param-name">Turn radius (low speed)</span><span class="physics-param-val">6 m</span></div>
+        <div class="physics-param"><span class="physics-param-name">Turn radius (top speed)</span><span class="physics-param-val">18 m</span></div>
+        <div class="physics-param"><span class="physics-param-name">Traction recovery time</span><span class="physics-param-val">0.3 s after slip</span></div>
+        <div class="physics-param"><span class="physics-param-name">Wall collision bounce</span><span class="physics-param-val">−30% speed, 0.4s stun</span></div>
+        <div class="physics-param"><span class="physics-param-name">Collision with opponent</span><span class="physics-param-val">Weight-based push</span></div>
+      </div>
+    </div>
+
+    <h3 class="sub-title">Control Schemes</h3>
+    <div class="card-grid g3">
+      <div class="card">
+        <div class="card-title">⌨️ Keyboard</div>
+        <div class="text-sm text-muted" style="line-height:2;">
+          <strong>Arrow Keys / WASD</strong> — Steer + Accelerate/Brake<br/>
+          <strong>Space</strong> — Use power-up<br/>
+          <strong>Shift</strong> — Manual drift<br/>
+          <strong>Esc</strong> — Pause menu<br/>
+          <strong>Ctrl+R</strong> — Restart race
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">📱 Touch (Mobile)</div>
+        <div class="text-sm text-muted" style="line-height:2;">
+          <strong>Left side tap/hold</strong> — Brake / Power-up<br/>
+          <strong>Right side tap/hold</strong> — Accelerate<br/>
+          <strong>Swipe left/right</strong> — Steer<br/>
+          <strong>Two-finger tap</strong> — Pause<br/>
+          Auto-drift on sharp turns
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">🎮 Gamepad (V3)</div>
+        <div class="text-sm text-muted" style="line-height:2;">
+          <strong>Left stick</strong> — Steer<br/>
+          <strong>RT / R2</strong> — Accelerate<br/>
+          <strong>LT / L2</strong> — Brake / Drift<br/>
+          <strong>A / X</strong> — Use power-up<br/>
+          <strong>Start / Options</strong> — Pause
+        </div>
+      </div>
+    </div>
+
+    <div class="callout callout-warn" style="margin-top:16px;">
+      <span class="callout-icon">⚠</span>
+      <span><strong>Physics Config Object:</strong> All numeric values above must live in <code>src/config/physics.config.ts</code> — never inline in game logic. This is mandatory for balance iteration without code deploys. The config is loaded at race start and cannot be changed mid-race.</span>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+       04 — POWER-UPS
+  ══════════════════════════════════════════════ -->
+  <section class="section" id="powerups">
+    <div class="section-label">Section 04</div>
+    <h2 class="section-title">Power-Up System</h2>
+    <p class="section-desc">4 power-up types collectible via item boxes on track. Each box respawns after 8 seconds. One item held at a time. Items are non-pay-to-win — all players access the same pool.</p>
+
+    <div class="powerup-grid">
+      <div class="powerup-card">
+        <div class="powerup-head">
+          <div class="powerup-icon" style="background:var(--amber-c);">🍄</div>
+          <div>
+            <div class="powerup-name">Mushroom</div>
+            <div class="powerup-rarity rarity-common">Common · 45% drop rate</div>
+          </div>
+        </div>
+        <div class="powerup-desc">Instant speed burst. Primary catch-up mechanic. Hits harder the further behind you are (position-weighted drop rate).</div>
+        <div class="powerup-divider"></div>
+        <div class="powerup-spec-row"><span class="powerup-spec-label">Speed bonus</span><span class="powerup-spec-val">+40%</span></div>
+        <div class="powerup-spec-row"><span class="powerup-spec-label">Duration</span><span class="powerup-spec-val">3.0 s</span></div>
+        <div class="powerup-spec-row"><span class="powerup-spec-label">Boost fill</span><span class="powerup-spec-val">+30 units</span></div>
+        <div class="powerup-spec-row"><span class="powerup-spec-label">Drop rate (1st place)</span><span class="powerup-spec-val">20%</span></div>
+        <div class="powerup-spec-row"><span class="powerup-spec-label">Drop rate (4th place)</span><span class="powerup-spec-val">60%</span></div>
+        <div class="powerup-spec-row"><span class="powerup-spec-label">Visual cue</span><span class="powerup-spec-val">Gold particle trail</span></div>
+      </div>
+
+      <div class="powerup-card">
+        <div class="powerup-head">
+          <div class="powerup-icon" style="background:#fffbc8;">⭐</div>
+          <div>
+            <div class="powerup-name">Star</div>
+            <div class="powerup-rarity rarity-rare">Rare · 20% drop rate</div>
+          </div>
+        </div>
+        <div class="powerup-desc">Temporary invincibility + speed. Knocks aside any opponent contacted. Pastel rainbow particle trail. The most visually spectacular item.</div>
+        <div class="powerup-divider"></div>
+        <div class="powerup-spec-row"><span class="powerup-spec-label">Speed bonus</span><span class="powerup-spec-val">+25%</span></div>
+        <div class="powerup-spec-row"><span class="powerup-spec-label">Duration</span><span class="powerup-spec-val">5.0 s</span></div>
+        <div class="powerup-spec-row"><span class="powerup-spec-label">Collision effect</span><span class="powerup-spec-val">Knock (0.8s stun)</span></div>
+        <div class="powerup-spec-row"><span class="powerup-spec-label">Invincibility to</span><span class="powerup-spec-val">Rockets, wall damage</span></div>
+        <div class="powerup-spec-row"><span class="powerup-spec-label">Drop rate (1st place)</span><span class="powerup-spec-val">5%</span></div>
+        <div class="powerup-spec-row"><span class="powerup-spec-label">Visual cue</span><span class="powerup-spec-val">Rainbow sparkle aura</span></div>
+      </div>
+
+      <div class="powerup-card">
+        <div class="powerup-head">
+          <div class="powerup-icon" style="background:var(--blue-c);">🛡️</div>
+          <div>
+            <div class="powerup-name">Shield</div>
+            <div class="powerup-rarity rarity-rare">Rare · 20% drop rate</div>
+          </div>
+        </div>
+        <div class="powerup-desc">Absorbs one incoming Rocket or collision. Passive — activates automatically. Visible as a soft blue bubble around the car. Provides psychological comfort to cozy players.</div>
+        <div class="powerup-divider"></div>
+        <div class="powerup-spec-row"><span class="powerup-spec-label">Charges</span><span class="powerup-spec-val">1 (absorbs 1 hit)</span></div>
+        <div class="powerup-spec-row"><span class="powerup-spec-label">Duration</span><span class="powerup-spec-val">Until hit or lap end</span></div>
+        <div class="powerup-spec-row"><span class="powerup-spec-label">Blocks</span><span class="powerup-spec-val">Rocket · Collision stun</span></div>
+        <div class="powerup-spec-row"><span class="powerup-spec-label">Does NOT block</span><span class="powerup-spec-val">Off-track slow</span></div>
+        <div class="powerup-spec-row"><span class="powerup-spec-label">Pop animation</span><span class="powerup-spec-val">Bubble burst + sparkle</span></div>
+        <div class="powerup-spec-row"><span class="powerup-spec-label">Sound</span><span class="powerup-spec-val">Soft chime on absorb</span></div>
+      </div>
+
+      <div class="powerup-card">
+        <div class="powerup-head">
+          <div class="powerup-icon" style="background:var(--error-c);">🚀</div>
+          <div>
+            <div class="powerup-name">Rocket</div>
+            <div class="powerup-rarity rarity-epic">Epic · 15% drop rate</div>
+          </div>
+        </div>
+        <div class="powerup-desc">Fires forward at the nearest opponent. Homing with soft curve — not pixel-perfect. Miss chance increases with target's Handling stat. The most offensive item. Tone: pastel pinkish missile, not violent.</div>
+        <div class="powerup-divider"></div>
+        <div class="powerup-spec-row"><span class="powerup-spec-label">Speed (projectile)</span><span class="powerup-spec-val">2× current car speed</span></div>
+        <div class="powerup-spec-row"><span class="powerup-spec-label">Homing range</span><span class="powerup-spec-val">80 m</span></div>
+        <div class="powerup-spec-row"><span class="powerup-spec-label">Hit effect</span><span class="powerup-spec-val">1.5s spin stun</span></div>
+        <div class="powerup-spec-row"><span class="powerup-spec-label">Miss condition</span><span class="powerup-spec-val">Target handling &gt;75</span></div>
+        <div class="powerup-spec-row"><span class="powerup-spec-label">Max travel distance</span><span class="powerup-spec-val">120 m then dissolve</span></div>
+        <div class="powerup-spec-row"><span class="powerup-spec-label">Visual</span><span class="powerup-spec-val">Pink pastel missile</span></div>
+      </div>
+    </div>
+
+    <h4 class="mini-title">Item Box Distribution Rules</h4>
+    <div class="card">
+      <p class="text-sm text-muted" style="margin-bottom:12px;">Item boxes are placed at track design time. Placement rules (enforced by track design checklist):</p>
+      <div class="card-grid g3" style="gap:10px;">
+        <div style="font-size:13px;"><strong>Minimum 6 boxes per lap</strong><br/><span class="text-muted">Ensures every player encounters at least 2 boxes per lap on average.</span></div>
+        <div style="font-size:13px;"><strong>No boxes on chicanes</strong><br/><span class="text-muted">Prevents item collection at high-danger moments. Reduces frustration.</span></div>
+        <div style="font-size:13px;"><strong>Catch-up zone boxes</strong><br/><span class="text-muted">At least 2 boxes placed where 3rd/4th place typically runs. Enables comeback mechanics.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+       05 — CAMERA
+  ══════════════════════════════════════════════ -->
+  <section class="section" id="camera">
+    <div class="section-label">Section 05</div>
+    <h2 class="section-title">Camera & Rendering</h2>
+    <p class="section-desc">Isometric perspective is the defining visual choice. All camera decisions must preserve the signature "clay diorama" look.</p>
+
+    <div class="camera-grid">
+      <div class="camera-card">
+        <div class="camera-name">🎥 Race Camera</div>
+        <div class="camera-spec"><strong>Type:</strong> Fixed isometric follow</div>
+        <div class="camera-spec"><strong>FOV:</strong> 50° orthographic-like</div>
+        <div class="camera-spec"><strong>Angle:</strong> 45° elevation, 45° azimuth</div>
+        <div class="camera-spec"><strong>Follow distance:</strong> 12 units behind</div>
+        <div class="camera-spec"><strong>Lag:</strong> 0.12s smooth damp</div>
+        <div class="camera-spec"><strong>Speed zoom:</strong> Subtle FOV widen at top speed (+5°)</div>
+      </div>
+      <div class="camera-card">
+        <div class="camera-name">💨 Boost Camera FX</div>
+        <div class="camera-spec"><strong>Trigger:</strong> Boost activation</div>
+        <div class="camera-spec"><strong>FOV change:</strong> +8° over 0.3s</div>
+        <div class="camera-spec"><strong>Screen shake:</strong> 0.05 amplitude, 12Hz</div>
+        <div class="camera-spec"><strong>Chromatic aberration:</strong> 0.8px fringe</div>
+        <div class="camera-spec"><strong>Motion lines:</strong> 6 radial streaks, 0.4s</div>
+        <div class="camera-spec"><strong>Recovery:</strong> All FX ease out over 0.5s post-boost</div>
+      </div>
+      <div class="camera-card">
+        <div class="camera-name">🏆 Victory Camera</div>
+        <div class="camera-spec"><strong>Type:</strong> Cinematic dolly orbit</div>
+        <div class="camera-spec"><strong>Duration:</strong> 4s orbit then cut to results</div>
+        <div class="camera-spec"><strong>Orbit speed:</strong> 60°/s around winning car</div>
+        <div class="camera-spec"><strong>Height ramp:</strong> Rises 20° during orbit</div>
+        <div class="camera-spec"><strong>DOF:</strong> Background bokeh on results</div>
+        <div class="camera-spec"><strong>Skip:</strong> Any input skips to Results screen</div>
+      </div>
+    </div>
+
+    <h3 class="sub-title">Three.js Rendering Pipeline</h3>
+    <div class="card-grid g2" style="gap:14px;">
+      <div class="card">
+        <div class="card-title">Lighting</div>
+        <p class="text-sm text-muted">One directional light (sun) at 45° elevation. Ambient light at 40% intensity. Per-world color temperature: Dawn Archipelago = warm (#FFE8D0), Sugar Snow = cool (#D0E8FF). No dynamic shadows on mobile low-quality preset.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">Post-Processing Stack</div>
+        <p class="text-sm text-muted">Passes in order: SSAO (ambient occlusion, desktop only) → Bloom (threshold 0.8, mild glow on power-ups) → FXAA (anti-aliasing) → Color grading (per-world LUT). Motion blur pass: OFF by default, toggle in Settings.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">LOD (Level of Detail)</div>
+        <p class="text-sm text-muted"><strong>High:</strong> Full geometry, all post-processing, 60FPS target. <strong>Medium:</strong> 50% poly reduction, no SSAO, FXAA only. <strong>Low:</strong> 25% poly, no post-processing, mobile preset. Auto-detected on first load, overridable in Settings.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">Asset Streaming</div>
+        <p class="text-sm text-muted">Track geometry streamed on World Map selection (not at game boot). Vehicle assets cached after first load. Loading screen progress bar maps to: 0–30% auth, 30–70% track geometry, 70–100% textures + audio. Never shows 100% until truly ready.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+       06 — CHARACTERS
+  ══════════════════════════════════════════════ -->
+  <section class="section" id="characters">
+    <div class="section-label">Section 06</div>
+    <h2 class="section-title">Playable Characters</h2>
+    <p class="section-desc">4 characters. Each pairs with a vehicle class archetype. Character choice affects narrative flavor only — stats come from the vehicle, not the character. This is intentional: it separates cosmetic identity from mechanical choice.</p>
+
+    <div class="char-grid">
+      <div class="char-card">
+        <div class="char-head">
+          <div class="char-avatar" style="background:var(--primary-c);">🐰</div>
+          <div class="char-name">Bunny</div>
+          <div class="char-class" style="color:var(--tertiary);">Speedster Archetype</div>
+          <div class="char-tagline">"Light as a cloud, fast as a dream."</div>
+        </div>
+        <div class="char-divider"></div>
+        <div class="char-body">
+          <div class="char-jtbd">"I want to win races by being the fastest thing on the track — pure speed, no weight."</div>
+          <div class="stat-row"><span class="stat-label">Speed</span><div class="stat-track"><div class="stat-fill fill-speed" style="width:85%"></div></div><span class="stat-val">85</span></div>
+          <div class="stat-row"><span class="stat-label">Acceleration</span><div class="stat-track"><div class="stat-fill fill-accel" style="width:95%"></div></div><span class="stat-val">95</span></div>
+          <div class="stat-row"><span class="stat-label">Handling</span><div class="stat-track"><div class="stat-fill fill-handle" style="width:70%"></div></div><span class="stat-val">70</span></div>
+          <div class="stat-row"><span class="stat-label">Weight</span><div class="stat-track"><div class="stat-fill fill-weight" style="width:30%"></div></div><span class="stat-val">30</span></div>
+          <div style="margin-top:10px;">
+            <div class="char-trait-row">
+              <span class="char-trait char-strong">✓ Fast starts</span>
+              <span class="char-trait char-strong">✓ Tight corners</span>
+              <span class="char-trait char-weak">✕ Collision pushback</span>
+            </div>
+          </div>
+          <p class="text-xs text-muted">Pairs with: Speed Demon, Bubble Kart. Best on: twisty technical tracks (Circuit, Hairpin). Recommended for: The Completionist persona.</p>
+        </div>
+      </div>
+
+      <div class="char-card">
+        <div class="char-head">
+          <div class="char-avatar" style="background:var(--secondary-c);">🐱</div>
+          <div class="char-name">Cat</div>
+          <div class="char-class" style="color:var(--secondary);">All-Rounder Archetype</div>
+          <div class="char-tagline">"Smooth is fast. Fast is smooth."</div>
+        </div>
+        <div class="char-divider"></div>
+        <div class="char-body">
+          <div class="char-jtbd">"I want a car that doesn't punish me for small mistakes — consistent and reliable."</div>
+          <div class="stat-row"><span class="stat-label">Speed</span><div class="stat-track"><div class="stat-fill fill-speed" style="width:78%"></div></div><span class="stat-val">78</span></div>
+          <div class="stat-row"><span class="stat-label">Acceleration</span><div class="stat-track"><div class="stat-fill fill-accel" style="width:75%"></div></div><span class="stat-val">75</span></div>
+          <div class="stat-row"><span class="stat-label">Handling</span><div class="stat-track"><div class="stat-fill fill-handle" style="width:85%"></div></div><span class="stat-val">85</span></div>
+          <div class="stat-row"><span class="stat-label">Weight</span><div class="stat-track"><div class="stat-fill fill-weight" style="width:55%"></div></div><span class="stat-val">55</span></div>
+          <div style="margin-top:10px;">
+            <div class="char-trait-row">
+              <span class="char-trait char-strong">✓ Balanced stats</span>
+              <span class="char-trait char-strong">✓ Great for beginners</span>
+              <span class="char-trait char-weak">✕ No standout advantage</span>
+            </div>
+          </div>
+          <p class="text-xs text-muted">Pairs with: Bubblegum Cruiser, Nimbus Cruiser. Best on: mixed tracks. Recommended for: The Cozy Gamer + Casual Dripper personas.</p>
+        </div>
+      </div>
+
+      <div class="char-card">
+        <div class="char-head">
+          <div class="char-avatar" style="background:var(--tertiary-c);">🐸</div>
+          <div class="char-name">Frog</div>
+          <div class="char-class" style="color:var(--tertiary);">Drift Master Archetype</div>
+          <div class="char-tagline">"Corners are where I shine."</div>
+        </div>
+        <div class="char-divider"></div>
+        <div class="char-body">
+          <div class="char-jtbd">"I want to feel the satisfaction of a perfect drift line — the boost is just the reward."</div>
+          <div class="stat-row"><span class="stat-label">Speed</span><div class="stat-track"><div class="stat-fill fill-speed" style="width:72%"></div></div><span class="stat-val">72</span></div>
+          <div class="stat-row"><span class="stat-label">Acceleration</span><div class="stat-track"><div class="stat-fill fill-accel" style="width:100%"></div></div><span class="stat-val">100</span></div>
+          <div class="stat-row"><span class="stat-label">Handling</span><div class="stat-track"><div class="stat-fill fill-handle" style="width:92%"></div></div><span class="stat-val">92</span></div>
+          <div class="stat-row"><span class="stat-label">Weight</span><div class="stat-track"><div class="stat-fill fill-weight" style="width:22%"></div></div><span class="stat-val">22</span></div>
+          <div style="margin-top:10px;">
+            <div class="char-trait-row">
+              <span class="char-trait char-strong">✓ Max handling</span>
+              <span class="char-trait char-strong">✓ Drift boost bonus +10%</span>
+              <span class="char-trait char-weak">✕ Lightest — easy to push</span>
+            </div>
+          </div>
+          <p class="text-xs text-muted">Pairs with: Zenith Flyer, Azure Breeze. Best on: high-turn tracks. Special trait: drift boost meter charges 10% faster.</p>
+        </div>
+      </div>
+
+      <div class="char-card">
+        <div class="char-head">
+          <div class="char-avatar" style="background:var(--purple-c);">🐻</div>
+          <div class="char-name">Bear</div>
+          <div class="char-class" style="color:var(--purple);">Tank Archetype</div>
+          <div class="char-tagline">"I don't avoid collisions. I cause them."</div>
+        </div>
+        <div class="char-divider"></div>
+        <div class="char-body">
+          <div class="char-jtbd">"I want to bulldoze through traffic — my size is my weapon."</div>
+          <div class="stat-row"><span class="stat-label">Speed</span><div class="stat-track"><div class="stat-fill fill-speed" style="width:75%"></div></div><span class="stat-val">75</span></div>
+          <div class="stat-row"><span class="stat-label">Acceleration</span><div class="stat-track"><div class="stat-fill fill-accel" style="width:55%"></div></div><span class="stat-val">55</span></div>
+          <div class="stat-row"><span class="stat-label">Handling</span><div class="stat-track"><div class="stat-fill fill-handle" style="width:60%"></div></div><span class="stat-val">60</span></div>
+          <div class="stat-row"><span class="stat-label">Weight</span><div class="stat-track"><div class="stat-fill fill-weight" style="width:92%"></div></div><span class="stat-val">92</span></div>
+          <div style="margin-top:10px;">
+            <div class="char-trait-row">
+              <span class="char-trait char-strong">✓ Immune to light push</span>
+              <span class="char-trait char-strong">✓ Best straight-line top speed</span>
+              <span class="char-trait char-weak">✕ Slow corners</span>
+            </div>
+          </div>
+          <p class="text-xs text-muted">Pairs with: Golden Champ, Cotton Candy Cruiser. Best on: long straight tracks (Oval, Highway). Special trait: ignores collision from Bunny/Frog weight class.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+       07 — VEHICLES
+  ══════════════════════════════════════════════ -->
+  <section class="section" id="vehicles">
+    <div class="section-label">Section 07</div>
+    <h2 class="section-title">Vehicle Roster & Stats</h2>
+    <p class="section-desc">8 vehicles across 3 classes. Class determines max top speed ceiling. Stats shown are base values before upgrades. Each pip = 10 stat points.</p>
+
+    <table class="v-table">
+      <thead>
+        <tr>
+          <th>Vehicle</th>
+          <th>Class</th>
+          <th>Speed</th>
+          <th>Handling</th>
+          <th>Accel</th>
+          <th>Weight</th>
+          <th>Unlock Cost</th>
+          <th>Best For</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="font-weight:700;font-size:13px;">Bubblegum Cruiser</td>
+          <td><span class="vehicle-class cls-c">Class C</span></td>
+          <td><div class="mini-stat"><div class="mini-pip filled-s"></div><div class="mini-pip filled-s"></div><div class="mini-pip filled-s"></div><div class="mini-pip filled-s"></div><div class="mini-pip"></div><div class="mini-pip"></div><div class="mini-pip"></div><div class="mini-pip"></div></div></td>
+          <td><div class="mini-stat"><div class="mini-pip filled-h"></div><div class="mini-pip filled-h"></div><div class="mini-pip filled-h"></div><div class="mini-pip filled-h"></div><div class="mini-pip filled-h"></div><div class="mini-pip filled-h"></div><div class="mini-pip"></div><div class="mini-pip"></div></div></td>
+          <td><div class="mini-stat"><div class="mini-pip filled-a"></div><div class="mini-pip filled-a"></div><div class="mini-pip filled-a"></div><div class="mini-pip filled-a"></div><div class="mini-pip filled-a"></div><div class="mini-pip"></div><div class="mini-pip"></div><div class="mini-pip"></div></div></td>
+          <td><div class="mini-stat"><div class="mini-pip filled-w"></div><div class="mini-pip filled-w"></div><div class="mini-pip filled-w"></div><div class="mini-pip"></div><div class="mini-pip"></div><div class="mini-pip"></div><div class="mini-pip"></div><div class="mini-pip"></div></div></td>
+          <td><span class="coin-val">Starter (free)</span></td>
+          <td class="text-xs text-muted">Balanced beginners</td>
+        </tr>
+        <tr>
+          <td style="font-weight:700;font-size:13px;">Lemon Buggy</td>
+          <td><span class="vehicle-class cls-c">Class C</span></td>
+          <td><div class="mini-stat"><div class="mini-pip filled-s"></div><div class="mini-pip filled-s"></div><div class="mini-pip filled-s"></div><div class="mini-pip"></div><div class="mini-pip"></div><div class="mini-pip"></div><div class="mini-pip"></div><div class="mini-pip"></div></div></td>
+          <td><div class="mini-stat"><div class="mini-pip filled-h"></div><div class="mini-pip filled-h"></div><div class="mini-pip filled-h"></div><div class="mini-pip filled-h"></div><div class="mini-pip filled-h"></div><div class="mini-pip filled-h"></div><div class="mini-pip filled-h"></div><div class="mini-pip"></div></div></td>
+          <td><div class="mini-stat"><div class="mini-pip filled-a"></div><div class="mini-pip filled-a"></div><div class="mini-pip filled-a"></div><div class="mini-pip filled-a"></div><div class="mini-pip filled-a"></div><div class="mini-pip filled-a"></div><div class="mini-pip filled-a"></div><div class="mini-pip"></div></div></td>
+          <td><div class="mini-stat"><div class="mini-pip filled-w"></div><div class="mini-pip filled-w"></div><div class="mini-pip"></div><div class="mini-pip"></div><div class="mini-pip"></div><div class="mini-pip"></div><div class="mini-pip"></div><div class="mini-pip"></div></div></td>
+          <td><span class="coin-val">Starter (free)</span></td>
+          <td class="text-xs text-muted">Max accel, drift builds</td>
+        </tr>
+        <tr>
+          <td style="font-weight:700;font-size:13px;">Mint Cruiser</td>
+          <td><span class="vehicle-class cls-b">Class B</span></td>
+          <td><div class="mini-stat"><div class="mini-pip filled-s"></div><div class="mini-pip filled-s"></div><div class="mini-pip filled-s"></div><div class="mini-pip filled-s"></div><div class="mini-pip filled-s"></div><div class="mini-pip"></div><div class="mini-pip"></div><div class="mini-pip"></div></div></td>
+          <td><div class="mini-stat"><div class="mini-pip filled-h"></div><div class="mini-pip filled-h"></div><div class="mini-pip filled-h"></div><div class="mini-pip filled-h"></div><div class="mini-pip filled-h"></div><div class="mini-pip"></div><div class="mini-pip"></div><div class="mini-pip"></div></div></td>
+          <td><div class="mini-stat"><div class="mini-pip filled-a"></div><div class="mini-pip filled-a"></div><div class="mini-pip filled-a"></div><div class="mini-pip filled-a"></div><div class="mini-pip"></div><div class="mini-pip"></div><div class="mini-pip"></div><div class="mini-pip"></div></div></td>
+          <td><div class="mini-stat"><div class="mini-pip filled-w"></div><div class="mini-pip filled-w"></div><div class="mini-pip filled-w"></div><div class="mini-pip filled-w"></div><div class="mini-pip"></div><div class="mini-pip"></div><div class="mini-pip"></div><div class="mini-pip"></div></div></td>
+          <td><span class="coin-val">2,500 🪙</span></td>
+          <td class="text-xs text-muted">Mid-game all-rounder</td>
+        </tr>
+        <tr>
+          <td style="font-weight:700;font-size:13px;">Azure Breeze</td>
+          <td><span class="vehicle-class cls-b">Class B</span></td>
+          <td><div class="mini-stat"><div class="mini-pip filled-s"></div><div class="mini-pip filled-s"></div><div class="mini-pip filled-s"></div><div class="mini-pip filled-s"></div><div class="mini-pip filled-s"></div><div class="mini-pip"></div><div class="mini-pip"></div><div class="mini-pip"></div></div></td>
+          <td><div class="mini-stat"><div class="mini-pip filled-h"></div><div class="mini-pip filled-h"></div><div class="mini-pip filled-h"></div><div class="mini-pip filled-h"></div><div class="mini-pip filled-h"></div><div class="mini-pip filled-h"></div><div class="mini-pip filled-h"></div><div class="mini-pip"></div></div></td>
+          <td><div class="mini-stat"><div class="mini-pip filled-a"></div><div class="mini-pip filled-a"></div><div class="mini-pip filled-a"></div><div class="mini-pip"></div><div class="mini-pip"></div><div class="mini-pip"></div><div class="mini-pip"></div><div class="mini-pip"></div></div></td>
+          <td><div class="mini-stat"><div class="mini-pip filled-w"></div><div class="mini-pip filled-w"></div><div class="mini-pip filled-w"></div><div class="mini-pip"></div><div class="mini-pip"></div><div class="mini-pip"></div><div class="mini-pip"></div><div class="mini-pip"></div></div></td>
+          <td><span class="coin-val">2,500 🪙</span></td>
+          <td class="text-xs text-muted">Technical tracks</td>
+        </tr>
+        <tr>
+          <td style="font-weight:700;font-size:13px;">Peach Drifter</td>
+          <td><span class="vehicle-class cls-b">Class B</span></td>
+          <td><div class="mini-stat"><div class="mini-pip filled-s"></div><div class="mini-pip filled-s"></div><div class="mini-pip filled-s"></div><div class="mini-pip filled-s"></div><div class="mini-pip"></div><div class="mini-pip"></div><div class="mini-pip"></div><div class="mini-pip"></div></div></td>
+          <td><div class="mini-stat"><div class="mini-pip filled-h"></div><div class="mini-pip filled-h"></div><div class="mini-pip filled-h"></div><div class="mini-pip filled-h"></div><div class="mini-pip filled-h"></div><div class="mini-pip"></div><div class="mini-pip"></div><div class="mini-pip"></div></div></td>
+          <td><div class="mini-stat"><div class="mini-pip filled-a"></div><div class="mini-pip filled-a"></div><div class="mini-pip filled-a"></div><div class="mini-pip filled-a"></div><div class="mini-pip filled-a"></div><div class="mini-pip filled-a"></div><div class="mini-pip"></div><div class="mini-pip"></div></div></td>
+          <td><div class="mini-stat"><div class="mini-pip filled-w"></div><div class="mini-pip filled-w"></div><div class="mini-pip"></div><div class="mini-pip"></div><div class="mini-pip"></div><div class="mini-pip"></div><div class="mini-pip"></div><div class="mini-pip"></div></div></td>
+          <td><span class="coin-val">4,800 🪙</span></td>
+          <td class="text-xs text-muted">High-accel drift</td>
+        </tr>
+        <tr>
+          <td style="font-weight:700;font-size:13px;">Speed Demon</td>
+          <td><span class="vehicle-class cls-a">Class A</span></td>
+          <td><div class="mini-stat"><div class="mini-pip filled-s"></div><div class="mini-pip filled-s"></div><div class="mini-pip filled-s"></div><div class="mini-pip filled-s"></div><div class="mini-pip filled-s"></div><div class="mini-pip filled-s"></div><div class="mini-pip filled-s"></div><div class="mini-pip"></div></div></td>
+          <td><div class="mini-stat"><div class="mini-pip filled-h"></div><div class="mini-pip filled-h"></div><div class="mini-pip filled-h"></div><div class="mini-pip filled-h"></div><div class="mini-pip filled-h"></div><div class="mini-pip"></div><div class="mini-pip"></div><div class="mini-pip"></div></div></td>
+          <td><div class="mini-stat"><div class="mini-pip filled-a"></div><div class="mini-pip filled-a"></div><div class="mini-pip filled-a"></div><div class="mini-pip filled-a"></div><div class="mini-pip filled-a"></div><div class="mini-pip filled-a"></div><div class="mini-pip filled-a"></div><div class="mini-pip filled-a"></div></div></td>
+          <td><div class="mini-stat"><div class="mini-pip filled-w"></div><div class="mini-pip filled-w"></div><div class="mini-pip filled-w"></div><div class="mini-pip"></div><div class="mini-pip"></div><div class="mini-pip"></div><div class="mini-pip"></div><div class="mini-pip"></div></div></td>
+          <td><span class="gem-val">150 💎</span></td>
+          <td class="text-xs text-muted">Competitive leaderboard</td>
+        </tr>
+        <tr>
+          <td style="font-weight:700;font-size:13px;">Nimbus Cruiser</td>
+          <td><span class="vehicle-class cls-a">Class A</span></td>
+          <td><div class="mini-stat"><div class="mini-pip filled-s"></div><div class="mini-pip filled-s"></div><div class="mini-pip filled-s"></div><div class="mini-pip filled-s"></div><div class="mini-pip filled-s"></div><div class="mini-pip filled-s"></div><div class="mini-pip"></div><div class="mini-pip"></div></div></td>
+          <td><div class="mini-stat"><div class="mini-pip filled-h"></div><div class="mini-pip filled-h"></div><div class="mini-pip filled-h"></div><div class="mini-pip filled-h"></div><div class="mini-pip filled-h"></div><div class="mini-pip filled-h"></div><div class="mini-pip filled-h"></div><div class="mini-pip"></div></div></td>
+          <td><div class="mini-stat"><div class="mini-pip filled-a"></div><div class="mini-pip filled-a"></div><div class="mini-pip filled-a"></div><div class="mini-pip filled-a"></div><div class="mini-pip filled-a"></div><div class="mini-pip"></div><div class="mini-pip"></div><div class="mini-pip"></div></div></td>
+          <td><div class="mini-stat"><div class="mini-pip filled-w"></div><div class="mini-pip filled-w"></div><div class="mini-pip filled-w"></div><div class="mini-pip filled-w"></div><div class="mini-pip filled-w"></div><div class="mini-pip"></div><div class="mini-pip"></div><div class="mini-pip"></div></div></td>
+          <td><span class="gem-val">200 💎</span></td>
+          <td class="text-xs text-muted">Balanced Class A</td>
+        </tr>
+        <tr>
+          <td style="font-weight:700;font-size:13px;">Golden Champ</td>
+          <td><span class="vehicle-class cls-a">Class A</span></td>
+          <td><div class="mini-stat"><div class="mini-pip filled-s"></div><div class="mini-pip filled-s"></div><div class="mini-pip filled-s"></div><div class="mini-pip filled-s"></div><div class="mini-pip filled-s"></div><div class="mini-pip filled-s"></div><div class="mini-pip filled-s"></div><div class="mini-pip filled-s"></div></div></td>
+          <td><div class="mini-stat"><div class="mini-pip filled-h"></div><div class="mini-pip filled-h"></div><div class="mini-pip filled-h"></div><div class="mini-pip"></div><div class="mini-pip"></div><div class="mini-pip"></div><div class="mini-pip"></div><div class="mini-pip"></div></div></td>
+          <td><div class="mini-stat"><div class="mini-pip filled-a"></div><div class="mini-pip filled-a"></div><div class="mini-pip filled-a"></div><div class="mini-pip filled-a"></div><div class="mini-pip"></div><div class="mini-pip"></div><div class="mini-pip"></div><div class="mini-pip"></div></div></td>
+          <td><div class="mini-stat"><div class="mini-pip filled-w"></div><div class="mini-pip filled-w"></div><div class="mini-pip filled-w"></div><div class="mini-pip filled-w"></div><div class="mini-pip filled-w"></div><div class="mini-pip filled-w"></div><div class="mini-pip filled-w"></div><div class="mini-pip"></div></div></td>
+          <td><span class="gem-val">300 💎 (Legendary)</span></td>
+          <td class="text-xs text-muted">Max speed straight tracks</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+       08 — UPGRADES
+  ══════════════════════════════════════════════ -->
+  <section class="section" id="upgrades">
+    <div class="section-label">Section 08</div>
+    <h2 class="section-title">Vehicle Upgrade System</h2>
+    <p class="section-desc">3 upgradeable parts per vehicle. 5 levels each. Upgrades are permanent and vehicle-specific. The displayed stat after upgrade must match the physics engine value exactly — no visual-only stat changes.</p>
+
+    <div class="upgrade-grid">
+      <div class="upgrade-part">
+        <div class="upgrade-head">
+          <div class="upgrade-icon">⚡</div>
+          <div>
+            <div class="upgrade-part-name">Turbo Charger</div>
+            <div class="upgrade-part-stat">Affects: Speed stat (+5/level)</div>
+          </div>
+        </div>
+        <div class="upgrade-levels">
+          <div class="upgrade-level"><span class="upgrade-lv-num">Lv 1</span><span class="upgrade-lv-effect">Speed +5 · Top speed ceiling +4 km/h</span><span class="upgrade-lv-cost">300 🪙</span></div>
+          <div class="upgrade-level"><span class="upgrade-lv-num">Lv 2</span><span class="upgrade-lv-effect">Speed +10 · Boost duration +0.2s</span><span class="upgrade-lv-cost">500 🪙</span></div>
+          <div class="upgrade-level"><span class="upgrade-lv-num">Lv 3</span><span class="upgrade-lv-effect">Speed +15 · Drift boost +5%</span><span class="upgrade-lv-cost">800 🪙</span></div>
+          <div class="upgrade-level"><span class="upgrade-lv-num">Lv 4</span><span class="upgrade-lv-effect">Speed +20 · Mini-turbo duration +0.3s</span><span class="upgrade-lv-cost">1,200 🪙</span></div>
+          <div class="upgrade-level"><span class="upgrade-lv-num">Lv 5</span><span class="upgrade-lv-effect">Speed +25 · Boost fill rate +15%</span><span class="upgrade-lv-cost"><span class="upgrade-max">MAX</span> 2,000 🪙</span></div>
+        </div>
+      </div>
+
+      <div class="upgrade-part">
+        <div class="upgrade-head">
+          <div class="upgrade-icon">🏎️</div>
+          <div>
+            <div class="upgrade-part-name">Grip Tires</div>
+            <div class="upgrade-part-stat">Affects: Handling stat (+6/level)</div>
+          </div>
+        </div>
+        <div class="upgrade-levels">
+          <div class="upgrade-level"><span class="upgrade-lv-num">Lv 1</span><span class="upgrade-lv-effect">Handling +6 · Off-track slow −5%</span><span class="upgrade-lv-cost">250 🪙</span></div>
+          <div class="upgrade-level"><span class="upgrade-lv-num">Lv 2</span><span class="upgrade-lv-effect">Handling +12 · Traction recovery −0.05s</span><span class="upgrade-lv-cost">450 🪙</span></div>
+          <div class="upgrade-level"><span class="upgrade-lv-num">Lv 3</span><span class="upgrade-lv-effect">Handling +18 · Drift activation easier</span><span class="upgrade-lv-cost">700 🪙</span></div>
+          <div class="upgrade-level"><span class="upgrade-lv-num">Lv 4</span><span class="upgrade-lv-effect">Handling +24 · Wall bounce speed loss −5%</span><span class="upgrade-lv-cost">1,100 🪙</span></div>
+          <div class="upgrade-level"><span class="upgrade-lv-num">Lv 5</span><span class="upgrade-lv-effect">Handling +30 · Drift mini-turbo +0.2s</span><span class="upgrade-lv-cost"><span class="upgrade-max">MAX</span> 1,800 🪙</span></div>
+        </div>
+      </div>
+
+      <div class="upgrade-part">
+        <div class="upgrade-head">
+          <div class="upgrade-icon">🌬️</div>
+          <div>
+            <div class="upgrade-part-name">Aero Kit</div>
+            <div class="upgrade-part-stat">Affects: Acceleration stat (+4/level)</div>
+          </div>
+        </div>
+        <div class="upgrade-levels">
+          <div class="upgrade-level"><span class="upgrade-lv-num">Lv 1</span><span class="upgrade-lv-effect">Accel +4 · 0→100 time −0.15s</span><span class="upgrade-lv-cost">350 🪙</span></div>
+          <div class="upgrade-level"><span class="upgrade-lv-num">Lv 2</span><span class="upgrade-lv-effect">Accel +8 · Post-collision recovery −0.2s</span><span class="upgrade-lv-cost">600 🪙</span></div>
+          <div class="upgrade-level"><span class="upgrade-lv-num">Lv 3</span><span class="upgrade-lv-effect">Accel +12 · Race start boost improved</span><span class="upgrade-lv-cost">950 🪙</span></div>
+          <div class="upgrade-level"><span class="upgrade-lv-num">Lv 4</span><span class="upgrade-lv-effect">Accel +16 · Speed regain after item hit +25%</span><span class="upgrade-lv-cost">1,400 🪙</span></div>
+          <div class="upgrade-level"><span class="upgrade-lv-num">Lv 5</span><span class="upgrade-lv-effect">Accel +20 · Unlocks: Aero Kit visual on car</span><span class="upgrade-lv-cost"><span class="upgrade-max">MAX</span> 2,200 🪙</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout callout-warn" style="margin-top:16px;">
+      <span class="callout-icon">⚠</span>
+      <span><strong>Balance Rule:</strong> A fully upgraded Class C vehicle must NOT out-perform a base Class A vehicle in its dominant stat. Max Turbo Lv5 on Bubblegum Cruiser (Speed 75+25=100) matches but does not exceed base Golden Champ (Speed 100). Upgrades enable competitive play, not class bypassing.</span>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+       09 — TRACKS
+  ══════════════════════════════════════════════ -->
+  <section class="section" id="tracks">
+    <div class="section-label">Section 09</div>
+    <h2 class="section-title">Track Design Specifications</h2>
+    <p class="section-desc">16 tracks across 4 worlds. Each track has a design brief, difficulty rating, signature mechanic, and unlock requirement. Track designers must complete a 12-point checklist before any track is playable.</p>
+
+    <h3 class="sub-title">World 1 — Dawn Archipelago</h3>
+    <p class="text-sm text-muted" style="margin-bottom:16px;">Warm sunrise palette. Soft sands and calm turquoise waters. Gentle difficulty. Entry world for all personas.</p>
+    <div class="track-grid" style="margin-bottom:24px;">
+      <div class="track-card">
+        <div class="track-banner" style="background:linear-gradient(90deg,#ffd1dc,#fce8a0);"></div>
+        <div class="track-body">
+          <div class="track-world">World 1 · Track 1</div>
+          <div class="track-name">Soft Sands Oval</div>
+          <div class="track-sub">A gentle oval on a beach. First track unlocked. Tutorial pace.</div>
+          <div class="track-meta">
+            <span class="track-chip diff-easy">Easy</span>
+            <span class="track-chip tag-secondary">Length: 1,200m</span>
+            <span class="track-chip tag-tertiary">Laps: 3</span>
+            <span class="track-chip tag-warn">Par: 1:45</span>
+          </div>
+          <div class="track-features">
+            <div class="track-feat-label">Signature elements</div>
+            <div class="track-feat-list">
+              <span class="feat-tag">Wide lanes</span>
+              <span class="feat-tag">Sand shortcut</span>
+              <span class="feat-tag">6 item boxes</span>
+              <span class="feat-tag">No elevation</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="track-card">
+        <div class="track-banner" style="background:linear-gradient(90deg,#b7e7f7,#cbe3c7);"></div>
+        <div class="track-body">
+          <div class="track-world">World 1 · Track 2</div>
+          <div class="track-name">Minty Meadows Circuit</div>
+          <div class="track-sub">Rolling green meadows with 3 sweeping corners and a long back straight.</div>
+          <div class="track-meta">
+            <span class="track-chip diff-easy">Easy</span>
+            <span class="track-chip tag-secondary">Length: 1,450m</span>
+            <span class="track-chip tag-tertiary">Laps: 3</span>
+            <span class="track-chip tag-warn">Par: 2:00</span>
+          </div>
+          <div class="track-features">
+            <div class="track-feat-label">Signature elements</div>
+            <div class="track-feat-list">
+              <span class="feat-tag">First drift section</span>
+              <span class="feat-tag">Speed boost pad</span>
+              <span class="feat-tag">8 item boxes</span>
+              <span class="feat-tag">Mild camber</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="track-card">
+        <div class="track-banner" style="background:linear-gradient(90deg,#ffd1dc,#b7e7f7);"></div>
+        <div class="track-body">
+          <div class="track-world">World 1 · Track 3</div>
+          <div class="track-name">Peach Peaks Hairpin</div>
+          <div class="track-sub">Mountain switchbacks. First technical track. Hairpin corners punish late braking.</div>
+          <div class="track-meta">
+            <span class="track-chip diff-med">Medium</span>
+            <span class="track-chip tag-secondary">Length: 1,800m</span>
+            <span class="track-chip tag-tertiary">Laps: 3</span>
+            <span class="track-chip tag-warn">Par: 2:30</span>
+          </div>
+          <div class="track-features">
+            <div class="track-feat-label">Signature elements</div>
+            <div class="track-feat-list">
+              <span class="feat-tag">5 hairpins</span>
+              <span class="feat-tag">Elevation ±20m</span>
+              <span class="feat-tag">Drift zones</span>
+              <span class="feat-tag">Cliffside risk</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="track-card">
+        <div class="track-banner" style="background:linear-gradient(90deg,#cbe3c7,#ffd1dc);"></div>
+        <div class="track-body">
+          <div class="track-world">World 1 · Track 4</div>
+          <div class="track-name">Island Grand Circuit</div>
+          <div class="track-sub">Full circuit combining all World 1 elements. Unlocks World 2.</div>
+          <div class="track-meta">
+            <span class="track-chip diff-med">Medium</span>
+            <span class="track-chip tag-secondary">Length: 2,200m</span>
+            <span class="track-chip tag-tertiary">Laps: 3</span>
+            <span class="track-chip tag-warn">Par: 3:10</span>
+          </div>
+          <div class="track-features">
+            <div class="track-feat-label">Signature elements</div>
+            <div class="track-feat-list">
+              <span class="feat-tag">10 item boxes</span>
+              <span class="feat-tag">Split paths</span>
+              <span class="feat-tag">Water shortcut</span>
+              <span class="feat-tag">Full World 1 tour</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="sub-title">Track Design Checklist (12 Points)</h3>
+    <div class="card">
+      <div class="card-grid g3" style="gap:10px;">
+        <div class="text-sm"><strong>1.</strong> <span class="text-muted">Minimum 6 item boxes per lap, no boxes in chicanes</span></div>
+        <div class="text-sm"><strong>2.</strong> <span class="text-muted">At least 1 overtaking opportunity per 500m</span></div>
+        <div class="text-sm"><strong>3.</strong> <span class="text-muted">No invisible walls — all boundaries visible in 3D</span></div>
+        <div class="text-sm"><strong>4.</strong> <span class="text-muted">Par time achievable by base Class C vehicle with no upgrades</span></div>
+        <div class="text-sm"><strong>5.</strong> <span class="text-muted">3-star time requires at least 1 drift mini-turbo per lap</span></div>
+        <div class="text-sm"><strong>6.</strong> <span class="text-muted">Track width: ≥18m on straights, ≥12m on corners</span></div>
+        <div class="text-sm"><strong>7.</strong> <span class="text-muted">All 5 UX states tested (loading, empty, error, edge case)</span></div>
+        <div class="text-sm"><strong>8.</strong> <span class="text-muted">Lap time verified to match between frontend display and server</span></div>
+        <div class="text-sm"><strong>9.</strong> <span class="text-muted">60FPS sustained on Medium LOD preset</span></div>
+        <div class="text-sm"><strong>10.</strong> <span class="text-muted">At least 2 catch-up item box placements for 3rd/4th positions</span></div>
+        <div class="text-sm"><strong>11.</strong> <span class="text-muted">World color palette validated against design token system</span></div>
+        <div class="text-sm"><strong>12.</strong> <span class="text-muted">AI path nodes placed for all 3 difficulty presets</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+       10 — GRAND PRIX
+  ══════════════════════════════════════════════ -->
+  <section class="section" id="grandprix">
+    <div class="section-label">Section 10</div>
+    <h2 class="section-title">Grand Prix Mode</h2>
+    <p class="section-desc">The primary competitive structure. 4 cups × 4 tracks each. Points accumulate across the cup. The CC difficulty sets AI behavior and coin reward multipliers.</p>
+
+    <div class="card-grid g4" style="margin-bottom:20px;">
+      <div class="card" style="border-top:4px solid var(--tertiary);">
+        <div class="card-icon">🍄</div>
+        <div class="card-title">Mushroom Cup</div>
+        <div class="card-sub">World 1 · 4 Tracks</div>
+        <p class="text-xs text-muted">Soft Sands Oval → Minty Meadows → Peach Peaks Hairpin → Island Grand Circuit</p>
+        <div class="tag tag-tertiary" style="margin-top:8px;">Beginner</div>
+      </div>
+      <div class="card" style="border-top:4px solid var(--amber);">
+        <div class="card-icon">⭐</div>
+        <div class="card-title">Star Cup</div>
+        <div class="card-sub">World 2 · 4 Tracks</div>
+        <p class="text-xs text-muted">Sugar Snow Summit → Frosty Flyover → Blizzard Chicane → Summit Grand Prix</p>
+        <div class="tag tag-warn" style="margin-top:8px;">Intermediate</div>
+      </div>
+      <div class="card" style="border-top:4px solid var(--secondary);">
+        <div class="card-icon">☁️</div>
+        <div class="card-title">Cloud Cup</div>
+        <div class="card-sub">World 3 · 4 Tracks</div>
+        <p class="text-xs text-muted">Neon Night Drift → City Chicane → Rooftop Spiral → Neon Grand Prix</p>
+        <div class="tag tag-secondary" style="margin-top:8px;">Advanced</div>
+      </div>
+      <div class="card" style="border-top:4px solid var(--primary);">
+        <div class="card-icon">🏔️</div>
+        <div class="card-title">Peak Cup</div>
+        <div class="card-sub">World 4 · 4 Tracks</div>
+        <p class="text-xs text-muted">Dream Archipelago X → Storm Peak → Crystal Circuit → Pastel Peak Grand Prix</p>
+        <div class="tag tag-primary" style="margin-top:8px;">Expert</div>
+      </div>
+    </div>
+
+    <h3 class="sub-title">Grand Prix Scoring</h3>
+    <div class="card">
+      <div class="card-grid g2" style="gap:16px;">
+        <div>
+          <h4 class="mini-title">Points Per Race (per position)</h4>
+          <table class="economy-table">
+            <thead><tr><th>Position</th><th>Points</th><th>Coin Reward</th></tr></thead>
+            <tbody>
+              <tr><td>🥇 1st</td><td class="text-mono" style="font-weight:700;color:var(--amber);">15 pts</td><td><span class="coin-val">500 🪙</span></td></tr>
+              <tr><td>🥈 2nd</td><td class="text-mono" style="font-weight:700;">12 pts</td><td><span class="coin-val">300 🪙</span></td></tr>
+              <tr><td>🥉 3rd</td><td class="text-mono" style="font-weight:700;">10 pts</td><td><span class="coin-val">150 🪙</span></td></tr>
+              <tr><td>4th</td><td class="text-mono" style="font-weight:700;">8 pts</td><td><span class="coin-val">75 🪙</span></td></tr>
+            </tbody>
+          </table>
+          <p class="text-xs text-muted" style="margin-top:8px;">Max points per cup: 60. Coin rewards are multiplied by CC difficulty (50cc ×1.0, 100cc ×1.5, 150cc ×2.0).</p>
+        </div>
+        <div>
+          <h4 class="mini-title">Star Ratings Per Race</h4>
+          <table class="economy-table">
+            <thead><tr><th>Stars</th><th>Condition</th></tr></thead>
+            <tbody>
+              <tr><td>⭐⭐⭐</td><td class="text-sm text-muted">1st place + lap time under par</td></tr>
+              <tr><td>⭐⭐</td><td class="text-sm text-muted">1st or 2nd place</td></tr>
+              <tr><td>⭐</td><td class="text-sm text-muted">3rd place (podium)</td></tr>
+              <tr><td>No stars</td><td class="text-sm text-muted">4th place</td></tr>
+            </tbody>
+          </table>
+          <p class="text-xs text-muted" style="margin-top:8px;">Stars accumulate globally and unlock tracks (see World Map). Max 48 stars across all 16 tracks.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+       11 — ECONOMY
+  ══════════════════════════════════════════════ -->
+  <section class="section" id="economy">
+    <div class="section-label">Section 11</div>
+    <h2 class="section-title">Economy Design</h2>
+    <p class="section-desc">Two-currency system. Coins are earned by playing (free). Gems are purchased with real money (IAP). All gameplay-relevant items are coin-purchasable. Gems are cosmetics-only. No pay-to-win.</p>
+
+    <h3 class="sub-title">Coin Economy (Earned Currency)</h3>
+    <table class="economy-table" style="margin-bottom:20px;">
+      <thead><tr><th>Source</th><th>Amount</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td class="text-sm" style="font-weight:600;">Race — 1st place (50cc)</td><td><span class="coin-val">500 🪙</span></td><td class="text-xs text-muted">Base rate. Multiplied by CC difficulty</td></tr>
+        <tr><td class="text-sm" style="font-weight:600;">Race — 2nd place (50cc)</td><td><span class="coin-val">300 🪙</span></td><td class="text-xs text-muted">Scaled proportionally</td></tr>
+        <tr><td class="text-sm" style="font-weight:600;">Race — 3rd place (50cc)</td><td><span class="coin-val">150 🪙</span></td><td class="text-xs text-muted"></td></tr>
+        <tr><td class="text-sm" style="font-weight:600;">Race — 4th place (50cc)</td><td><span class="coin-val">75 🪙</span></td><td class="text-xs text-muted">Always earns something — no shame in 4th</td></tr>
+        <tr><td class="text-sm" style="font-weight:600;">3-star race bonus</td><td><span class="coin-val">+200 🪙</span></td><td class="text-xs text-muted">One-time per track-CC combination</td></tr>
+        <tr><td class="text-sm" style="font-weight:600;">Daily first race bonus</td><td><span class="coin-val">+150 🪙</span></td><td class="text-xs text-muted">Resets at midnight UTC. Encourages daily habit.</td></tr>
+        <tr><td class="text-sm" style="font-weight:600;">New personal best (leaderboard)</td><td><span class="coin-val">+100 🪙</span></td><td class="text-xs text-muted">Per track, once per session</td></tr>
+        <tr><td class="text-sm" style="font-weight:600;">World cup completion bonus</td><td><span class="coin-val">+1,000 🪙</span></td><td class="text-xs text-muted">One-time per cup per CC level</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="sub-title">Gem Economy (IAP Currency)</h3>
+    <div class="card-grid g3" style="margin-bottom:16px;">
+      <div class="card">
+        <div class="card-title">💎 Starter Pack — $1.99</div>
+        <p class="text-sm text-muted">50 gems + 1,000 coins + Rare skin voucher. One-time purchase. Best value entry point for The Cozy Gamer.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">💎 Race Bundle — $4.99</div>
+        <p class="text-sm text-muted">150 gems + 3,000 coins. Standard bundle. Maps to ~1 Legendary skin purchase.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">💎 Peak Pack — $14.99</div>
+        <p class="text-sm text-muted">500 gems + 10,000 coins. Best gem-per-dollar. Targets The Completionist who wants immediate Class A access.</p>
+      </div>
+    </div>
+
+    <div class="callout callout-tip">
+      <span class="callout-icon">✓</span>
+      <span><strong>Economy Health Check:</strong> A player who plays daily for 2 weeks (earning ~4,000 coins/week) should be able to unlock a Class B vehicle and 2 upgrade levels without spending. This "free path viability" is essential to the Cozy Gamer persona and must be verified in each economy rebalance.</span>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+       12 — PROGRESSION
+  ══════════════════════════════════════════════ -->
+  <section class="section" id="progression">
+    <div class="section-label">Section 12</div>
+    <h2 class="section-title">Player Progression System</h2>
+    <p class="section-desc">Progression must always show a visible next goal. No player should finish a session without knowing exactly what they're working toward.</p>
+
+    <div class="prog-tree">
+      <div class="prog-tier">
+        <div class="prog-tier-head">
+          <span class="prog-tier-badge pt-new">New Player</span>
+          <div>
+            <div class="prog-tier-name">Weeks 1–2: The Hook</div>
+            <div class="prog-tier-req">0–10 races. Goal: first win, first upgrade, first 3-star.</div>
+          </div>
+        </div>
+        <div class="prog-unlocks">
+          <span class="prog-unlock-chip">🏁 3 starter tracks</span>
+          <span class="prog-unlock-chip">🚗 Bubblegum Cruiser + Lemon Buggy</span>
+          <span class="prog-unlock-chip">🎯 Tutorial race (Soft Sands)</span>
+          <span class="prog-unlock-chip">💡 Power-up tutorial tooltip</span>
+          <span class="prog-unlock-chip">⭐ First 3-star achievement</span>
+        </div>
+      </div>
+      <div class="prog-tier">
+        <div class="prog-tier-head">
+          <span class="prog-tier-badge pt-regular">Regular</span>
+          <div>
+            <div class="prog-tier-name">Weeks 3–6: The Grind</div>
+            <div class="prog-tier-req">10–50 races. Goal: first Class B vehicle, first cup completion.</div>
+          </div>
+        </div>
+        <div class="prog-unlocks">
+          <span class="prog-unlock-chip">🌍 World 2 (8+ stars)</span>
+          <span class="prog-unlock-chip">🏎️ Mint Cruiser, Azure Breeze</span>
+          <span class="prog-unlock-chip">⚡ First upgrade Lv3</span>
+          <span class="prog-unlock-chip">🏆 Mushroom Cup completion</span>
+          <span class="prog-unlock-chip">📊 Leaderboard top 500 accessible</span>
+        </div>
+      </div>
+      <div class="prog-tier">
+        <div class="prog-tier-head">
+          <span class="prog-tier-badge pt-veteran">Veteran</span>
+          <div>
+            <div class="prog-tier-name">Months 2–3: The Master</div>
+            <div class="prog-tier-req">50–200 races. Goal: Class A vehicle, leaderboard top 100.</div>
+          </div>
+        </div>
+        <div class="prog-unlocks">
+          <span class="prog-unlock-chip">🌍 Worlds 3 + 4</span>
+          <span class="prog-unlock-chip">🏎️ Speed Demon, Nimbus Cruiser</span>
+          <span class="prog-unlock-chip">⚡ All upgrades Lv4+</span>
+          <span class="prog-unlock-chip">🏆 Star + Cloud Cup</span>
+          <span class="prog-unlock-chip">📊 Leaderboard top 100 viable</span>
+          <span class="prog-unlock-chip">🛒 Access to Legendary skins</span>
+        </div>
+      </div>
+      <div class="prog-tier">
+        <div class="prog-tier-head">
+          <span class="prog-tier-badge pt-master">Master</span>
+          <div>
+            <div class="prog-tier-name">Ongoing: The Completionist</div>
+            <div class="prog-tier-req">200+ races. Goal: all 3-stars, leaderboard rank #1, full skin collection.</div>
+          </div>
+        </div>
+        <div class="prog-unlocks">
+          <span class="prog-unlock-chip">🏎️ Golden Champ (Legendary)</span>
+          <span class="prog-unlock-chip">⚡ All upgrades Lv5 (Max)</span>
+          <span class="prog-unlock-chip">⭐ 48/48 stars (all tracks)</span>
+          <span class="prog-unlock-chip">🏆 All 4 cups × all CC levels</span>
+          <span class="prog-unlock-chip">📊 Leaderboard season contention</span>
+          <span class="prog-unlock-chip">🎨 Full skin collection pursuit</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+       13 — AI
+  ══════════════════════════════════════════════ -->
+  <section class="section" id="ai">
+    <div class="section-label">Section 13</div>
+    <h2 class="section-title">AI Opponent Behavior</h2>
+    <p class="section-desc">Rule-based AI with rubber-band mechanics. Not truly adaptive ML — it's scripted opponent behavior tuned to feel fair and competitive. Three difficulty presets mapped to CC selection.</p>
+
+    <div class="ai-difficulty">
+      <div class="ai-card">
+        <div class="ai-head">
+          <div class="ai-name" style="color:var(--tertiary);">50cc — Gentle</div>
+          <span class="ai-cc cc-50">50cc</span>
+        </div>
+        <div class="ai-param-row"><span class="ai-param-label">Speed cap</span><span class="ai-param-val">75% of track max</span></div>
+        <div class="ai-param-row"><span class="ai-param-label">Item use accuracy</span><span class="ai-param-val">60%</span></div>
+        <div class="ai-param-row"><span class="ai-param-label">Rubber-band range</span><span class="ai-param-val">±8 seconds</span></div>
+        <div class="ai-param-row"><span class="ai-param-label">Drift usage</span><span class="ai-param-val">Rare (30% corners)</span></div>
+        <div class="ai-param-row"><span class="ai-param-label">Catch-up boost</span><span class="ai-param-val">+5% if 8s behind</span></div>
+        <div class="ai-param-row"><span class="ai-param-label">Blocking behavior</span><span class="ai-param-val">None</span></div>
+        <div class="ai-param-row"><span class="ai-param-label">Mistakes per lap</span><span class="ai-param-val">1–2 deliberate</span></div>
+        <div class="ai-param-row"><span class="ai-param-label">Coin reward ×</span><span class="ai-param-val">×1.0</span></div>
+      </div>
+      <div class="ai-card">
+        <div class="ai-head">
+          <div class="ai-name" style="color:var(--amber);">100cc — Balanced</div>
+          <span class="ai-cc cc-100">100cc</span>
+        </div>
+        <div class="ai-param-row"><span class="ai-param-label">Speed cap</span><span class="ai-param-val">88% of track max</span></div>
+        <div class="ai-param-row"><span class="ai-param-label">Item use accuracy</span><span class="ai-param-val">80%</span></div>
+        <div class="ai-param-row"><span class="ai-param-label">Rubber-band range</span><span class="ai-param-val">±4 seconds</span></div>
+        <div class="ai-param-row"><span class="ai-param-label">Drift usage</span><span class="ai-param-val">Common (70% corners)</span></div>
+        <div class="ai-param-row"><span class="ai-param-label">Catch-up boost</span><span class="ai-param-val">+10% if 4s behind</span></div>
+        <div class="ai-param-row"><span class="ai-param-label">Blocking behavior</span><span class="ai-param-val">Light — inside line</span></div>
+        <div class="ai-param-row"><span class="ai-param-label">Mistakes per lap</span><span class="ai-param-val">0–1 deliberate</span></div>
+        <div class="ai-param-row"><span class="ai-param-label">Coin reward ×</span><span class="ai-param-val">×1.5</span></div>
+      </div>
+      <div class="ai-card">
+        <div class="ai-head">
+          <div class="ai-name" style="color:var(--error);">150cc — Expert</div>
+          <span class="ai-cc cc-150">150cc</span>
+        </div>
+        <div class="ai-param-row"><span class="ai-param-label">Speed cap</span><span class="ai-param-val">100% of track max</span></div>
+        <div class="ai-param-row"><span class="ai-param-label">Item use accuracy</span><span class="ai-param-val">95%</span></div>
+        <div class="ai-param-row"><span class="ai-param-label">Rubber-band range</span><span class="ai-param-val">±1.5 seconds</span></div>
+        <div class="ai-param-row"><span class="ai-param-label">Drift usage</span><span class="ai-param-val">All eligible corners</span></div>
+        <div class="ai-param-row"><span class="ai-param-label">Catch-up boost</span><span class="ai-param-val">+15% if 1.5s behind</span></div>
+        <div class="ai-param-row"><span class="ai-param-label">Blocking behavior</span><span class="ai-param-val">Aggressive — mirrors</span></div>
+        <div class="ai-param-row"><span class="ai-param-label">Mistakes per lap</span><span class="ai-param-val">0 (near-perfect)</span></div>
+        <div class="ai-param-row"><span class="ai-param-label">Coin reward ×</span><span class="ai-param-val">×2.0</span></div>
+      </div>
+    </div>
+
+    <div class="callout callout-design" style="margin-top:16px;">
+      <span class="callout-icon">◆</span>
+      <span><strong>Rubber-Band Philosophy:</strong> The rubber-band system must never feel like cheating. The AI should feel like it's "pushing itself harder," not teleporting. Catch-up boost applies only when the AI is behind — never in front. A player who dominates 150cc should feel unstoppable, not rubber-banded down.</span>
+    </div>
+
+    <h3 class="sub-title">AI Path System</h3>
+    <div class="card-grid g2">
+      <div class="card">
+        <div class="card-title">Racing Line Nodes</div>
+        <p class="text-sm text-muted">Each track has a pre-authored racing line as a spline curve. AI navigates waypoints along this line. Waypoints specify: position, target speed, drift flag, item box interaction. Node density: 1 per 15m average.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">Difficulty Path Variants</div>
+        <p class="text-sm text-muted">Three racing line variants per track: <strong>Optimal</strong> (150cc — shortest/fastest path), <strong>Standard</strong> (100cc — clean but not perfect), <strong>Casual</strong> (50cc — safe wide path, avoids walls). Variant selected at race start based on CC.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+       14 — JUICE & GAME FEEL
+  ══════════════════════════════════════════════ -->
+  <section class="section" id="juice">
+    <div class="section-label">Section 14</div>
+    <h2 class="section-title">Juice & Game Feel</h2>
+    <p class="section-desc">"Juice" is the layer of feedback that makes actions feel satisfying beyond their mechanical effect. Every interaction in the list below is a first-class deliverable — not a nice-to-have. The 4.5/5 game feel score cannot be reached without them.</p>
+
+    <table class="juice-table">
+      <thead>
+        <tr>
+          <th style="width:70px;">Type</th>
+          <th style="width:80px;">Priority</th>
+          <th style="width:180px;">Trigger</th>
+          <th>Effect</th>
+          <th>Technical Note</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="juice-type jt-visual">Visual</span></td><td><span class="juice-priority jp-p0">P0 — Ship</span></td><td class="text-sm" style="font-weight:600;">Boost activation</td><td class="text-sm text-muted">Speed lines (6 radial streaks, 400ms), FOV +8° over 300ms, screen shake 0.05amp × 12Hz, chromatic aberration 0.8px</td><td class="text-xs text-muted">Three.js post-process pass. Must not drop below 55FPS when triggered.</td></tr>
+        <tr><td><span class="juice-type jt-visual">Visual</span></td><td><span class="juice-priority jp-p0">P0 — Ship</span></td><td class="text-sm" style="font-weight:600;">Drift activation</td><td class="text-sm text-muted">Colored tire tracks (player skin hue), smoke particles (12/s), drift counter UI badge pulses</td><td class="text-xs text-muted">Particle system: max 50 particles active. Fade over 1.2s. Mobile: reduce to 20.</td></tr>
+        <tr><td><span class="juice-type jt-visual">Visual</span></td><td><span class="juice-priority jp-p0">P0 — Ship</span></td><td class="text-sm" style="font-weight:600;">Mini-turbo earned</td><td class="text-sm text-muted">Blue spark burst from tires (0.4s), "BOOST!" text popup (scale 0→1.2→1.0 over 300ms), boost bar flash</td><td class="text-xs text-muted">Text rendered in 3D world space, not HUD. Always faces camera.</td></tr>
+        <tr><td><span class="juice-type jt-audio">Audio</span></td><td><span class="juice-priority jp-p0">P0 — Ship</span></td><td class="text-sm" style="font-weight:600;">Vehicle engine</td><td class="text-sm text-muted">Pitch-shifts with speed (0.7× at idle → 1.4× at top speed). Smooth interpolation, no stepping.</td><td class="text-xs text-muted">Web Audio API pitch shift. Single engine loop sample, no crossfade.</td></tr>
+        <tr><td><span class="juice-type jt-audio">Audio</span></td><td><span class="juice-priority jp-p0">P0 — Ship</span></td><td class="text-sm" style="font-weight:600;">Power-up collect</td><td class="text-sm text-muted">Distinct chime per item type. Mushroom: warm 3-note ascending. Star: shimmer arpeggio. Shield: soft thud. Rocket: whoosh.</td><td class="text-xs text-muted">4 unique SFX files. Must play within 80ms of collision detection.</td></tr>
+        <tr><td><span class="juice-type jt-haptic">Haptic</span></td><td><span class="juice-priority jp-p1">P1 — Sprint</span></td><td class="text-sm" style="font-weight:600;">Collision / hit</td><td class="text-sm text-muted">Device vibration: 40ms pulse (navigator.vibrate). Screen flash: white 0.15 opacity × 100ms. Car bounces 0.1 units Y axis.</td><td class="text-xs text-muted">Vibration API — must handle gracefully when not available (desktop).</td></tr>
+        <tr><td><span class="juice-type jt-visual">Visual</span></td><td><span class="juice-priority jp-p1">P1 — Sprint</span></td><td class="text-sm" style="font-weight:600;">Item box hit</td><td class="text-sm text-muted">Box spins + bursts into colored confetti particles (20 pieces, 0.6s), item icon scales in to HUD slot</td><td class="text-xs text-muted">Confetti uses shared particle pool to avoid allocation spikes.</td></tr>
+        <tr><td><span class="juice-type jt-camera">Camera</span></td><td><span class="juice-priority jp-p1">P1 — Sprint</span></td><td class="text-sm" style="font-weight:600;">1st place moment</td><td class="text-sm text-muted">Camera pulls back 20% to show more track, subtle golden tint on post-processing. Position badge animates to "1st".</td><td class="text-xs text-muted">Camera position lerps over 2 seconds. Tint via color grading LUT overlay.</td></tr>
+        <tr><td><span class="juice-type jt-visual">Visual</span></td><td><span class="juice-priority jp-p1">P1 — Sprint</span></td><td class="text-sm" style="font-weight:600;">Victory screen</td><td class="text-sm text-muted">Confetti explosion (80 particles, 4 pastel colors), trophy scales 0→1.2→1.0, star icons animate in sequence, coin counter counts up audibly</td><td class="text-xs text-muted">Coin counter increments at 120 coins/sec. Must complete before "Next Race" is tappable.</td></tr>
+        <tr><td><span class="juice-type jt-audio">Audio</span></td><td><span class="juice-priority jp-p1">P1 — Sprint</span></td><td class="text-sm" style="font-weight:600;">Rank improvement</td><td class="text-sm text-muted">"Rank Up" rising tone when leaderboard position improves mid-race. Positive reinforcement without distraction.</td><td class="text-xs text-muted">Triggered only when rank improves, not continuously. Max once per 5s.</td></tr>
+        <tr><td><span class="juice-type jt-visual">Visual</span></td><td><span class="juice-priority jp-p2">P2 — Polish</span></td><td class="text-sm" style="font-weight:600;">UI button press</td><td class="text-sm text-muted">All interactive buttons: scale 0.95 on press, 1.05 on release (20ms spring), glass sheen sweeps left-to-right</td><td class="text-xs text-muted">CSS transforms only — no JS required. Sheen via pseudo-element animation.</td></tr>
+        <tr><td><span class="juice-type jt-audio">Audio</span></td><td><span class="juice-priority jp-p2">P2 — Polish</span></td><td class="text-sm" style="font-weight:600;">Screen transition</td><td class="text-sm text-muted">Soft whoosh (80ms) on every major screen change. Consistent audio identity for navigation.</td><td class="text-xs text-muted">Single shared audio clip, triggered in JS transition handler.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+       15 — AUDIO
+  ══════════════════════════════════════════════ -->
+  <section class="section" id="audio">
+    <div class="section-label">Section 15</div>
+    <h2 class="section-title">Audio Design</h2>
+    <p class="section-desc">Audio is half the "Digitally Tactile" pillar. Every sound must feel soft, warm, and satisfying — never jarring. The audio palette is acoustic + synthesized pastel: soft marimba, gentle chimes, warm bass, and airy synths.</p>
+
+    <div class="callout callout-design">
+      <span class="callout-icon">◆</span>
+      <span><strong>Audio Direction:</strong> If it would fit in a Studio Ghibli film, it belongs. If it sounds like a typical "game SFX pack," it doesn't. The car engine should sound warm and cartoonish, not realistic. The music should feel like a gentle breeze, not a hype track.</span>
+    </div>
+
+    <h3 class="sub-title">Music System</h3>
+    <div class="card-grid g2" style="margin-bottom:16px;">
+      <div class="card">
+        <div class="card-title">Dynamic Music Architecture</div>
+        <p class="text-sm text-muted" style="margin-bottom:8px;">Each track has a 3-layer music stem system. Layers blend based on race context:</p>
+        <p class="text-sm text-muted"><strong>Layer A — Base:</strong> Always playing. Ambient melody, low energy.<br/><strong>Layer B — Mid:</strong> Fades in when player hits top 50% speed. Adds rhythm.<br/><strong>Layer C — Hype:</strong> Full intensity at top speed or with Star power-up active. Drops on collision.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">Music Per World</div>
+        <p class="text-sm text-muted">
+          <strong>World 1 — Dawn Archipelago:</strong> Tropical acoustic guitar, marimba, ocean ambience. BPM: 120.<br/><br/>
+          <strong>World 2 — Sugar Snow Summit:</strong> Soft piano, music box, wind chimes, muffled bass. BPM: 108.<br/><br/>
+          <strong>World 3 — Neon Night City:</strong> Lo-fi synthwave, warm pad, gentle bass. BPM: 140.<br/><br/>
+          <strong>World 4 — Pastel Peak:</strong> Orchestral strings + synth hybrid. Epic but soft. BPM: 132.
+        </p>
+      </div>
+    </div>
+
+    <h3 class="sub-title">Sound Effect Catalog</h3>
+    <table class="audio-table">
+      <thead>
+        <tr>
+          <th style="width:70px;">Category</th>
+          <th style="width:180px;">Sound Event</th>
+          <th>Description</th>
+          <th style="width:90px;">Priority</th>
+          <th style="width:80px;">Duration</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="audio-cat ac-sfx">SFX</span></td><td class="text-sm" style="font-weight:600;">Engine idle</td><td class="text-sm text-muted">Warm, low hum. Cartoonish — like a toy car motor. No realistic exhaust.</td><td><span class="tag tag-primary">P0</span></td><td class="text-xs text-muted">Loop</td></tr>
+        <tr><td><span class="audio-cat ac-sfx">SFX</span></td><td class="text-sm" style="font-weight:600;">Engine rev (speed-scaled)</td><td class="text-sm text-muted">Pitch rises smoothly with speed. Warm whirr, not roar. Children's toy aesthetic.</td><td><span class="tag tag-primary">P0</span></td><td class="text-xs text-muted">Loop</td></tr>
+        <tr><td><span class="audio-cat ac-sfx">SFX</span></td><td class="text-sm" style="font-weight:600;">Boost activation</td><td class="text-sm text-muted">Ascending "whoooosh" with a soft sparkle tail. Duration 400ms.</td><td><span class="tag tag-primary">P0</span></td><td class="text-xs text-muted">400ms</td></tr>
+        <tr><td><span class="audio-cat ac-sfx">SFX</span></td><td class="text-sm" style="font-weight:600;">Drift squeal</td><td class="text-sm text-muted">Soft tire squeak — cartoon, not realistic. Loops while drifting. Volume scales with drift duration.</td><td><span class="tag tag-primary">P0</span></td><td class="text-xs text-muted">Loop</td></tr>
+        <tr><td><span class="audio-cat ac-sfx">SFX</span></td><td class="text-sm" style="font-weight:600;">Mini-turbo spark</td><td class="text-sm text-muted">3-note ascending sparkle chime. Plays at drift release if mini-turbo earned.</td><td><span class="tag tag-primary">P0</span></td><td class="text-xs text-muted">300ms</td></tr>
+        <tr><td><span class="audio-cat ac-sfx">SFX</span></td><td class="text-sm" style="font-weight:600;">Item box collect</td><td class="text-sm text-muted">Soft "bwop" with item-specific chime layer (4 variants, one per item type).</td><td><span class="tag tag-primary">P0</span></td><td class="text-xs text-muted">200ms</td></tr>
+        <tr><td><span class="audio-cat ac-sfx">SFX</span></td><td class="text-sm" style="font-weight:600;">Mushroom use</td><td class="text-sm text-muted">Cartoon "BOING" with upward pitch. Cheerful, energetic.</td><td><span class="tag tag-primary">P0</span></td><td class="text-xs text-muted">350ms</td></tr>
+        <tr><td><span class="audio-cat ac-sfx">SFX</span></td><td class="text-sm" style="font-weight:600;">Star power activate</td><td class="text-sm text-muted">Shimmering ascending arpeggio. 4 notes, major key. Loops during star duration at low volume.</td><td><span class="tag tag-primary">P0</span></td><td class="text-xs text-muted">600ms + loop</td></tr>
+        <tr><td><span class="audio-cat ac-sfx">SFX</span></td><td class="text-sm" style="font-weight:600;">Shield bubble pop</td><td class="text-sm text-muted">Satisfying soap-bubble pop with short chime. Softer than the hit would otherwise sound.</td><td><span class="tag tag-secondary">P1</span></td><td class="text-xs text-muted">250ms</td></tr>
+        <tr><td><span class="audio-cat ac-sfx">SFX</span></td><td class="text-sm" style="font-weight:600;">Rocket fire + hit</td><td class="text-sm text-muted">Soft "phwooop" launch. "Boing" on impact. Never violent. Think Nerf, not missile.</td><td><span class="tag tag-secondary">P1</span></td><td class="text-xs text-muted">Fire 300ms · Hit 400ms</td></tr>
+        <tr><td><span class="audio-cat ac-sfx">SFX</span></td><td class="text-sm" style="font-weight:600;">Wall collision</td><td class="text-sm text-muted">Rubber "thunk." Short. Not painful. Conveys impact without frustration amplification.</td><td><span class="tag tag-primary">P0</span></td><td class="text-xs text-muted">200ms</td></tr>
+        <tr><td><span class="audio-cat ac-sfx">SFX</span></td><td class="text-sm" style="font-weight:600;">Race start countdown</td><td class="text-sm text-muted">3 soft beeps (descending pitch) then a GO! fanfare (3-note ascending bright chord).</td><td><span class="tag tag-primary">P0</span></td><td class="text-xs text-muted">3.5s total</td></tr>
+        <tr><td><span class="audio-cat ac-sfx">SFX</span></td><td class="text-sm" style="font-weight:600;">Final lap jingle</td><td class="text-sm text-muted">Soft 2-bar jingle plays at lap 3 start. Increases urgency without anxiety.</td><td><span class="tag tag-secondary">P1</span></td><td class="text-xs text-muted">2s</td></tr>
+        <tr><td><span class="audio-cat ac-sfx">SFX</span></td><td class="text-sm" style="font-weight:600;">Finish line cross</td><td class="text-sm text-muted">Triumphant 4-note fanfare (major key). Position-dependent pitch (1st = highest, 4th = neutral but not sad).</td><td><span class="tag tag-primary">P0</span></td><td class="text-xs text-muted">1.2s</td></tr>
+        <tr><td><span class="audio-cat ac-music">Music</span></td><td class="text-sm" style="font-weight:600;">Victory jingle</td><td class="text-sm text-muted">12-second celebration melody on Victory screen. Warm, triumphant, joyful. Loops once during confetti.</td><td><span class="tag tag-primary">P0</span></td><td class="text-xs text-muted">12s (×2)</td></tr>
+        <tr><td><span class="audio-cat ac-ui">UI</span></td><td class="text-sm" style="font-weight:600;">Button tap</td><td class="text-sm text-muted">Gentle soft click. Almost inaudible (−18dB relative to SFX). Present but subconscious.</td><td><span class="tag tag-secondary">P1</span></td><td class="text-xs text-muted">50ms</td></tr>
+        <tr><td><span class="audio-cat ac-ui">UI</span></td><td class="text-sm" style="font-weight:600;">Purchase success</td><td class="text-sm text-muted">Warm coin clink + ascending 3-note chime. Rewarding but not excessive.</td><td><span class="tag tag-secondary">P1</span></td><td class="text-xs text-muted">500ms</td></tr>
+        <tr><td><span class="audio-cat ac-ambient">Ambient</span></td><td class="text-sm" style="font-weight:600;">World 1 — Ocean breeze</td><td class="text-sm text-muted">Gentle waves, seagulls (distant), wind. Plays under race music at −24dB. Reinforces setting.</td><td><span class="tag tag-tertiary">P2</span></td><td class="text-xs text-muted">Loop</td></tr>
+        <tr><td><span class="audio-cat ac-ambient">Ambient</span></td><td class="text-sm" style="font-weight:600;">World 2 — Snowfall</td><td class="text-sm text-muted">Wind gusts, soft snow crunch, occasional bell. Cold but cozy.</td><td><span class="tag tag-tertiary">P2</span></td><td class="text-xs text-muted">Loop</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="sub-title">Audio Settings</h3>
+    <div class="card-grid g3">
+      <div class="card">
+        <div class="card-title">🔊 Master Volume</div>
+        <p class="text-sm text-muted">Slider 0–100%. Affects all audio buses. Default: 100%. Persists to localStorage.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">🎵 Music Volume</div>
+        <p class="text-sm text-muted">Independent slider. Default: 80%. Many cozy gamers play with their own music. Must be instantly mutable.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">🎮 SFX Volume</div>
+        <p class="text-sm text-muted">Independent slider. Default: 100%. SFX carries the tactile feel — never disable by default. Preview button plays a sample SFX.</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- FOOTER -->
+<div class="doc-footer">
+  <div class="footer-brand">🏎️ Pastel Peak Racers GDD v2.0</div>
+  <div class="footer-meta">Document owner: Game Design Lead · Companion to PRD v2.0 · Updated: Sprint 4</div>
+</div>
+
+</body>
+</html>

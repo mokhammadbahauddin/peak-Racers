@@ -1,0 +1,71 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Global Catch-all Deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helpers
+    function isSignedIn() { return request.auth != null && request.auth.token.email_verified == true; }
+    function isValidId(id) { return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+
+    function isValidUser(data) {
+      return data.keys().hasAll(['coins', 'activeColor', 'activeCarType', 'settings']) 
+          && data.coins is number 
+          && data.activeColor is number 
+          && data.activeCarType is string && data.activeCarType.matches('^(cruiser|sprinter|tank)$')
+          && data.settings is map
+          && data.settings.keys().hasAll(['masterVolume', 'musicVolume', 'sfxVolume', 'graphicsQuality'])
+          && data.settings.masterVolume is number
+          && data.settings.musicVolume is number
+          && data.settings.sfxVolume is number
+          && data.settings.graphicsQuality is string && data.settings.graphicsQuality.matches('^(low|medium|high)$')
+          // Optional fields:
+          && (data.get('activeWorld', '') is string && data.get('activeWorld', '').size() <= 128)
+          && (data.get('activeTrack', '') is string && data.get('activeTrack', '').size() <= 128);
+    }
+    
+    match /users/{userId} {
+      allow get: if isSignedIn() && request.auth.uid == userId;
+      allow list: if false; 
+      
+      allow create: if isSignedIn() && request.auth.uid == userId 
+                    && isValidId(userId)
+                    && isValidUser(incoming())
+                    && incoming().createdAt == request.time;
+                    
+      allow update: if isSignedIn() && request.auth.uid == userId
+                    && isValidId(userId)
+                    && isValidUser(incoming())
+                    && incoming().updatedAt == request.time
+                    && incoming().createdAt == existing().createdAt;
+    }
+    
+    function isValidRaceRecord(data) {
+       return data.keys().hasAll(['userId', 'trackId', 'timeMs', 'carType', 'recordType', 'createdAt'])
+           && data.userId is string && data.userId == request.auth.uid
+           && data.trackId is string && data.trackId.size() <= 128
+           && data.timeMs is number && data.timeMs >= 0
+           && data.carType is string && data.carType.matches('^(cruiser|sprinter|tank)$')
+           && data.recordType is string && data.recordType.matches('^(best_lap|total_race)$')
+           && data.createdAt == request.time;
+    }
+    
+    match /raceRecords/{recordId} {
+      // Global reads are allowed for leaderboards
+      allow read: if isSignedIn(); 
+      
+      // Only the user themselves can create their own record
+      allow create: if isSignedIn() 
+                    && isValidId(recordId)
+                    && isValidRaceRecord(incoming());
+                    
+      // Records are immutable
+      allow update, delete: if false;
+    }
+  }
+}

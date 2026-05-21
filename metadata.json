@@ -1,0 +1,8 @@
+{
+  "name": "Pastel Peak Racers",
+  "description": "A high-fidelity 3D toy-box racing game featuring immersive glassmorphism UI, a refined pastel aesthetic, and high-performance drifting mechanics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
