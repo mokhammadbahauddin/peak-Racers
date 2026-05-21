@@ -3,6 +3,7 @@ import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
+import { SSAOPass } from 'three/examples/jsm/postprocessing/SSAOPass.js';
 
 export class RenderPipeline {
   scene: THREE.Scene;
@@ -22,8 +23,10 @@ export class RenderPipeline {
     this.renderer.setPixelRatio(window.devicePixelRatio > 1 ? Math.min(window.devicePixelRatio, 1.5) : 1);
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.shadowMap.enabled = true;
-    this.renderer.shadowMap.type = THREE.PCFShadowMap;
+    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.renderer.setClearColor(envColors.sky, 1);
+    this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    this.renderer.toneMappingExposure = 1.2;
     
     this.renderer.domElement.style.display = 'block';
     this.renderer.domElement.style.width = '100vw';
@@ -32,17 +35,25 @@ export class RenderPipeline {
 
     const renderScene = new RenderPass(this.scene, this.camera);
     
+    const ssaoPass = new SSAOPass(this.scene, this.camera, window.innerWidth, window.innerHeight);
+    ssaoPass.kernelRadius = 1.2;
+    ssaoPass.minDistance = 0.001;
+    ssaoPass.maxDistance = 0.1;
+
     // Bloom Pass configuration
     this.bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth / 2, window.innerHeight / 2), 1.5, 0.4, 0.85);
-    this.bloomPass.threshold = 0.95;
-    this.bloomPass.strength = 0.15; 
-    this.bloomPass.radius = 0.2;
+    this.bloomPass.threshold = 0.85;
+    this.bloomPass.strength = 0.3;
+    this.bloomPass.radius = 0.3;
 
     const outputPass = new OutputPass();
     // Removed SMAAPass to use hardware MSAA
 
     this.composer = new EffectComposer(this.renderer);
     this.composer.addPass(renderScene);
+    if (window.innerWidth > 768) {
+        this.composer.addPass(ssaoPass); // Only enable SSAO on desktop for performance
+    }
     this.composer.addPass(this.bloomPass);
     this.composer.addPass(outputPass);
 
