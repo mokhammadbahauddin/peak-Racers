@@ -20,49 +20,49 @@ export interface Vehicle {
 export const VEHICLES: Vehicle[] = [
   {
     id: 'bubblegum_cruiser', name: 'Bubblegum Cruiser', vehicleClass: 'C',
-    stats: { speed: 40, handling: 60, acceleration: 50, weight: 30 },
+    stats: { speed: 45, handling: 65, acceleration: 55, weight: 30 },
     unlockCost: 0, unlockCurrency: 'coins', carType: 'cruiser', color: 0xffadbc,
     description: 'A balanced beginner kart. Sweet and reliable.'
   },
   {
     id: 'lemon_buggy', name: 'Lemon Buggy', vehicleClass: 'C',
-    stats: { speed: 30, handling: 70, acceleration: 70, weight: 20 },
+    stats: { speed: 35, handling: 75, acceleration: 75, weight: 20 },
     unlockCost: 0, unlockCurrency: 'coins', carType: 'sprinter', color: 0xfff3b0,
     description: 'Zippy and nimble. Perfect for drift builds.'
   },
   {
     id: 'mint_cruiser', name: 'Mint Cruiser', vehicleClass: 'B',
-    stats: { speed: 50, handling: 50, acceleration: 40, weight: 40 },
+    stats: { speed: 55, handling: 55, acceleration: 45, weight: 45 },
     unlockCost: 2500, unlockCurrency: 'coins', carType: 'cruiser', color: 0xbaeafa,
     description: 'A mid-game all-rounder with a fresh look.'
   },
   {
     id: 'azure_breeze', name: 'Azure Breeze', vehicleClass: 'B',
-    stats: { speed: 50, handling: 70, acceleration: 30, weight: 30 },
+    stats: { speed: 55, handling: 80, acceleration: 35, weight: 35 },
     unlockCost: 2500, unlockCurrency: 'coins', carType: 'sprinter', color: 0x99e9f2,
     description: 'Built for technical tracks. Handles like a dream.'
   },
   {
     id: 'peach_drifter', name: 'Peach Drifter', vehicleClass: 'B',
-    stats: { speed: 40, handling: 50, acceleration: 60, weight: 20 },
+    stats: { speed: 45, handling: 55, acceleration: 70, weight: 25 },
     unlockCost: 4800, unlockCurrency: 'coins', carType: 'sprinter', color: 0xffc9c9,
     description: 'High-acceleration drift specialist.'
   },
   {
     id: 'speed_demon', name: 'Speed Demon', vehicleClass: 'A',
-    stats: { speed: 70, handling: 50, acceleration: 80, weight: 30 },
+    stats: { speed: 75, handling: 45, acceleration: 85, weight: 30 },
     unlockCost: 150, unlockCurrency: 'gems', carType: 'sprinter', color: 0xff6b6b,
     description: 'The competitive choice. Raw speed and acceleration.'
   },
   {
     id: 'nimbus_cruiser', name: 'Nimbus Cruiser', vehicleClass: 'A',
-    stats: { speed: 60, handling: 70, acceleration: 50, weight: 50 },
+    stats: { speed: 65, handling: 75, acceleration: 55, weight: 55 },
     unlockCost: 200, unlockCurrency: 'gems', carType: 'cruiser', color: 0xd0bfff,
     description: 'Balanced Class A. The workhorse of champions.'
   },
   {
     id: 'golden_champ', name: 'Golden Champ', vehicleClass: 'A',
-    stats: { speed: 80, handling: 30, acceleration: 40, weight: 70 },
+    stats: { speed: 85, handling: 25, acceleration: 35, weight: 80 },
     unlockCost: 300, unlockCurrency: 'gems', carType: 'tank', color: 0xffd43b,
     description: 'Legendary. Maximum speed on straights. A beast.'
   }

@@ -49,26 +49,21 @@ export class AiManager {
 
     public update(dt: number, track: TrackGenerator, playerPos: THREE.Vector3, playerRank: number, gameState: string, playerT: number) {
         this.aiCars.forEach((ai) => {
-            // Find closest point on curve for AI
-            let aDist = Infinity;
-            let cT = ai.t;
-            
-            // Use trackCurvePts to approximate closest t
-            let searchStart = Math.floor(ai.t * this.trackCurvePts.length) - 20;
-            let searchEnd = searchStart + 40;
-            
-            // Limit bounds to avoid searching whole track
-            const l = this.trackCurvePts.length;
-            for (let i = searchStart; i <= searchEnd; i++) {
-                let idx = (i + l) % l;
-                let pt = this.trackCurvePts[idx].p;
+            // Find closest t on CatmullRom spline more robustly utilizing the actual spline for interpolation
+            let bestT = ai.t;
+            let bestDist = Infinity;
+            // Scan around the approximate t with 10 steps using the spline itself
+            for (let i = -5; i <= 5; i++) {
+                let testT = (ai.t + i * 0.002 + 1.0) % 1.0;
+                let pt = track.curve.getPointAt(testT);
                 let d = ai.mesh.position.distanceToSquared(pt);
-                if (d < aDist) {
-                    aDist = d;
-                    cT = this.trackCurvePts[idx].t;
+                if (d < bestDist) {
+                    bestDist = d;
+                    bestT = testT;
                 }
             }
             
+            let cT = bestT;
             ai.t = cT;
             
             // AI Steering logic
@@ -99,16 +94,18 @@ export class AiManager {
                 const cross = this._t3.copy(forward).cross(toTarget);
                 aiSteer = cross.y > 0 ? -0.4 : 0.4; 
                 
-                // Tactical AI (Rubberbanding and Blocking)
+                // Tactical AI (Rubberbanding and Blocking) utilizing smooth CatmullRom path evaluation
                 const distToPlayer = ai.mesh.position.distanceTo(playerPos);
-                const tDiff = (playerT - ai.t + 1.0) % 1.0; 
+                let tDiff = (playerT - ai.t + 1.0) % 1.0;
+                if (tDiff > 0.5) tDiff -= 1.0; // map to -0.5 (behind) to 0.5 (ahead)
                 
-                if (distToPlayer > 100) {
-                    if (tDiff > 0.5) {
-                        aiTargetSpeed = ai.speed * 1.25; // More aggressive rubber-banding
-                    } else {
-                        aiTargetSpeed = ai.speed * 0.85; // Slow down more if far ahead
-                    }
+                // Smooth rubberbanding avoiding discrete logic jumps
+                if (tDiff > 0.01) {
+                    const catchupFactor = MathUtils.clamp(tDiff * 8, 0, 1);
+                    aiTargetSpeed = ai.speed * (1.0 + catchupFactor * 0.35);
+                } else if (tDiff < -0.01) {
+                    const slowFactor = MathUtils.clamp(-tDiff * 8, 0, 1);
+                    aiTargetSpeed = ai.speed * (1.0 - slowFactor * 0.2);
                 }
 
                 let avoidForce = 0;

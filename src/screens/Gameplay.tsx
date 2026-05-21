@@ -14,25 +14,25 @@ const Speedometer = () => {
   const showRedline = useHudStore(s => s.showRedline);
   
   return (
-    <div className="flex flex-col items-center gap-1 w-full">
-      <div className="flex justify-between w-full px-2 mb-1">
-        <span className="font-display font-black text-slate-400 uppercase tracking-[0.3em] text-[10px] opacity-70">Gear</span>
-        <span className="font-display font-black text-slate-400 uppercase tracking-[0.3em] text-[10px] opacity-70">Velocity</span>
+    <div className="flex flex-col items-center gap-0 w-full">
+      <div className="flex justify-between w-full px-1 mb-0">
+        <span className="font-display font-black text-slate-400 uppercase tracking-[0.2em] text-[8px] opacity-70">Gear</span>
+        <span className="font-display font-black text-slate-400 uppercase tracking-[0.2em] text-[8px] opacity-70">Velocity</span>
       </div>
-      <div className="flex items-baseline justify-between w-full px-2">
-          <div className="flex items-center gap-2">
-            <span className={`font-display text-4xl md:text-5xl leading-none font-black italic drop-shadow-md transition-colors ${showRedline ? 'text-red-500 animate-pulse' : 'text-slate-200'}`}>
+      <div className="flex items-baseline justify-between w-full px-1">
+          <div className="flex items-center gap-1">
+            <span className={`font-display text-3xl md:text-4xl leading-none font-black italic drop-shadow-md transition-colors ${showRedline ? 'text-red-500 animate-pulse' : 'text-slate-200'}`}>
               {gear}
             </span>
             {showRedline && (
-              <span className="w-3 h-3 rounded-full bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.8)] animate-ping" />
+              <span className="w-2 h-2 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.8)] animate-ping" />
             )}
           </div>
           <div className="flex items-baseline space-x-1">
-            <span className={`font-display text-primary text-6xl md:text-8xl leading-none font-black italic tracking-tighter drop-shadow-md ${showRedline ? 'text-red-500' : ''}`}>
+            <span className={`font-display text-primary text-5xl md:text-6xl leading-none font-black italic tracking-tighter drop-shadow-md ${showRedline ? 'text-red-500' : ''}`}>
               {Math.round(Math.abs(speed))}
             </span>
-            <span className="font-display text-slate-300 uppercase text-sm md:text-xl font-black italic opacity-60">KM/H</span>
+            <span className="font-display text-slate-300 uppercase text-xs md:text-sm font-black italic opacity-60">KM/H</span>
           </div>
       </div>
     </div>
@@ -318,9 +318,14 @@ export const Gameplay = ({ onNavigate }: { onNavigate: (path: string) => void })
           <LapDisplay />
         </div>
         
+        {/* Center Item Box (Physical Glass Style) */}
+        <div className="absolute left-1/2 top-6 md:top-10 -translate-x-1/2 pointer-events-auto z-30">
+            <ItemDisplay />
+        </div>
+
         <button 
           onClick={() => setIsPaused(true)}
-          className="glass-button w-16 h-16 rounded-full pointer-events-auto text-primary border-2 border-white shadow-xl group"
+          className="glass-button w-16 h-16 min-h-[48px] min-w-[48px] rounded-full pointer-events-auto text-primary border-2 border-white shadow-xl group"
         >
           <Pause size={24} className="group-active:scale-90 transition-transform fill-current" />
         </button>
@@ -349,7 +354,7 @@ export const Gameplay = ({ onNavigate }: { onNavigate: (path: string) => void })
 
       {isPaused && showSettings && (
         <div className="absolute inset-0 z-50 flex flex-col pointer-events-auto bg-slate-900/60 backdrop-blur-2xl overflow-y-auto">
-            <button onClick={() => setShowSettings(false)} className="absolute top-10 left-10 z-[60] glass-button h-14 px-8 rounded-full font-display uppercase font-black tracking-widest text-sm shadow-2xl border-white/80">
+            <button onClick={() => setShowSettings(false)} className="absolute top-10 left-10 z-[60] glass-button h-14 min-h-[48px] px-8 rounded-full font-display uppercase font-black tracking-widest text-sm shadow-2xl border-white/80">
                 <ArrowLeft size={18} className="mr-2" /> Back to Pause
             </button>
             <div className="w-full transform scale-95 sm:scale-100 flex-grow py-20 px-4 flex justify-center mt-10">
@@ -359,7 +364,7 @@ export const Gameplay = ({ onNavigate }: { onNavigate: (path: string) => void })
       )}
 
       <div className="absolute bottom-0 left-0 w-full flex justify-between items-end p-6 md:p-10 z-20 pointer-events-none">
-        <div className="glass-panel rounded-full p-4 pointer-events-auto w-40 h-40 md:w-56 md:h-56 flex items-center justify-center shadow-2xl border-white/90 overflow-hidden relative group">
+        <div className="glass-panel rounded-full p-4 pointer-events-auto w-32 h-32 md:w-44 md:h-44 flex items-center justify-center shadow-2xl border-white/90 overflow-hidden relative group">
            <svg 
               viewBox={`${mapBounds.x} ${mapBounds.y} ${mapBounds.w} ${mapBounds.h}`} 
               className="w-full h-full opacity-100 relative z-10 p-4"
@@ -374,12 +379,7 @@ export const Gameplay = ({ onNavigate }: { onNavigate: (path: string) => void })
            </svg>
         </div>
 
-        {/* Center Item Box (Physical Glass Style) */}
-        <div className="absolute left-1/2 bottom-6 md:bottom-10 -translate-x-1/2 pointer-events-auto z-30">
-            <ItemDisplay />
-        </div>
-
-        <div className="glass-panel p-6 flex flex-col items-center pointer-events-auto min-w-[200px] md:min-w-[240px] shadow-2xl border-white/90 relative overflow-hidden group">
+        <div className="glass-panel p-4 flex flex-col items-center pointer-events-auto min-w-[160px] md:min-w-[200px] shadow-2xl border-white/90 relative overflow-hidden group">
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-pink-400 via-rose-500 to-pink-400 animate-pulse"></div>
           <Speedometer />
           <BoostBar />
@@ -395,32 +395,16 @@ export const Gameplay = ({ onNavigate }: { onNavigate: (path: string) => void })
         <div className="flex flex-col gap-4 items-end pointer-events-auto transform translate-y-[-2rem]">
            <div className="flex gap-4">
               <button 
-                onPointerDown={(e) => { e.preventDefault(); engineRef.current?.simulateInput('z', true); }}
-                onPointerUp={(e) => { e.preventDefault(); engineRef.current?.simulateInput('z', false); }}
-                className="w-16 h-16 bg-slate-700/80 rounded-full border-2 border-white text-white font-black text-xs active:scale-95 shadow-xl"
-              >
-                 GEAR -
-              </button>
-              <button 
-                onPointerDown={(e) => { e.preventDefault(); engineRef.current?.simulateInput('x', true); }}
-                onPointerUp={(e) => { e.preventDefault(); engineRef.current?.simulateInput('x', false); }}
-                className="w-16 h-16 bg-slate-700/80 rounded-full border-2 border-white text-white font-black text-xs active:scale-95 shadow-xl"
-              >
-                 GEAR +
-              </button>
-           </div>
-           <div className="flex gap-4">
-              <button 
                 onPointerDown={(e) => { e.preventDefault(); engineRef.current?.simulateInput('e', true); }}
                 onPointerUp={(e) => { e.preventDefault(); engineRef.current?.simulateInput('e', false); }}
-                className="w-16 h-16 bg-purple-500 rounded-full border-2 border-white text-white font-black text-xs active:scale-95 shadow-xl"
+                className="w-20 h-20 min-h-[80px] min-w-[80px] bg-purple-500 rounded-full border-4 border-white text-white font-black text-lg active:scale-95 shadow-xl"
               >
                  ITEM
               </button>
               <button 
                 onPointerDown={(e) => { e.preventDefault(); engineRef.current?.simulateInput(' ', true); }}
                 onPointerUp={(e) => { e.preventDefault(); engineRef.current?.simulateInput(' ', false); }}
-                className="w-16 h-16 bg-amber-500 rounded-full border-2 border-white text-white font-black text-xs active:scale-95 shadow-xl"
+                className="w-20 h-20 min-h-[80px] min-w-[80px] bg-amber-500 rounded-full border-4 border-white text-white font-black text-lg active:scale-95 shadow-xl"
               >
                  DRIFT
               </button>
@@ -428,26 +412,10 @@ export const Gameplay = ({ onNavigate }: { onNavigate: (path: string) => void })
            <button 
              onPointerDown={(e) => { e.preventDefault(); engineRef.current?.simulateInput('Shift', true); }}
              onPointerUp={(e) => { e.preventDefault(); engineRef.current?.simulateInput('Shift', false); }}
-             className="w-20 h-20 bg-cyan-500 rounded-full border-4 border-white text-white font-black text-xl active:scale-95"
+             className="w-24 h-24 min-h-[96px] min-w-[96px] bg-cyan-500 rounded-full border-4 border-white text-white font-black text-xl active:scale-95 shadow-xl"
            >
               BOOST
            </button>
-           <div className="flex gap-4">
-             <button 
-               onPointerDown={(e) => { e.preventDefault(); engineRef.current?.simulateInput('ArrowDown', true); }}
-               onPointerUp={(e) => { e.preventDefault(); engineRef.current?.simulateInput('ArrowDown', false); }}
-               className="w-20 h-20 glass-button rounded-full flex items-center justify-center text-rose-500"
-             >
-                <ArrowDown size={24} />
-             </button>
-             <button 
-               onPointerDown={(e) => { e.preventDefault(); engineRef.current?.simulateInput('ArrowUp', true); }}
-               onPointerUp={(e) => { e.preventDefault(); engineRef.current?.simulateInput('ArrowUp', false); }}
-               className="w-24 h-24 glass-button rounded-[2rem] flex items-center justify-center text-emerald-600"
-             >
-                <ArrowUp size={32} />
-             </button>
-           </div>
         </div>
       </div>
     </div>

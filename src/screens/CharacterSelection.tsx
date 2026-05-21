@@ -53,7 +53,7 @@ export const CharacterSelection = ({ onNavigate }: { onNavigate: (path: string) 
       >
         <button
           onClick={() => onNavigate('landing')}
-          className="glass-button h-14 px-6 rounded-full font-display uppercase font-black tracking-widest text-sm shadow-xl border-white/80 flex items-center gap-2"
+          className="glass-button h-14 px-6 min-h-[48px] min-w-[48px] rounded-full font-display uppercase font-black tracking-widest text-sm shadow-xl border-white/80 flex items-center gap-2"
         >
           <ChevronLeft size={18} />
           Back
@@ -80,7 +80,7 @@ export const CharacterSelection = ({ onNavigate }: { onNavigate: (path: string) 
       {/* Character Carousel */}
       <div className="flex items-center gap-6 md:gap-12 max-w-4xl w-full">
         {/* Left Arrow */}
-        <button onClick={prev} className="glass-button w-14 h-14 rounded-full flex items-center justify-center group">
+        <button onClick={prev} className="glass-button w-14 h-14 min-h-[48px] min-w-[48px] rounded-full flex items-center justify-center group">
           <ChevronLeft size={24} className="text-slate-600 group-hover:text-primary transition-colors" />
         </button>
 
@@ -112,6 +112,16 @@ export const CharacterSelection = ({ onNavigate }: { onNavigate: (path: string) 
               </motion.div>
 
               <h2 className="font-display text-4xl font-black text-slate-800 mb-1">{character.name}</h2>
+
+              {/* Special Trait */}
+              <div className="mt-2 mb-3 glass-panel p-3 rounded-xl w-full border-amber-200 bg-amber-50/50">
+                <div className="flex items-center gap-2 mb-1">
+                  <Zap size={14} className="text-amber-500" />
+                  <span className="text-sm font-black text-amber-700 uppercase tracking-wider">{character.specialTrait.name}</span>
+                </div>
+                <p className="text-sm text-slate-700 font-bold">{character.specialTrait.description}</p>
+              </div>
+
               <span className="inline-flex items-center gap-1 bg-pink-100 text-pink-700 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider mb-3">
                 <Sparkles size={12} />
                 {character.archetype}
@@ -119,15 +129,6 @@ export const CharacterSelection = ({ onNavigate }: { onNavigate: (path: string) 
               <p className="text-center text-slate-600 italic font-bold text-sm leading-relaxed">
                 "{character.tagline}"
               </p>
-
-              {/* Special Trait */}
-              <div className="mt-4 glass-panel p-3 rounded-xl w-full">
-                <div className="flex items-center gap-2 mb-1">
-                  <Zap size={14} className="text-amber-500" />
-                  <span className="text-xs font-black text-amber-700 uppercase tracking-wider">{character.specialTrait.name}</span>
-                </div>
-                <p className="text-xs text-slate-500 font-bold">{character.specialTrait.description}</p>
-              </div>
             </div>
 
             {/* Stats */}
@@ -163,7 +164,7 @@ export const CharacterSelection = ({ onNavigate }: { onNavigate: (path: string) 
         </motion.div>
 
         {/* Right Arrow */}
-        <button onClick={next} className="glass-button w-14 h-14 rounded-full flex items-center justify-center group">
+        <button onClick={next} className="glass-button w-14 h-14 min-h-[48px] min-w-[48px] rounded-full flex items-center justify-center group">
           <ChevronRight size={24} className="text-slate-600 group-hover:text-primary transition-colors" />
         </button>
       </div>
@@ -174,7 +175,7 @@ export const CharacterSelection = ({ onNavigate }: { onNavigate: (path: string) 
           <button
             key={c.id}
             onClick={() => setSelectedIndex(i)}
-            className={`w-12 h-12 rounded-full flex items-center justify-center text-2xl transition-all
+            className={`w-12 h-12 min-h-[48px] min-w-[48px] rounded-full flex items-center justify-center text-2xl transition-all
               ${i === selectedIndex ? 'bg-white shadow-lg scale-110 ring-2 ring-pink-300' : 'bg-white/50 hover:bg-white/80'}
             `}
           >

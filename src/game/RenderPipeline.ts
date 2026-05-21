@@ -39,7 +39,6 @@ export class RenderPipeline {
     ssaoPass.kernelRadius = 12;
     ssaoPass.minDistance = 0.001;
     ssaoPass.maxDistance = 0.05;
-
     // Bloom Pass configuration
     this.bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth / 2, window.innerHeight / 2), 1.5, 0.4, 0.85);
     this.bloomPass.threshold = 0.8;
