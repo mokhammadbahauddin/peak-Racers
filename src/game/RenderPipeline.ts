@@ -3,7 +3,6 @@ import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
-import { SSAOPass } from 'three/examples/jsm/postprocessing/SSAOPass.js';
 
 export class RenderPipeline {
   scene: THREE.Scene;
@@ -39,6 +38,7 @@ export class RenderPipeline {
     ssaoPass.kernelRadius = 12;
     ssaoPass.minDistance = 0.001;
     ssaoPass.maxDistance = 0.05;
+
     // Bloom Pass configuration
     this.bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth / 2, window.innerHeight / 2), 1.5, 0.4, 0.85);
     this.bloomPass.threshold = 0.8;
@@ -50,7 +50,6 @@ export class RenderPipeline {
 
     this.composer = new EffectComposer(this.renderer);
     this.composer.addPass(renderScene);
-    this.composer.addPass(ssaoPass);
     this.composer.addPass(this.bloomPass);
     this.composer.addPass(outputPass);
 
