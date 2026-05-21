@@ -167,8 +167,8 @@ export class TrackGenerator {
 
     this.trackMesh = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({
        map: this.createTrackTexture(),
-       roughness: 0.85,
-       metalness: 0.3,
+       roughness: 1.0,
+       metalness: 0.0,
        side: THREE.DoubleSide,
     }));
     this.trackMesh.receiveShadow = true;
@@ -195,8 +195,8 @@ export class TrackGenerator {
 
     const wallMesh = new THREE.Mesh(wallGeo, new THREE.MeshStandardMaterial({
        map: trimTex,
-       roughness: 0.6,
-       metalness: 0.3,
+       roughness: 0.8,
+       metalness: 0.1,
        side: THREE.FrontSide
     }));
     wallMesh.receiveShadow = true;
@@ -239,7 +239,7 @@ export class TrackGenerator {
     const floorMat = new THREE.MeshStandardMaterial({
        color: this.trackData.colors.base,
        roughness: 0.4,
-       metalness: 0.3,
+       metalness: 0.1,
        transparent: true, // give it a soft bottom gradient feel
        opacity: 0.7
     });
@@ -384,8 +384,8 @@ export class TrackGenerator {
     const roundBushyGeo = new THREE.DodecahedronGeometry(4, 0);
 
     const trunkMat = new THREE.MeshStandardMaterial({ color: 0x8b5a2b, roughness: 0.9, flatShading: true });
-    const leaf1Mat = new THREE.MeshStandardMaterial({ color: 0xd1e9cd, roughness: 0.6, flatShading: true });
-    const leaf2Mat = new THREE.MeshStandardMaterial({ color: 0xb5cdb2, roughness: 0.6, flatShading: true });
+    const leaf1Mat = new THREE.MeshStandardMaterial({ color: 0xd1e9cd, roughness: 0.8, flatShading: true });
+    const leaf2Mat = new THREE.MeshStandardMaterial({ color: 0xb5cdb2, roughness: 0.8, flatShading: true });
     const bushyMat = new THREE.MeshStandardMaterial({ color: 0xbaeafa, roughness: 0.7, flatShading: true });
 
     const pineTrunkInst = new THREE.InstancedMesh(pineTrunkGeo, trunkMat, treeCount);
@@ -461,7 +461,7 @@ export class TrackGenerator {
             propType = 'sign';
             const mesh = new THREE.Group();
             mesh.position.copy(pos);
-            const poleMat = new THREE.MeshStandardMaterial({ color: 0xdcece8, roughness: 0.6, flatShading: true });
+            const poleMat = new THREE.MeshStandardMaterial({ color: 0xdcece8, roughness: 0.8, flatShading: true });
             const poleL = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 15, 6), poleMat);
             poleL.position.set(-6, 7.5, 0);
             poleL.castShadow = true;

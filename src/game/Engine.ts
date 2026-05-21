@@ -413,7 +413,7 @@ export class Engine {
 
     if ((this as any).wasDriftingActive) {
        isDrifting = true;
-       vehicleSteer *= 2.5; // Snappier turning while drifting
+       vehicleSteer *= 1.8; // Snappier turning while drifting
     }
 
     // Default maxSpeed multiplier applied during boost

@@ -16,7 +16,6 @@ const ConfettiPiece = ({ delay, key }: { delay: number; key?: number | string })
 
   return (
     <div
-      key={key}
       className="absolute top-0 rounded-full animate-[confetti-fall_linear_forwards]"
       style={{
         left: `${left}%`,

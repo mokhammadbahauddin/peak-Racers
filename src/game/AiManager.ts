@@ -105,9 +105,9 @@ export class AiManager {
                 
                 if (distToPlayer > 100) {
                     if (tDiff > 0.5) {
-                        aiTargetSpeed = ai.speed * 1.25; // More aggressive rubber-banding
+                        aiTargetSpeed = ai.speed * 1.15;
                     } else {
-                        aiTargetSpeed = ai.speed * 0.85; // Slow down more if far ahead
+                        aiTargetSpeed = ai.speed * 0.9;
                     }
                 }
 
