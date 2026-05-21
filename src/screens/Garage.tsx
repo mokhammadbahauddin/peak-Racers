@@ -86,7 +86,7 @@ export const Garage = ({ onNavigate }: { onNavigate: (path: string) => void }) =
       >
         <button
           onClick={() => onNavigate('landing')}
-          className="glass-button h-14 px-6 rounded-full font-display uppercase font-black tracking-widest text-sm shadow-xl border-white/80 flex items-center gap-2"
+          className="glass-button h-14 px-6 min-h-[48px] min-w-[48px] rounded-full font-display uppercase font-black tracking-widest text-sm shadow-xl border-white/80 flex items-center gap-2"
         >
           <ChevronLeft size={18} />
           Back
@@ -121,45 +121,14 @@ export const Garage = ({ onNavigate }: { onNavigate: (path: string) => void }) =
         </motion.div>
       )}
 
-      <div className="flex-1 flex flex-col md:flex-row items-center justify-center gap-6 p-6 pt-24 overflow-y-auto">
-        {/* Vehicle Roster (left sidebar) */}
-        <motion.div
-          initial={{ x: -30, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          className="glass-panel p-4 rounded-2xl w-full md:w-64 flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-y-auto md:max-h-[70vh]"
-        >
-          <h3 className="font-display font-black text-xs text-slate-400 uppercase tracking-widest px-2 py-1 hidden md:block">Vehicles</h3>
-          {VEHICLES.map(v => {
-            const owned = (data.ownedVehicles || []).includes(v.id);
-            const isSelected = v.id === selectedVehicleId;
-            return (
-              <button
-                key={v.id}
-                onClick={() => setSelectedVehicleId(v.id)}
-                className={`flex items-center gap-3 px-3 py-2 rounded-xl transition-all min-w-fit whitespace-nowrap
-                  ${isSelected ? 'bg-white shadow-lg ring-2 ring-pink-300' : 'hover:bg-white/50'}
-                  ${!owned ? 'opacity-60' : ''}
-                `}
-              >
-                <div className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-black"
-                  style={{ backgroundColor: `#${v.color.toString(16).padStart(6, '0')}30`, color: `#${v.color.toString(16).padStart(6, '0')}` }}>
-                  {v.vehicleClass}
-                </div>
-                <div className="flex flex-col items-start">
-                  <span className="text-xs font-black text-slate-700">{v.name}</span>
-                  {!owned && <span className="text-[10px] text-slate-400 flex items-center gap-1"><Lock size={8} /> Locked</span>}
-                </div>
-              </button>
-            );
-          })}
-        </motion.div>
+      <div className="flex-1 flex flex-col items-center justify-start gap-6 p-6 pt-24 pb-32 overflow-y-auto w-full max-w-4xl mx-auto">
 
-        {/* Main Vehicle Display */}
+        {/* Main Vehicle Display & Upgrades */}
         <motion.div
           key={selectedVehicleId}
           initial={{ scale: 0.95, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="glass-panel p-8 rounded-3xl shadow-2xl flex-1 max-w-xl relative overflow-hidden"
+          className="glass-panel p-8 rounded-3xl shadow-2xl w-full relative overflow-hidden flex flex-col md:flex-row gap-8"
         >
           <div className="absolute inset-0 opacity-10"
             style={{ background: `radial-gradient(circle at 50% 30%, #${vehicle.color.toString(16).padStart(6, '0')}, transparent 60%)` }} />
@@ -206,13 +175,13 @@ export const Garage = ({ onNavigate }: { onNavigate: (path: string) => void }) =
             {!isOwned ? (
               <button
                 onClick={handleUnlock}
-                className="glass-button-primary w-full py-4 text-lg font-black rounded-xl flex items-center justify-center gap-3"
+                className="glass-button-primary w-full min-h-[48px] py-4 text-lg font-black rounded-xl flex items-center justify-center gap-3"
               >
                 {vehicle.unlockCurrency === 'coins' ? <Coins size={20} /> : <Gem size={20} />}
                 UNLOCK — {vehicle.unlockCost.toLocaleString()} {vehicle.unlockCurrency === 'coins' ? '🪙' : '💎'}
               </button>
             ) : !isActive ? (
-              <button onClick={handleEquip} className="glass-button-primary w-full py-4 text-lg font-black rounded-xl">
+              <button onClick={handleEquip} className="glass-button-primary w-full min-h-[48px] py-4 text-lg font-black rounded-xl">
                 EQUIP THIS VEHICLE
               </button>
             ) : (
@@ -221,65 +190,95 @@ export const Garage = ({ onNavigate }: { onNavigate: (path: string) => void }) =
               </div>
             )}
           </div>
+
+          {/* Upgrades Panel (integrated) */}
+          {isOwned && (
+            <div className="flex-1 flex flex-col gap-4 border-t md:border-t-0 md:border-l border-white/40 pt-6 md:pt-0 md:pl-8">
+              <div className="flex items-center gap-2 mb-2">
+                <Wrench size={18} className="text-slate-500" />
+                <h3 className="font-display font-black text-sm text-slate-600 uppercase tracking-wider">Upgrades</h3>
+              </div>
+
+              {UPGRADE_INFO.map(upgrade => {
+                const level = getUpgradeLevel(upgrade.key);
+                const maxed = level >= 5;
+                const nextCost = maxed ? 0 : UPGRADE_COSTS[upgrade.key][level];
+
+                return (
+                  <div key={upgrade.key} className="glass-panel p-4 rounded-xl">
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${upgrade.color} bg-white/80`}>
+                          {upgrade.icon}
+                        </div>
+                        <div>
+                          <div className="text-xs font-black text-slate-700">{upgrade.label}</div>
+                          <div className="text-[10px] text-slate-400 font-bold">{upgrade.desc}</div>
+                        </div>
+                      </div>
+                      <span className="text-xs font-black text-slate-600">Lv {level}/5</span>
+                    </div>
+
+                    {/* Level pips */}
+                    <div className="flex gap-1 mb-3">
+                      {[0, 1, 2, 3, 4].map(i => (
+                        <div key={i} className={`flex-1 h-2 rounded-full transition-all ${i < level ? upgrade.bgColor : 'bg-slate-200'}`} />
+                      ))}
+                    </div>
+
+                    {!maxed ? (
+                      <button
+                        onClick={() => handleUpgrade(upgrade.key)}
+                        className="glass-button w-full min-h-[48px] py-2 rounded-lg text-xs font-black flex items-center justify-center gap-2 hover:bg-white/80"
+                      >
+                        <Coins size={12} className="text-amber-500" />
+                        Upgrade — {nextCost.toLocaleString()} 🪙
+                      </button>
+                    ) : (
+                      <div className="text-center text-[10px] font-black text-emerald-600 bg-emerald-50 py-1.5 rounded-lg">
+                        ✓ MAX LEVEL
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </motion.div>
 
-        {/* Upgrades Panel (right sidebar) */}
-        {isOwned && (
-          <motion.div
-            initial={{ x: 30, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            className="glass-panel p-5 rounded-2xl w-full md:w-72 flex flex-col gap-4"
-          >
-            <div className="flex items-center gap-2 mb-2">
-              <Wrench size={18} className="text-slate-500" />
-              <h3 className="font-display font-black text-sm text-slate-600 uppercase tracking-wider">Upgrades</h3>
-            </div>
+      </div>
 
-            {UPGRADE_INFO.map(upgrade => {
-              const level = getUpgradeLevel(upgrade.key);
-              const maxed = level >= 5;
-              const nextCost = maxed ? 0 : UPGRADE_COSTS[upgrade.key][level];
-
-              return (
-                <div key={upgrade.key} className="glass-panel p-4 rounded-xl">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-2">
-                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${upgrade.color} bg-white/80`}>
-                        {upgrade.icon}
-                      </div>
-                      <div>
-                        <div className="text-xs font-black text-slate-700">{upgrade.label}</div>
-                        <div className="text-[10px] text-slate-400 font-bold">{upgrade.desc}</div>
-                      </div>
-                    </div>
-                    <span className="text-xs font-black text-slate-600">Lv {level}/5</span>
-                  </div>
-
-                  {/* Level pips */}
-                  <div className="flex gap-1 mb-3">
-                    {[0, 1, 2, 3, 4].map(i => (
-                      <div key={i} className={`flex-1 h-2 rounded-full transition-all ${i < level ? upgrade.bgColor : 'bg-slate-200'}`} />
-                    ))}
-                  </div>
-
-                  {!maxed ? (
-                    <button
-                      onClick={() => handleUpgrade(upgrade.key)}
-                      className="glass-button w-full py-2 rounded-lg text-xs font-black flex items-center justify-center gap-2 hover:bg-white/80"
-                    >
-                      <Coins size={12} className="text-amber-500" />
-                      Upgrade — {nextCost.toLocaleString()} 🪙
-                    </button>
-                  ) : (
-                    <div className="text-center text-[10px] font-black text-emerald-600 bg-emerald-50 py-1.5 rounded-lg">
-                      ✓ MAX LEVEL
-                    </div>
-                  )}
+      {/* Swipeable Vehicle Carousel at Bottom */}
+      <div className="absolute bottom-6 left-0 w-full overflow-hidden">
+        <motion.div
+          drag="x"
+          dragConstraints={{ left: -((VEHICLES.length - 1) * 200), right: 0 }}
+          className="flex gap-4 px-6 cursor-grab active:cursor-grabbing w-max"
+        >
+          {VEHICLES.map(v => {
+            const owned = (data.ownedVehicles || []).includes(v.id);
+            const isSelected = v.id === selectedVehicleId;
+            return (
+              <button
+                key={v.id}
+                onClick={() => setSelectedVehicleId(v.id)}
+                className={`flex items-center gap-3 p-3 w-48 min-h-[48px] rounded-xl transition-all whitespace-nowrap
+                  ${isSelected ? 'bg-white shadow-xl ring-2 ring-pink-300 scale-105' : 'glass-panel hover:bg-white/50 scale-100'}
+                  ${!owned ? 'opacity-60' : ''}
+                `}
+              >
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center text-sm font-black"
+                  style={{ backgroundColor: `#${v.color.toString(16).padStart(6, '0')}30`, color: `#${v.color.toString(16).padStart(6, '0')}` }}>
+                  {v.vehicleClass}
                 </div>
-              );
-            })}
-          </motion.div>
-        )}
+                <div className="flex flex-col items-start overflow-hidden">
+                  <span className="text-sm font-black text-slate-700 truncate w-full text-left">{v.name}</span>
+                  {!owned && <span className="text-[10px] text-slate-400 flex items-center gap-1 mt-0.5"><Lock size={8} /> Locked</span>}
+                </div>
+              </button>
+            );
+          })}
+        </motion.div>
       </div>
     </main>
   );
