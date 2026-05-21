@@ -1,0 +1,28 @@
+--- src/game/Engine.ts
++++ src/game/Engine.ts
+@@ -10,6 +10,7 @@
+ import { TRACK_REGISTRY } from './tracks/TrackRegistry';
+ import { ArcadeVehicle } from './physics/ArcadeVehicle';
+ import { PhysicsConfig } from './physics/PhysicsConfig';
+ import { useHudStore } from './stores/useHudStore';
+ import { generateNetworkManager } from './NetworkManager';
++import { GameDataManager } from './GameData';
+
+ export type GameState = 'intro' | 'countdown' | 'racing' | 'finished' | 'podium';
+
+@@ -628,7 +629,14 @@
+     } else if (this.gameState === 'finished') {
+         this.stateTimer += dt;
+         if (this.stateTimer > 4.0) {
+             this.gameState = 'podium';
+             this.stateTimer = 0;
+             // Stop cars to emulate podium parking
+             this.chassisBody.velocity.set(0,0,0);
+             this.chassisBody.angularVelocity.set(0,0,0);
+
++            // Save race data
++            let activeTrackId = GameDataManager.getInstance().getData().activeTrack || 'sands_1';
++            GameDataManager.getInstance().saveRaceRecord(activeTrackId, this.raceTimeMs, this.bestLapMs !== Infinity ? this.bestLapMs : undefined);
+         }
+     } else if (this.gameState === 'podium') {
+         this.stateTimer += dt;

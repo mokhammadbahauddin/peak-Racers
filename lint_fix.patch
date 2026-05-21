@@ -1,0 +1,30 @@
+--- src/game/GameData.ts
++++ src/game/GameData.ts
+@@ -19,6 +19,7 @@
+ export interface RaceRecord {
+   timeMs: number;
+   carType: 'cruiser' | 'sprinter' | 'tank';
++  rank?: number;
+ }
+
+ export interface TrackRecords {
+--- src/screens/Auth.tsx
++++ src/screens/Auth.tsx
+@@ -4,6 +4,7 @@
+ import { useAuth } from '../contexts/AuthContext';
+ import { GameDataManager } from '../game/GameData';
+ import { auth } from '../firebase';
++import { apiFetch, setToken } from '../apiClient';
+
+ export const AuthScreen = ({ onNavigate }: { onNavigate: (path: string) => void }) => {
+   const { user, signIn, signUp, logout } = useAuth();
+--- src/screens/Shop.tsx
++++ src/screens/Shop.tsx
+@@ -4,6 +4,7 @@
+ import { VEHICLES } from '../game/VehicleData';
+ import { GameDataManager } from '../game/GameData';
+ import { ChevronLeft, Coins, Gem, ShoppingBag } from 'lucide-react';
++import { apiFetch } from '../apiClient';
+
+ type ShopItem = {
+   id: string;

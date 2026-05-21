@@ -1,0 +1,82 @@
+--- src/screens/Shop.tsx
++++ src/screens/Shop.tsx
+@@ -4,6 +4,7 @@
+ import { VEHICLES } from '../game/VehicleData';
+ import { GameDataManager } from '../game/GameData';
+ import { ChevronLeft, Coins, Gem, ShoppingBag } from 'lucide-react';
++import { apiFetch } from '../apiClient';
+
+ type ShopItem = {
+   id: string;
+@@ -47,6 +48,22 @@
+   const [activeTab, setActiveTab] = useState<'vehicles' | 'skins' | 'trails' | 'gems'>('vehicles');
+   const [toast, setToast] = useState<string | null>(null);
+
++  // Mock fetching items from the API to show integration point
++  useEffect(() => {
++    const fetchItems = async () => {
++        try {
++            const items = await apiFetch('/shop/items');
++            // The items would typically replace or supplement SHOP_ITEMS.
++            // For the sake of this prototype, we're keeping SHOP_ITEMS statically
++            // but logging the API response.
++            console.log('API Shop Items:', items);
++        } catch (e) {
++            console.error('Failed to fetch shop items:', e);
++        }
++    };
++    fetchItems();
++  }, []);
++
+   useEffect(() => {
+     const unsub = gd.subscribe(setData);
+     return unsub;
+@@ -57,25 +74,40 @@
+     setTimeout(() => setToast(null), 2000);
+   };
+
+-  const handlePurchase = (item: ShopItem) => {
++  const handlePurchase = async (item: ShopItem) => {
+     if (item.type === 'vehicle') {
+       const vehicleId = item.id.replace('vehicle_', '');
+       const vehicle = VEHICLES.find(v => v.id === vehicleId);
+       if (!vehicle) return;
+       if ((data.ownedVehicles || []).includes(vehicleId)) {
+         showToast('Already owned!');
+         return;
+       }
+-      const success = gd.unlockVehicle(vehicleId, vehicle.unlockCost, vehicle.unlockCurrency);
+-      if (success) showToast(`${vehicle.name} purchased!`);
+-      else showToast(`Not enough ${vehicle.unlockCurrency}!`);
++      // Example API call to unlock vehicle
++      try {
++         const result = await apiFetch(`/vehicles/${vehicleId}/unlock`, { method: 'POST' });
++         if (result.vehicle) {
++             gd.unlockVehicle(vehicleId, vehicle.unlockCost, vehicle.unlockCurrency);
++             showToast(`${vehicle.name} purchased!`);
++         }
++      } catch(e) {
++         console.error(e);
++         showToast(`Not enough ${vehicle.unlockCurrency}!`);
++      }
+     } else {
+-      // Cosmetic purchase placeholder
+       if (item.currency === 'coins' && data.coins >= item.price) {
+-        gd.addCoins(-item.price);
+-        showToast(`${item.name} purchased!`);
++        try {
++           await apiFetch('/shop/purchase', {
++               method: 'POST',
++               body: JSON.stringify({ item_id: item.id })
++           });
++           gd.addCoins(-item.price);
++           showToast(`${item.name} purchased!`);
++        } catch(e) {
++           showToast(`Error: ${e}`);
++        }
+       } else if (item.currency === 'gems' && (data.gems || 0) >= item.price) {
+-        gd.addGems(-item.price);
++        gd.addGems(-item.price); // Mock since gem API isn't fully implemented in our mockup server
+         showToast(`${item.name} purchased!`);
+       } else {
+         showToast(`Not enough ${item.currency}!`);

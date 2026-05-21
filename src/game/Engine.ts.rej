@@ -1,0 +1,9 @@
+--- Engine.ts
++++ Engine.ts
+@@ -10,6 +10,7 @@
+ import { TRACK_REGISTRY } from './tracks/TrackRegistry';
+ import { ArcadeVehicle } from './physics/ArcadeVehicle';
+ import { PhysicsConfig } from './physics/PhysicsConfig';
+ import { useHudStore } from './stores/useHudStore';
+ import { generateNetworkManager } from './NetworkManager';
++import { GameDataManager } from './GameData';
