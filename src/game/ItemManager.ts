@@ -112,6 +112,34 @@ export class ItemManager {
             }
 
             if (p.type === 'rocket') {
+                // Find nearest target for homing
+                let nearestDist = 80 * 80; // Homing range squared
+                let targetPos = null;
+
+                if (p.ownerId !== 'player') {
+                    const dSq = p.mesh.position.distanceToSquared(playerPos);
+                    if (dSq < nearestDist) {
+                        nearestDist = dSq;
+                        targetPos = playerPos;
+                    }
+                }
+
+                for (let j = 0; j < aiCars.length; j++) {
+                    if (p.ownerId === `ai_${j}`) continue;
+                    const dSq = p.mesh.position.distanceToSquared(aiCars[j].mesh.position);
+                    if (dSq < nearestDist) {
+                        nearestDist = dSq;
+                        targetPos = aiCars[j].mesh.position;
+                    }
+                }
+
+                if (targetPos) {
+                    const toTarget = this._t1.copy(targetPos).sub(p.mesh.position).normalize();
+                    const currentDir = p.velocity.clone().normalize();
+                    currentDir.lerp(toTarget, dt * 2.5).normalize();
+                    p.velocity.copy(currentDir).multiplyScalar(p.velocity.length());
+                }
+
                 p.mesh.position.addScaledVector(p.velocity, dt);
                 p.mesh.rotation.x += dt * 5;
                 

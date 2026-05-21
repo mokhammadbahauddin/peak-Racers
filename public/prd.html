@@ -1592,6 +1592,14 @@ h3.sub-title::after { content: ''; flex: 1; height: 1px; background: var(--outli
                              Added a custom Touch-Analog Joystick overlay (`AnalogJoystick`) allowing fractional steering values and smooth interpolation.
                          </td>
                      </tr>
+                     <tr>
+                         <td style="font-weight:600;">Mario Kart-Tier Rework</td>
+                         <td>The game felt a bit generic and lacked the fast-paced, highly responsive feel of top-tier arcade racers. The visuals, while good, were missing modern post-processing and material depth. The AI was too passive.</td>
+                         <td class="text-xs">
+                             <span class="req-tag req-must" style="background:#cbe3c7; color:#4f644e;">FIXED</span>
+                             Completely reworked the physics for tighter, "Mario Kart"-like drifting. Upgraded RenderPipeline with ACESFilmicToneMapping and SSAO. Implemented true homing logic for rocket items and aggressive rubber-band AI.
+                         </td>
+                     </tr>
                  </tbody>
              </table>
          </div>
