@@ -13,8 +13,6 @@ export class ArcadeVehicle {
     world: CANNON.World;
 
     // Transmission & Engine
-    currentGear: number = 1;
-    maxGears: number = 6;
     rpm: number = 0;
     maxSpeed: number = 120;
     speed: number = 0;
@@ -31,6 +29,7 @@ export class ArcadeVehicle {
     private _t1 = new THREE.Vector3();
 
     private _groundNormal: CANNON.Vec3 = new CANNON.Vec3(0, 1, 0);
+    private _currentDamping: number = 0;
 
     constructor(world: CANNON.World, mesh: THREE.Group, startPt: THREE.Vector3, faceAngle: number, speedMult: number, armorMult: number, handlingMult: number, maxSpeed: number = 120) {
         this.world = world;
@@ -65,35 +64,19 @@ export class ArcadeVehicle {
         }
     }
 
-    update(gas: number, steer: number, brake: number, gearUp: boolean, gearDown: boolean, isDrifting: boolean, dt: number) {
+    update(gas: number, steer: number, brake: number, isDrifting: boolean, dt: number) {
         this.body.wakeUp();
 
         // Steering modify yaw
         const steerSpeed = 2.0 * this.handlingMult * (isDrifting ? 1.8 : 1.0);
         this.yaw += steer * steerSpeed * dt;
 
-        // Transmission / Gear Logic (AMT)
+        // Transmission / Engine
         this.speed = this.body.velocity.length() * 3.6;
-
-        if (gearUp && this.currentGear < this.maxGears) {
-            this.currentGear++;
-        }
-        if (gearDown && this.currentGear > 1) {
-            this.currentGear--;
-        }
-
-        const currentGearMaxSpeed = (this.currentGear / this.maxGears) * this.maxSpeed;
-        this.rpm = Math.max(0, this.speed / currentGearMaxSpeed);
-
-        // Automatic Shifting
-        if (this.rpm > 1.0 && this.speed > 10 && this.currentGear < this.maxGears) {
-            this.currentGear++;
-        } else if (this.rpm < 0.2 && this.currentGear > 1 && this.speed > 5) {
-            this.currentGear--;
-        }
+        this.rpm = Math.min(1.0, this.speed / this.maxSpeed);
 
         let engineForce = gas * PhysicsConfig.baseAccelForce * this.speedMult; // Base max force
-        if (this.speed > currentGearMaxSpeed && engineForce > 0) {
+        if (this.speed > this.maxSpeed && engineForce > 0) {
             engineForce = 0; // Rev limiter
         }
         
@@ -105,7 +88,7 @@ export class ArcadeVehicle {
         let hoverDist = 1.6;
 
         const springK = 20000;
-        const springD = 1000;
+        const springD = 2500;
 
         // Front-left, Front-right, Back-left, Back-right
         const offsets = [
@@ -185,12 +168,16 @@ export class ArcadeVehicle {
         let rSpeed = velX * this._tRight.x + velY * this._tRight.y + velZ * this._tRight.z;
 
         // Grip Logic
-        // Math.log(0.95) ~ -0.051, Math.log(0.88) ~ -0.128
-        const normalGripDamping = dt / (PhysicsConfig.tractionRecovery * 0.8);
+        // Increase traction recovery slightly so snap-back is smoother
+        const normalGripDamping = dt / (PhysicsConfig.tractionRecovery * 1.2);
         const driftGripDamping = normalGripDamping * 0.4; // Less grip while drifting
-        const damping = isDrifting ? driftGripDamping : normalGripDamping;
         
-        const grip = Math.exp(-damping);
+        // Use lerp for grip dampening instead of instantaneous cut
+        const targetDamping = isDrifting ? driftGripDamping : normalGripDamping;
+        if (!this._currentDamping) this._currentDamping = normalGripDamping;
+        this._currentDamping += (targetDamping - this._currentDamping) * 5.0 * dt;
+
+        const grip = Math.exp(-this._currentDamping);
         rSpeed *= grip;
 
         this.body.velocity.set(

@@ -55,10 +55,10 @@ export class CameraController {
             this.camera.position.lerpVectors(this._idealCam, this._introCamStart, ease);
             this.camera.lookAt(carPos);
         } else if (gameState === 'countdown') {
-            this.camera.position.lerp(this._idealCam, 1.0 - Math.exp(-20 * dt));
+            this.camera.position.lerp(this._idealCam, 1.0 - Math.exp(-12 * dt));
             this.camera.lookAt(this._lookTgt);
         } else if (gameState === 'racing') {
-            const camDamp = 1.0 - Math.exp(-20 * dt);
+            const camDamp = 1.0 - Math.exp(-12 * dt);
             this.camera.position.lerp(this._idealCam, camDamp);
             
             if (this.cameraShake > 0) {

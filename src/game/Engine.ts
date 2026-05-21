@@ -395,9 +395,6 @@ export class Engine {
             this.chassisBody.angularVelocity.set(0,0,0);
         }
 
-       const gearUpPressed = this.input.isGearUp();
-       const gearDownPressed = this.input.isGearDown();
-
        const steer = this.input.getSteer(dt);
        if (Math.abs(steer) > 0.05) vehicleSteer = steer * maxSteerVal;
        
@@ -436,12 +433,7 @@ export class Engine {
        vehicleSteer = 0;
     }
 
-    const gearUp = this.input.isGearUp() && !(this as any).wasGearUp;
-    const gearDown = this.input.isGearDown() && !(this as any).wasGearDown;
-    (this as any).wasGearUp = this.input.isGearUp();
-    (this as any).wasGearDown = this.input.isGearDown();
-
-    this.playerVehicle.update(gas, vehicleSteer, braking, gearUp, gearDown, isDrifting, dt);
+    this.playerVehicle.update(gas, vehicleSteer, braking, isDrifting, dt);
     this.playerVehicle.render(dt);
 
     this._forwardLocal.set(0, 0, -1).applyQuaternion(this.playerCar.quaternion);
@@ -697,7 +689,7 @@ export class Engine {
       lap: this.currentLap,
       rank: pRank,
       maxSpeed: this.maxSpeed,
-      gear: this.playerVehicle.currentGear,
+      gear: 1,
       rpm: rpm,
       showRedline: showRedline,
       gameState: this.gameState,

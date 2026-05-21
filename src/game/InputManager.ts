@@ -175,30 +175,6 @@ export class InputManager {
     return r;
   }
 
-  public isGearUp(): boolean {
-    let up = this.keys.x || this.keys.X;
-    const gp = this.getGamepad();
-    if (gp) {
-        // Y button (button 3)
-        if ((gp.buttons[3] && gp.buttons[3].pressed)) {
-            up = true;
-        }
-    }
-    return up;
-  }
-
-  public isGearDown(): boolean {
-    let down = this.keys.z || this.keys.Z;
-    const gp = this.getGamepad();
-    if (gp) {
-        // X button (button 2)
-        if ((gp.buttons[2] && gp.buttons[2].pressed)) {
-            down = true;
-        }
-    }
-    return down;
-  }
-
   public dispose() {
     window.removeEventListener('keydown', this.handleKeyDown);
     window.removeEventListener('keyup', this.handleKeyUp);
