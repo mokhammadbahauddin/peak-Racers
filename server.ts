@@ -17,20 +17,27 @@ async function startServer() {
   
   const players: Record<string, any> = {};
 
+  let dirtyPlayers = false;
+
   io.on("connection", (socket) => {
     console.log("Client connected:", socket.id);
     
     socket.on("join-race", (data) => {
-       players[socket.id] = { id: socket.id, position: null, rotation: null, active: true, carType: data?.carType || 'cruiser' };
-       // Tell everyone someone joined
+       players[socket.id] = {
+           id: socket.id,
+           position: null,
+           rotation: null,
+           active: true,
+           carType: data?.carType || 'cruiser',
+           lastSeen: Date.now()
+       };
        io.emit("players-update", players);
     });
 
     socket.on("player-update", (data) => {
        if (players[socket.id]) {
-           players[socket.id] = { ...players[socket.id], ...data };
-           // optimize: we could broadcast this in a tick instead of on every message
-           socket.broadcast.emit("player-moved", players[socket.id]);
+           players[socket.id] = { ...players[socket.id], ...data, lastSeen: Date.now() };
+           dirtyPlayers = true;
        }
     });
 
@@ -40,6 +47,30 @@ async function startServer() {
       io.emit("players-update", players);
     });
   });
+
+  // 20Hz Server Tick Loop
+  setInterval(() => {
+      const now = Date.now();
+      let dropped = false;
+
+      // Cleanup inactive players (10 seconds timeout)
+      for (const id in players) {
+          if (now - players[id].lastSeen > 10000) {
+              console.log("Dropping inactive player:", id);
+              delete players[id];
+              dropped = true;
+          }
+      }
+
+      if (dropped) {
+          io.emit("players-update", players);
+          dirtyPlayers = false;
+      } else if (dirtyPlayers) {
+          // Broadcast movement updates instead of on every single socket message
+          io.emit("players-update", players);
+          dirtyPlayers = false;
+      }
+  }, 50); // 20Hz = 50ms
 
   // Needed for large image payloads
   app.use(express.json({ limit: "50mb" }));

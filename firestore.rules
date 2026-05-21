@@ -42,7 +42,8 @@ service cloud.firestore {
                     && isValidId(userId)
                     && isValidUser(incoming())
                     && incoming().updatedAt == request.time
-                    && incoming().createdAt == existing().createdAt;
+                    && incoming().createdAt == existing().createdAt
+                    && incoming().coins == existing().coins;
     }
     
     function isValidRaceRecord(data) {
