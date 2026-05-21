@@ -10,7 +10,7 @@ const UPGRADE_INFO = [
   { key: 'aero' as const, label: 'Aero Kit', icon: <Wind size={18} />, color: 'text-emerald-500', bgColor: 'bg-emerald-500', desc: 'Better acceleration' }
 ];
 
-const StatPip = ({ filled, color }: { filled: boolean; color: string }) => (
+const StatPip = ({ filled, color }: { key?: number, filled: boolean; color: string }) => (
   <div className={`w-3 h-8 rounded-sm transition-all ${filled ? color + ' shadow-md' : 'bg-slate-200'}`} />
 );
 

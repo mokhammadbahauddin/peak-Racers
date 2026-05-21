@@ -8,7 +8,7 @@ const POSITION_LABELS = ['1st', '2nd', '3rd', '4th'];
 const POSITION_COLORS = ['text-amber-500', 'text-slate-400', 'text-orange-600', 'text-slate-500'];
 const CONFETTI_COLORS = ['#ff6b9d', '#c084fc', '#67e8f9', '#fde68a', '#86efac', '#fda4af'];
 
-const ConfettiPiece = ({ delay }: { delay: number }) => {
+const ConfettiPiece = ({ delay }: { key?: number, delay: number }) => {
   const color = CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)];
   const left = Math.random() * 100;
   const duration = 2 + Math.random() * 2;

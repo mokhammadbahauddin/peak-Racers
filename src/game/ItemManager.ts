@@ -33,7 +33,7 @@ export class ItemManager {
         this.scene = scene;
     }
 
-    public update(dt: number, now: number, playerPos: THREE.Vector3, playerVelocity: THREE.Vector3, input: InputManager, triggerBoost: (duration: number) => void, addBoostBar: (amount: number) => void, triggerSpinout: () => void, aiCars: any[]) {
+    public update(dt: number, now: number, playerPos: THREE.Vector3, playerVelocity: THREE.Vector3, input: InputManager, triggerBoost: (duration: number) => void, addBoostBar: (amount: number) => void, triggerSpinout: () => void, aiCars: any[], triggerInvincibility?: () => void) {
         // Animate and check Item Boxes
         this.track.itemBoxes.forEach(pickup => {
             if (!pickup.active) return;
@@ -90,7 +90,7 @@ export class ItemManager {
         const hudState = useHudStore.getState();
         if (input.isItemPressed()) {
             if (!this.wasItemPressed && hudState.currentItem !== 'none') {
-                 this.useItem(hudState.currentItem, playerPos, playerVelocity, triggerBoost, addBoostBar, 'player');
+                 this.useItem(hudState.currentItem, playerPos, playerVelocity, triggerBoost, addBoostBar, 'player', triggerInvincibility);
                  useHudStore.getState().setHudData({ currentItem: 'none' });
             }
             this.wasItemPressed = true;
@@ -112,7 +112,40 @@ export class ItemManager {
             }
 
             if (p.type === 'rocket') {
+                // Find nearest opponent
+                let nearestAI = null;
+                let minDist = Infinity;
+                for (let j = 0; j < aiCars.length; j++) {
+                    if (p.ownerId === `ai_${j}`) continue;
+                    const dist = p.mesh.position.distanceToSquared(aiCars[j].mesh.position);
+                    if (dist < minDist) {
+                        minDist = dist;
+                        nearestAI = aiCars[j];
+                    }
+                }
+
+                if (nearestAI && p.ownerId !== 'player') {
+                    // Check distance to player as well
+                    const distToPlayer = p.mesh.position.distanceToSquared(playerPos);
+                    if (distToPlayer < minDist) {
+                        minDist = distToPlayer;
+                        nearestAI = { mesh: { position: playerPos } }; // Duck typing to match
+                    }
+                } else if (p.ownerId === 'player' && nearestAI) {
+                    // Already found nearest AI
+                } else if (p.ownerId !== 'player') {
+                    // If AI fired, maybe target player
+                     nearestAI = { mesh: { position: playerPos } };
+                }
+
+                if (nearestAI) {
+                    const targetDir = nearestAI.mesh.position.clone().sub(p.mesh.position).normalize();
+                    const targetVel = targetDir.multiplyScalar(p.velocity.length());
+                    p.velocity.lerp(targetVel, dt * 2.0); // Homing strength
+                }
+
                 p.mesh.position.addScaledVector(p.velocity, dt);
+                p.mesh.lookAt(p.mesh.position.clone().add(p.velocity));
                 p.mesh.rotation.x += dt * 5;
                 
                 // Height conform slightly
@@ -156,7 +189,7 @@ export class ItemManager {
         }
     }
 
-    private useItem(item: string, playerPos: THREE.Vector3, velocity: THREE.Vector3, triggerBoost: (duration: number) => void, addBoostBar: (amount: number) => void, ownerId: string) {
+    private useItem(item: string, playerPos: THREE.Vector3, velocity: THREE.Vector3, triggerBoost: (duration: number) => void, addBoostBar: (amount: number) => void, ownerId: string, triggerInvincibility?: () => void) {
         if (item === 'mushroom') {
             triggerBoost(3.0); // 3 second boost (GDD spec)
             this.audio.playPickup();
@@ -165,7 +198,7 @@ export class ItemManager {
             addBoostBar(30.0); // +30 boost units to the bar!
             this.audio.playPickup();
             this.juice.addImpact(playerPos, 0xffffff); // Star sparkle
-            // Implementation detail: we could add invincibility flag to player vehicle
+            if (triggerInvincibility) triggerInvincibility();
         } else if (item === 'shield') {
             this.audio.playPickup();
             this.juice.addImpact(playerPos, 0x00ccff); // Shield bubble
