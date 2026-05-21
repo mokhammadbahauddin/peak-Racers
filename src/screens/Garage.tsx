@@ -193,7 +193,7 @@ export const Garage = ({ onNavigate }: { onNavigate: (path: string) => void }) =
                   <span className="text-xs font-black text-slate-500 uppercase tracking-wider w-24">{stat}</span>
                   <div className="flex gap-1 flex-1">
                     {Array.from({ length: 10 }, (_, i) => (
-                      <StatPip key={i} filled={i < Math.round(getEffectiveStat(stat) / 10)}
+                      <StatPip filled={i < Math.round(getEffectiveStat(stat) / 10)}
                         color={stat === 'speed' ? 'bg-pink-400' : stat === 'handling' ? 'bg-blue-400' : stat === 'acceleration' ? 'bg-emerald-400' : 'bg-purple-400'} />
                     ))}
                   </div>

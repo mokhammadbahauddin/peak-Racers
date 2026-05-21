@@ -194,7 +194,7 @@ export class ArcadeVehicle {
 
         // Grip Logic
         // Math.log(0.95) ~ -0.051, Math.log(0.88) ~ -0.128
-        const normalGripDamping = dt / PhysicsConfig.tractionRecovery; 
+        const normalGripDamping = dt / (PhysicsConfig.tractionRecovery * 0.8);
         const driftGripDamping = normalGripDamping * 0.4; // Less grip while drifting
         const damping = isDrifting ? driftGripDamping : normalGripDamping;
         
@@ -229,8 +229,8 @@ export class ArcadeVehicle {
 
         // Body Roll (from steering/drifting)
         const localVelX = this.body.velocity.x * this._tRight.x + this.body.velocity.z * this._tRight.z;
-        const targetRoll = Math.min(Math.max(-localVelX * 0.015, -0.2), 0.2);
-        this.rollAmount += (targetRoll - this.rollAmount) * 10.0 * dt;
+        const targetRoll = Math.min(Math.max(-localVelX * 0.018, -0.28), 0.28);
+        this.rollAmount += (targetRoll - this.rollAmount) * 12.0 * dt;
 
         // Body Pitch (from acceleration/braking)
         const accel = (this.speed - (this as any).lastSpeed || this.speed) / dt;

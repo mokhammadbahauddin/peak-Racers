@@ -1,0 +1,10 @@
+--- GameData.ts
++++ GameData.ts
+@@ -1,6 +1,7 @@
+ import { db, auth } from '../firebase';
+ import { doc, getDoc, setDoc, serverTimestamp, collection, addDoc } from 'firebase/firestore';
+ import { LastRaceStats } from './stores/useHudStore';
++import { apiFetch } from '../apiClient';
+
+ export interface GameSettings {
+   masterVolume: number;

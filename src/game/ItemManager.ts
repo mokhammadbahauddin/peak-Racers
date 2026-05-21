@@ -112,36 +112,32 @@ export class ItemManager {
             }
 
             if (p.type === 'rocket') {
-                // Find nearest opponent
-                let nearestAI = null;
-                let minDist = Infinity;
+                // Find nearest target for homing
+                let nearestDist = 80 * 80; // Homing range squared
+                let targetPos = null;
+
+                if (p.ownerId !== 'player') {
+                    const dSq = p.mesh.position.distanceToSquared(playerPos);
+                    if (dSq < nearestDist) {
+                        nearestDist = dSq;
+                        targetPos = playerPos;
+                    }
+                }
+
                 for (let j = 0; j < aiCars.length; j++) {
                     if (p.ownerId === `ai_${j}`) continue;
-                    const dist = p.mesh.position.distanceToSquared(aiCars[j].mesh.position);
-                    if (dist < minDist) {
-                        minDist = dist;
-                        nearestAI = aiCars[j];
+                    const dSq = p.mesh.position.distanceToSquared(aiCars[j].mesh.position);
+                    if (dSq < nearestDist) {
+                        nearestDist = dSq;
+                        targetPos = aiCars[j].mesh.position;
                     }
                 }
 
-                if (nearestAI && p.ownerId !== 'player') {
-                    // Check distance to player as well
-                    const distToPlayer = p.mesh.position.distanceToSquared(playerPos);
-                    if (distToPlayer < minDist) {
-                        minDist = distToPlayer;
-                        nearestAI = { mesh: { position: playerPos } }; // Duck typing to match
-                    }
-                } else if (p.ownerId === 'player' && nearestAI) {
-                    // Already found nearest AI
-                } else if (p.ownerId !== 'player') {
-                    // If AI fired, maybe target player
-                     nearestAI = { mesh: { position: playerPos } };
-                }
-
-                if (nearestAI) {
-                    const targetDir = nearestAI.mesh.position.clone().sub(p.mesh.position).normalize();
-                    const targetVel = targetDir.multiplyScalar(p.velocity.length());
-                    p.velocity.lerp(targetVel, dt * 2.0); // Homing strength
+                if (targetPos) {
+                    const toTarget = this._t1.copy(targetPos).sub(p.mesh.position).normalize();
+                    const currentDir = p.velocity.clone().normalize();
+                    currentDir.lerp(toTarget, dt * 2.5).normalize();
+                    p.velocity.copy(currentDir).multiplyScalar(p.velocity.length());
                 }
 
                 p.mesh.position.addScaledVector(p.velocity, dt);

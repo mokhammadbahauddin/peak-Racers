@@ -23,8 +23,10 @@ export class RenderPipeline {
     this.renderer.setPixelRatio(window.devicePixelRatio > 1 ? Math.min(window.devicePixelRatio, 1.5) : 1);
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.shadowMap.enabled = true;
-    this.renderer.shadowMap.type = THREE.PCFShadowMap;
+    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.renderer.setClearColor(envColors.sky, 1);
+    this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    this.renderer.toneMappingExposure = 1.2;
     
     this.renderer.domElement.style.display = 'block';
     this.renderer.domElement.style.width = '100vw';
@@ -33,7 +35,6 @@ export class RenderPipeline {
 
     const renderScene = new RenderPass(this.scene, this.camera);
     
-    // SSAO Pass for ambient occlusion
     const ssaoPass = new SSAOPass(this.scene, this.camera, window.innerWidth, window.innerHeight);
     ssaoPass.kernelRadius = 16;
     ssaoPass.minDistance = 0.005;
@@ -41,9 +42,9 @@ export class RenderPipeline {
 
     // Bloom Pass configuration
     this.bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth / 2, window.innerHeight / 2), 1.5, 0.4, 0.85);
-    this.bloomPass.threshold = 0.95;
-    this.bloomPass.strength = 0.15; 
-    this.bloomPass.radius = 0.2;
+    this.bloomPass.threshold = 0.85;
+    this.bloomPass.strength = 0.3;
+    this.bloomPass.radius = 0.3;
 
     const outputPass = new OutputPass();
     // Removed SMAAPass to use hardware MSAA

@@ -25,7 +25,6 @@ export interface LastRaceStats {
 export interface RaceRecord {
   timeMs: number;
   carType: 'cruiser' | 'sprinter' | 'tank';
-  rank?: number;
 }
 
 export interface TrackRecords {
@@ -293,7 +292,7 @@ export class GameDataManager {
   unlockVehicle(id: string, cost: number, currency: 'coins' | 'gems'): boolean {
     if (!this.data.ownedVehicles) this.data.ownedVehicles = ['bubblegum_cruiser', 'lemon_buggy'];
     if (this.data.ownedVehicles.includes(id)) return false;
-    
+
     if (currency === 'coins' && this.data.coins >= cost) {
       this.data.coins -= cost;
       this.data.ownedVehicles.push(id);
@@ -316,7 +315,7 @@ export class GameDataManager {
     const currentLevel = this.data.vehicleUpgrades[vehicleId][part];
     if (currentLevel >= 5) return false;
     if (this.data.coins < cost) return false;
-    
+
     this.data.coins -= cost;
     this.data.vehicleUpgrades[vehicleId][part] = currentLevel + 1;
     this.saveData();
@@ -376,6 +375,16 @@ export class GameDataManager {
              createdAt: serverTimestamp()
            });
         }
+
+        // Also submit to v2 API mock
+        await apiFetch('/races', {
+            method: 'POST',
+            body: JSON.stringify({
+                track_id: trackId,
+                lap_time_ms: bestLapMs || totalTimeMs,
+                finish_position: newTotalRec.rank || 1 // Assuming 1 for simplicity here
+            })
+        });
       } catch(e) {
         console.error('Failed to save cloud record', e);
       }

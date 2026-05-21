@@ -3,7 +3,6 @@ import { motion } from 'motion/react';
 import { ChevronLeft, Coins, Gem, Star, Sparkles, ShoppingBag } from 'lucide-react';
 import { GameDataManager } from '../game/GameData';
 import { VEHICLES, Vehicle } from '../game/VehicleData';
-import { apiFetch } from '../apiClient';
 
 interface ShopItem {
   id: string;
@@ -203,11 +202,11 @@ export const Shop = ({ onNavigate }: { onNavigate: (path: string) => void }) => 
                   transition={{ delay: i * 0.05 }}
                   className={`glass-panel p-5 rounded-2xl relative overflow-hidden ${isVehicleOwned ? 'opacity-60' : ''}`}
                 >
-                  <div className={`absolute top-0 left-0 w-full h-1 ${rarityStyle.bg.replace('50', '400').replace('bg-', 'bg-')}`} 
+                  <div className={`absolute top-0 left-0 w-full h-1 ${rarityStyle.bg.replace('50', '400').replace('bg-', 'bg-')}`}
                     style={{ background: item.rarity === 'legendary' ? 'linear-gradient(90deg, #fbbf24, #f59e0b, #d97706)' :
                              item.rarity === 'epic' ? 'linear-gradient(90deg, #a78bfa, #8b5cf6)' :
                              item.rarity === 'rare' ? 'linear-gradient(90deg, #60a5fa, #3b82f6)' : '#94a3b8' }} />
-                  
+
                   <div className="flex items-start gap-4 mb-3">
                     <span className="text-4xl">{item.emoji}</span>
                     <div className="flex-1">

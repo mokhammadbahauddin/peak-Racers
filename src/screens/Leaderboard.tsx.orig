@@ -3,7 +3,6 @@ import { motion } from 'motion/react';
 import { ChevronLeft, Trophy, Medal, Star, Timer, User, Crown } from 'lucide-react';
 import { GameDataManager } from '../game/GameData';
 import { TRACK_REGISTRY, WORLD_NAMES } from '../game/tracks/TrackRegistry';
-import { apiFetch } from '../apiClient';
 
 // Generate mock leaderboard data for display
 const generateMockLeaderboard = (trackId: string) => {
@@ -27,39 +26,24 @@ const formatTime = (ms: number) => {
 export const Leaderboard = ({ onNavigate }: { onNavigate: (path: string) => void }) => {
   const gd = GameDataManager.getInstance();
   const data = gd.getData();
-  
+
   // Get all tracks
   const allTracks = Object.entries(TRACK_REGISTRY).flatMap(([worldId, tracks]) =>
     tracks.map(t => ({ ...t, worldId }))
   );
-  
+
   const [selectedTrackId, setSelectedTrackId] = useState(allTracks[0]?.id || 'sands_1');
-  const [apiLeaderboard, setApiLeaderboard] = useState<any[]>([]);
-  
+
   const selectedTrack = allTracks.find(t => t.id === selectedTrackId);
   const worldName = selectedTrack ? WORLD_NAMES[selectedTrack.worldId] : '';
-  
+
   // Build leaderboard with player's time inserted
   const playerRecord = data.records?.[selectedTrackId]?.bestLap;
   const mockEntries = generateMockLeaderboard(selectedTrackId);
 
-  useEffect(() => {
-      const fetchLeaderboard = async () => {
-          try {
-              const res = await apiFetch(`/leaderboard/${selectedTrackId}`);
-              if (res.entries) setApiLeaderboard(res.entries);
-          } catch (e) {
-              console.error(e);
-          }
-      };
-      fetchLeaderboard();
-  }, [selectedTrackId]);
-  
   let entries = [...mockEntries];
-  const pTime = apiLeaderboard.find(e => e.player_id === 'user_123')?.best_lap_ms || playerRecord?.timeMs;
-
-  if (pTime) {
-    entries.push({ rank: 0, name: 'You', time: pTime, isPlayer: true });
+  if (playerRecord) {
+    entries.push({ rank: 0, name: 'You', time: playerRecord.timeMs, isPlayer: true });
     entries.sort((a, b) => a.time - b.time);
     entries = entries.map((e, i) => ({ ...e, rank: i + 1 }));
   }

@@ -1565,6 +1565,38 @@ h4.mini-title{font-family:var(--font-head);font-size:14px;font-weight:700;color:
     </div>
   </section>
 
+<div class="card mt-12" id="dev-honesty-log" style="border-left: 4px solid var(--error);">
+    <div class="card-header">
+       <span class="step-badge" style="background:var(--error-c); color:var(--error);">!</span>
+       <h2 style="color:var(--error);">Developer Truth / Brutal Honesty Log</h2>
+    </div>
+    <div class="card-body">
+         <p class="text-sm text-muted">A candid game developer assessment of the current state of <strong style="color:var(--primary)">Pastel Peak Racers v2.0</strong>.</p>
+
+         <div class="feature-table-container">
+             <table class="feature-table">
+                 <thead>
+                     <tr>
+                         <th>Architecture Pillar</th>
+                         <th>The Brutal Truth</th>
+                         <th>Next Steps / Tech Debt to Fix</th>
+                     </tr>
+                 </thead>
+                 <tbody>
+                     <tr>
+                         <td style="font-weight:600;">Mario Kart-Tier Rework</td>
+                         <td>The game felt a bit generic and lacked the fast-paced, highly responsive feel of top-tier arcade racers. The visuals, while good, were missing modern post-processing and material depth. The AI was too passive.</td>
+                         <td class="text-xs">
+                             <span class="req-tag req-must" style="background:#cbe3c7; color:#4f644e;">FIXED</span>
+                             Completely reworked the physics for tighter, "Mario Kart"-like drifting. Upgraded RenderPipeline with ACESFilmicToneMapping and SSAO. Implemented true homing logic for rocket items and aggressive rubber-band AI.
+                         </td>
+                     </tr>
+                 </tbody>
+             </table>
+         </div>
+    </div>
+</div>
+
 </div>
 
 <!-- FOOTER -->
