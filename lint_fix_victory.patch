@@ -1,0 +1,10 @@
+--- src/screens/Victory.tsx
++++ src/screens/Victory.tsx
+@@ -134,7 +134,7 @@
+         {/* Confetti container */}
+         <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
+           {Array.from({ length: 40 }, (_, i) => (
+-            <ConfettiPiece key={i} delay={i * 0.08} />
++            <ConfettiPiece delay={i * 0.08} />
+           ))}
+         </div>
