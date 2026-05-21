@@ -10,8 +10,8 @@ const UPGRADE_INFO = [
   { key: 'aero' as const, label: 'Aero Kit', icon: <Wind size={18} />, color: 'text-emerald-500', bgColor: 'bg-emerald-500', desc: 'Better acceleration' }
 ];
 
-const StatPip = ({ filled, color }: { filled: boolean; color: string }) => (
-  <div className={`w-3 h-8 rounded-sm transition-all ${filled ? color + ' shadow-md' : 'bg-slate-200'}`} />
+const StatPip = ({ filled, color, key }: { filled: boolean; color: string; key?: number }) => (
+  <div key={key} className={`w-3 h-8 rounded-sm transition-all ${filled ? color + ' shadow-md' : 'bg-slate-200'}`} />
 );
 
 export const Garage = ({ onNavigate }: { onNavigate: (path: string) => void }) => {

@@ -63,12 +63,12 @@ export class CameraController {
             
             if (this.cameraShake > 0) {
                const time = performance.now() * 0.05;
-               this.camera.position.x += Math.sin(time) * this.cameraShake;
-               this.camera.position.y += Math.cos(time * 1.3) * this.cameraShake;
+               this.camera.position.x += Math.sin(time) * this.cameraShake * 1.5;
+               this.camera.position.y += Math.cos(time * 1.3) * this.cameraShake * 1.5;
             }
 
             // Dutch Angle (Camera Roll) based on steering and drift
-            const rollAmount = -this.input.getSteer() * (isDrifting ? 0.25 : 0.1);
+            const rollAmount = -this.input.getSteer() * (isDrifting ? 0.35 : 0.15);
             const targetUp = this._t3.set(Math.sin(rollAmount), Math.cos(rollAmount), 0).normalize();
             this.camera.up.lerp(targetUp, 1.0 - Math.exp(-5 * dt));
 
@@ -92,7 +92,7 @@ export class CameraController {
             this.camera.lookAt(carPos);
         }
         
-        const targetFov = 50 + (Math.abs(speed) / maxSpeed) * 5 + (this.input.isBoosting() && gameState === 'racing' ? 10 : 0);
+        const targetFov = 50 + (Math.abs(speed) / maxSpeed) * 8 + (this.input.isBoosting() && gameState === 'racing' ? 15 : 0);
         this.camera.fov += (targetFov - this.camera.fov) * (1.0 - Math.exp(-5 * dt));
         this.camera.updateProjectionMatrix();
     }
