@@ -342,9 +342,9 @@ export class TrackGenerator {
     const trackSegments = 800;
     
     // Barriers
-    const barrierGeo = new THREE.CylinderGeometry(1.5, 1.5, 8, 8);
-    barrierGeo.rotateZ(Math.PI / 2);
-    const barrierMat = new THREE.MeshStandardMaterial({ color: 0xffdad6, roughness: 0.9, flatShading: true });
+    const barrierGeo = new THREE.CapsuleGeometry(1.5, 5, 8, 16);
+    barrierGeo.rotateZ(Math.PI / 2); // Capsule length is along Y axis naturally
+    const barrierMat = new THREE.MeshStandardMaterial({ color: 0xffdad6, roughness: 0.9, flatShading: false });
     
     const barrierCount = Math.floor(trackSegments / 12);
     const barrierInstanced = new THREE.InstancedMesh(barrierGeo, barrierMat, barrierCount);
@@ -378,15 +378,15 @@ export class TrackGenerator {
     // Trees
     const treeCount = 250;
     const pineTrunkGeo = new THREE.CylinderGeometry(1, 1.5, 4, 6);
-    const pineLeaves1Geo = new THREE.ConeGeometry(5, 8, 6);
-    const pineLeaves2Geo = new THREE.ConeGeometry(4, 6, 6);
+    const pineLeaves1Geo = new THREE.IcosahedronGeometry(4.5, 1); // Soft pine leaves top
+    const pineLeaves2Geo = new THREE.IcosahedronGeometry(5.5, 1); // Soft pine leaves bottom
     const roundTrunkGeo = new THREE.CylinderGeometry(0.8, 1, 3, 6);
-    const roundBushyGeo = new THREE.DodecahedronGeometry(4, 0);
+    const roundBushyGeo = new THREE.IcosahedronGeometry(4, 2); // Fluffy round tree
 
-    const trunkMat = new THREE.MeshStandardMaterial({ color: 0x8b5a2b, roughness: 0.9, flatShading: true });
-    const leaf1Mat = new THREE.MeshStandardMaterial({ color: 0xd1e9cd, roughness: 0.6, flatShading: true });
-    const leaf2Mat = new THREE.MeshStandardMaterial({ color: 0xb5cdb2, roughness: 0.6, flatShading: true });
-    const bushyMat = new THREE.MeshStandardMaterial({ color: 0xbaeafa, roughness: 0.7, flatShading: true });
+    const trunkMat = new THREE.MeshStandardMaterial({ color: 0x8b5a2b, roughness: 0.9, flatShading: false });
+    const leaf1Mat = new THREE.MeshStandardMaterial({ color: 0xd1e9cd, roughness: 0.6, flatShading: false });
+    const leaf2Mat = new THREE.MeshStandardMaterial({ color: 0xb5cdb2, roughness: 0.6, flatShading: false });
+    const bushyMat = new THREE.MeshStandardMaterial({ color: 0xbaeafa, roughness: 0.7, flatShading: false });
 
     const pineTrunkInst = new THREE.InstancedMesh(pineTrunkGeo, trunkMat, treeCount);
     const pine1Inst = new THREE.InstancedMesh(pineLeaves1Geo, leaf1Mat, treeCount);
@@ -461,14 +461,14 @@ export class TrackGenerator {
             propType = 'sign';
             const mesh = new THREE.Group();
             mesh.position.copy(pos);
-            const poleMat = new THREE.MeshStandardMaterial({ color: 0xdcece8, roughness: 0.6, flatShading: true });
+            const poleMat = new THREE.MeshStandardMaterial({ color: 0xdcece8, roughness: 0.6, flatShading: false });
             const poleL = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 15, 6), poleMat);
             poleL.position.set(-6, 7.5, 0);
             poleL.castShadow = true;
             const poleR = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 15, 6), poleMat);
             poleR.position.set(6, 7.5, 0);
             poleR.castShadow = true;
-            const sign = new THREE.Mesh(new THREE.BoxGeometry(14, 6, 1), new THREE.MeshStandardMaterial({ color: 0xffd1dc, roughness: 0.5, flatShading: true }));
+            const sign = new THREE.Mesh(new THREE.BoxGeometry(14, 6, 1), new THREE.MeshStandardMaterial({ color: 0xffd1dc, roughness: 0.5, flatShading: false }));
             sign.position.set(0, 15, 0);
             sign.castShadow = true;
             mesh.add(poleL, poleR, sign);
@@ -483,12 +483,12 @@ export class TrackGenerator {
             propType = 'flag';
             const mesh = new THREE.Group();
             mesh.position.copy(pos);
-            const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.3, 12, 6), new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.6, flatShading: true }));
+            const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.3, 12, 6), new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.6, flatShading: false }));
             pole.position.y = 6;
             pole.castShadow = true;
             mesh.add(pole);
 
-            const flagMat = new THREE.MeshStandardMaterial({ color: 0xe7bbc6, side: THREE.DoubleSide, roughness: 0.6, flatShading: true });
+            const flagMat = new THREE.MeshStandardMaterial({ color: 0xe7bbc6, side: THREE.DoubleSide, roughness: 0.6, flatShading: false });
             const flag = new THREE.Mesh(new THREE.PlaneGeometry(4, 2.5, 4, 3), flagMat);
             flag.geometry.translate(2, 0, 0);
             flag.position.set(0, 10.5, 0);
@@ -517,18 +517,18 @@ export class TrackGenerator {
     this.sceneryGroup.add(pineTrunkInst, pine1Inst, pine2Inst, roundTrunkInst, roundBushyInst);
     
     // Item Boxes
-    const itemBoxGeo = new THREE.BoxGeometry(1.8, 1.8, 1.8);
+    const itemBoxGeo = new THREE.IcosahedronGeometry(1.2, 1); // Rounder, glowing item boxes
     const itemBoxMat = new THREE.MeshPhysicalMaterial({
         color: 0xffffff,
         emissive: 0xaa55ff,
-        emissiveIntensity: 0.5,
+        emissiveIntensity: 1.2,
         roughness: 0.1,
         metalness: 0.2,
         transparent: true,
         opacity: 0.8,
         clearcoat: 1.0,
     });
-    const innerBoxGeo = new THREE.BoxGeometry(1.0, 1.0, 1.0);
+    const innerBoxGeo = new THREE.DodecahedronGeometry(0.8, 0); // Inner diamond shape
     const innerBoxMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
     
     for (let i = 0; i < 25; i++) {

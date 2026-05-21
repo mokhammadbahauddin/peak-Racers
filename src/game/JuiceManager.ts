@@ -25,7 +25,7 @@ export class JuiceManager {
   scrubIndex = 0;
 
   // Particles Instanced
-  particleGeo: THREE.BoxGeometry;
+  particleGeo: THREE.IcosahedronGeometry;
   particleMat: THREE.MeshBasicMaterial;
   particles: ParticleData[] = [];
   particleInstanced: THREE.InstancedMesh;
@@ -57,7 +57,7 @@ export class JuiceManager {
     this.scene.add(this.scrubInstanced);
     
     // Particles
-    this.particleGeo = new THREE.BoxGeometry(0.4, 0.4, 0.4);
+    this.particleGeo = new THREE.IcosahedronGeometry(0.4, 0); // rounder, bigger particles for juicy feel
     this.particleMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.8 });
     this.particleInstanced = new THREE.InstancedMesh(this.particleGeo, this.particleMat, this.maxParticles);
     

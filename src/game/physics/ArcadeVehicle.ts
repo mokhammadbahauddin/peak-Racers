@@ -69,7 +69,7 @@ export class ArcadeVehicle {
         this.body.wakeUp();
 
         // Steering modify yaw
-        const steerSpeed = 2.0 * this.handlingMult * (isDrifting ? 1.5 : 1.0);
+        const steerSpeed = 3.5 * this.handlingMult * (isDrifting ? 1.8 : 1.0); // Tighter, snappier steering like MK
         this.yaw += steer * steerSpeed * dt;
 
         // Transmission / Gear Logic (AMT)
@@ -104,8 +104,8 @@ export class ArcadeVehicle {
         let hitCount = 0;
         let hoverDist = 1.6;
 
-        const springK = 20000;
-        const springD = 1000;
+        const springK = 30000; // Stiffer suspension so it doesnt feel floaty
+        const springD = 2500; // More damping so it doesnt bounce forever
 
         // Front-left, Front-right, Back-left, Back-right
         const offsets = [

@@ -3,13 +3,13 @@ export const PhysicsConfig = {
     topSpeedA: 160, // km/h (Class A)
     topSpeedB: 140, // km/h (Class B)
     topSpeedC: 120, // km/h (Class C)
-    baseAccelForce: 12000, 
+    baseAccelForce: 18000, // Make acceleration punchier
     brakingDecel: 2.8, // -2.8 m/s² passive decel
-    activeBrakingDecel: 28.0, // Active braking needs to feel responsive in arcade racers. Multiplying GDD nominal value x10 for gameplay feel.
+    activeBrakingDecel: 45.0, // Mario Kart style tight braking // Active braking needs to feel responsive in arcade racers. Multiplying GDD nominal value x10 for gameplay feel.
     offTrackPenalty: 0.4, // -40%
 
     // Drifting
-    driftSpeedMult: 0.95,
+    driftSpeedMult: 0.98, // Keep speed up during drift
     boostChargeRate: 3.0, // +3% / s (assume capacity 100 = 3 units/s? Wait, if 3% per second, and capacity is 100, then it's 3 units/sec. BUT GDD says 'Mini-turbo threshold 1.5s'. If 3/sec * 1.5s = 4.5. Wait, mini-turbo is separate from the boost bar!)
     miniTurboThreshold: 1.5,
     miniTurboSpeedBonus: 20,

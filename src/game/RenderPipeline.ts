@@ -26,7 +26,7 @@ export class RenderPipeline {
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.renderer.setClearColor(envColors.sky, 1);
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 1.2;
+    this.renderer.toneMappingExposure = 1.15;
     
     this.renderer.domElement.style.display = 'block';
     this.renderer.domElement.style.width = '100vw';
@@ -36,15 +36,15 @@ export class RenderPipeline {
     const renderScene = new RenderPass(this.scene, this.camera);
     
     const ssaoPass = new SSAOPass(this.scene, this.camera, window.innerWidth, window.innerHeight);
-    ssaoPass.kernelRadius = 16;
-    ssaoPass.minDistance = 0.005;
-    ssaoPass.maxDistance = 0.1;
+    ssaoPass.kernelRadius = 12;
+    ssaoPass.minDistance = 0.001;
+    ssaoPass.maxDistance = 0.05;
 
     // Bloom Pass configuration
     this.bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth / 2, window.innerHeight / 2), 1.5, 0.4, 0.85);
-    this.bloomPass.threshold = 0.85;
-    this.bloomPass.strength = 0.3;
-    this.bloomPass.radius = 0.3;
+    this.bloomPass.threshold = 0.8;
+    this.bloomPass.strength = 0.4;
+    this.bloomPass.radius = 0.5;
 
     const outputPass = new OutputPass();
     // Removed SMAAPass to use hardware MSAA
@@ -55,20 +55,26 @@ export class RenderPipeline {
     this.composer.addPass(this.bloomPass);
     this.composer.addPass(outputPass);
 
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
     this.scene.add(ambientLight);
+
+    const hemiLight = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 0.5);
+    hemiLight.position.set(0, 200, 0);
+    this.scene.add(hemiLight);
     
-    this.dirLight = new THREE.DirectionalLight(0xffaa88, 1.2);
-    this.dirLight.position.set(100, 200, 100);
+    this.dirLight = new THREE.DirectionalLight(0xfff0dd, 1.4);
+    this.dirLight.position.set(100, 200, 50);
     this.dirLight.castShadow = true;
-    this.dirLight.shadow.mapSize.width = 2048;
-    this.dirLight.shadow.mapSize.height = 2048;
+    this.dirLight.shadow.mapSize.width = 4096;
+    this.dirLight.shadow.mapSize.height = 4096;
     this.dirLight.shadow.camera.near = 0.5;
     this.dirLight.shadow.camera.far = 600;
-    this.dirLight.shadow.camera.left = -150;
-    this.dirLight.shadow.camera.right = 150;
-    this.dirLight.shadow.camera.top = 150;
-    this.dirLight.shadow.camera.bottom = -150;
+    this.dirLight.shadow.camera.left = -200;
+    this.dirLight.shadow.camera.right = 200;
+    this.dirLight.shadow.camera.top = 200;
+    this.dirLight.shadow.camera.bottom = -200;
+    this.dirLight.shadow.bias = -0.0005;
+    this.dirLight.shadow.normalBias = 0.02;
     this.scene.add(this.dirLight);
   }
 
